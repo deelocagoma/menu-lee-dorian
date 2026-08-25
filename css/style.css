@@ -800,139 +800,68 @@ body {
 }
 
 /* ============================================
-   VERSION BUREAU & TABLETTE PAYSAGE (>1024px)
+   VERSION BUREAU & TABLETTE (>768px)
    ============================================ */
-@media (min-width: 1024px) {
-    body {
-        padding-bottom: 0 !important; /* Enlève le padding du bottom-nav mobile */
-        background-color: var(--bg-dark);
-        display: flex;
-        justify-content: center;
-    }
-    
-    /* Le Header se réduit et s'aligne à droite de la sidebar */
-    .app-header {
-        left: 280px;
-        width: calc(100% - 280px);
-        padding: 0 40px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-    }
-    
-    /* Le bottom-nav devient une élégante Sidebar à gauche */
-    .bottom-nav {
-        top: 0;
-        left: 0;
-        bottom: 0;
-        width: 280px;
-        height: 100vh;
-        flex-direction: column;
-        justify-content: flex-start;
-        padding-top: calc(var(--header-height) + 24px);
-        border-radius: 0;
-        border-top: none;
-        border-right: 1px solid var(--border);
-        transform: none;
-        max-width: none;
-        background: var(--bg-primary);
-        z-index: 1000;
-        align-items: stretch;
-    }
-
-    .nav-item {
-        flex: none;
-        width: calc(100% - 48px);
-        margin: 8px 24px;
-        padding: 16px 20px;
-        flex-direction: row;
-        justify-content: flex-start;
-        gap: 16px;
-        border-radius: var(--radius-md);
-        background: transparent;
-        transition: all 0.2s;
-    }
-
-    .nav-item:hover {
-        background: var(--bg-elevated);
-    }
-    
-    .nav-item svg {
-        margin-bottom: 0;
-        width: 22px;
-        height: 22px;
-    }
-    
-    .nav-item span {
-        font-size: 1rem;
-        font-weight: 500;
-    }
-
-    /* Le contenu principal prend l'espace restant */
+@media (min-width: 768px) {
     .app-content {
-        margin-left: 280px;
-        max-width: 1100px;
-        width: 100%;
-        padding: calc(var(--header-height) + 40px) 40px 80px;
-        background: var(--bg-dark);
-        min-height: 100vh;
+        max-width: 800px;
+        margin: 0 auto;
+        padding-top: calc(var(--header-height) + 20px);
     }
     
-    /* Titres de page */
-    .page-title {
-        font-size: 1.8rem;
-        margin-bottom: 32px;
+    .app-header {
+        max-width: 800px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+    
+    .bottom-nav {
+        max-width: 800px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     }
 
     /* Grille pour les menus */
     .menu-category {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 20px;
-        margin-bottom: 40px;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
     }
     
     .category-title {
-        grid-column: 1 / -1; /* Le titre prend toute la ligne */
-        font-size: 1.1rem;
-        margin-bottom: 8px;
+        grid-column: 1 / -1;
     }
 
     /* Grille pour les Plats Phares */
     .featured-scroll {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 24px;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 16px;
         padding: 0;
         overflow: visible;
         flex-wrap: wrap;
-        margin-bottom: 40px;
     }
     
     .featured-card {
         min-width: 0;
         flex: none;
-        height: 220px; /* Un peu plus grand sur desktop */
     }
-
-    /* Catégories rapides (boutons) */
-    .categories-scroll {
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        padding: 0;
-        margin-bottom: 32px;
-    }
-
-    /* Bannière PWA affichée en bas à gauche façon "Toast" */
+    
+    /* Bannière PWA centrée */
     .pwa-banner {
-        bottom: 32px;
-        left: 312px; /* 280 + 32 */
-        right: auto;
-        width: 360px;
+        max-width: 760px;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 80px;
+        animation: slideUpCenter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    /* Boutons flottants ramenés à l'intérieur */
-    .fab, .selection-fab {
-        bottom: 40px;
-        right: 40px;
+    @keyframes slideUpCenter {
+        from { transform: translate(-50%, 150%); opacity: 0; }
+        to { transform: translate(-50%, 0); opacity: 1; }
     }
 }
 
