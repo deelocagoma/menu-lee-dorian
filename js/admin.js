@@ -104,7 +104,7 @@ class AdminApp {
     renderItems(itemType = 'plat', containerId = 'itemsList') {
         const itemsList = document.getElementById(containerId);
         const categories = this.menuData.categories || [];
-        const displayMode = localStorage.getItem('admin_display_mode') || 'grid';
+        const displayMode = localStorage.getItem('admin_display_mode') || 'list';
         
         document.querySelectorAll('.display-option').forEach(opt => {
             opt.classList.toggle('active', opt.dataset.display === displayMode);

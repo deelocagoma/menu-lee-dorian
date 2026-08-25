@@ -5,12 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0C0C0C">
-    <title>Pili-Pili Lounge</title>
+    <meta name="theme-color" content="#121212">
+    <title>New Pili Pili</title>
+    
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/logo.jpg">
+    <meta name="apple-mobile-web-app-title" content="New Pili Pili">
+
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- PWA Install Banner -->
+    <div id="pwaInstallBanner" class="pwa-banner" style="display: none;">
+        <img src="assets/logo.jpg" alt="Logo" class="pwa-logo">
+        <div class="pwa-info">
+            <span class="pwa-title">New Pili Pili</span>
+            <span class="pwa-desc">Installer l'application sur votre écran d'accueil</span>
+        </div>
+        <button id="pwaInstallBtn" class="pwa-btn">Installer</button>
+        <button id="pwaCloseBtn" class="pwa-close">✕</button>
+    </div>
+
     <!-- Header -->
     <header class="app-header">
         <div class="header-top">

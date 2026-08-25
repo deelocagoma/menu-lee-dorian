@@ -793,3 +793,65 @@ function clearSelection() {
 document.addEventListener('DOMContentLoaded', () => {
     menuApp = new MenuApp();
 });
+
+// ============================================
+// PWA INSTALLATION
+// ============================================
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => {
+            console.log('SW registration failed: ', err);
+        });
+    });
+}
+
+let deferredPrompt;
+const pwaBanner = document.getElementById('pwaInstallBanner');
+const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+const pwaCloseBtn = document.getElementById('pwaCloseBtn');
+
+// Detect iOS
+const isIos = () => {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    return /iphone|ipad|ipod/.test(userAgent);
+};
+// Detect if app is already installed
+const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+    
+    // Show banner if not dismissed before
+    if (!localStorage.getItem('pwa_dismissed')) {
+        pwaBanner.style.display = 'flex';
+    }
+});
+
+// For iOS, there is no beforeinstallprompt, so we check manually
+if (isIos() && !isInStandaloneMode() && !localStorage.getItem('pwa_dismissed')) {
+    pwaBanner.style.display = 'flex';
+    document.querySelector('.pwa-desc').textContent = 'Appuyez sur Partager puis "Sur l\'écran d\'accueil"';
+    pwaInstallBtn.style.display = 'none'; // iOS users must use the browser menu
+}
+
+if (pwaInstallBtn) {
+    pwaInstallBtn.addEventListener('click', async () => {
+        pwaBanner.style.display = 'none';
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to the install prompt: ${outcome}`);
+            deferredPrompt = null;
+        }
+    });
+}
+
+if (pwaCloseBtn) {
+    pwaCloseBtn.addEventListener('click', () => {
+        pwaBanner.style.display = 'none';
+        localStorage.setItem('pwa_dismissed', 'true');
+    });
+}
