@@ -1,7 +1,10 @@
 // Admin Pili-Pili Lounge - Version Premium
 class AdminApp {
     constructor() {
-        this.binId = localStorage.getItem('pilipili_binId');
+        // Priorité : binId hardcodé dans config.js, sinon localStorage
+        this.binId = JSONBIN_CONFIG.binId || localStorage.getItem('pilipili_binId');
+        // Synchroniser le localStorage avec le binId utilisé
+        if (this.binId) localStorage.setItem('pilipili_binId', this.binId);
         this.menuData = null;
         this.currentSection = 'items';
         this.photoData = null;
