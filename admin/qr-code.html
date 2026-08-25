@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur QR Code - Pili-Pili Lounge</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+        .qr-section {
+            max-width: 600px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+        
+        .qr-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            display: inline-block;
+        }
+        
+        #qrcode {
+            display: flex;
+            justify-content: center;
+        }
+        
+        #qrcode img {
+            max-width: 300px;
+            height: auto;
+        }
+        
+        .qr-url {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            word-break: break-all;
+            font-family: monospace;
+            color: var(--gold-primary);
+        }
+        
+        .download-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            margin: 0.5rem;
+            background: linear-gradient(135deg, var(--red-primary), var(--red-secondary));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .download-btn.secondary {
+            background: linear-gradient(135deg, var(--orange-primary), var(--orange-secondary));
+        }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="admin-header-content">
+            <img src="../assets/logo.jpg" alt="Pili-Pili Lounge" class="admin-logo">
+            <h1>Générateur QR Code</h1>
+            <a href="dashboard.html" class="logout-btn">← Retour Admin</a>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <div class="qr-section">
+            <h2 style="color: var(--gold-primary); margin-bottom: 1rem;">QR Code du Menu</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                Ce QR code est permanent et ne changera jamais, même si vous modifiez le menu.
+            </p>
+            
+            <div class="qr-url" id="menuUrl"></div>
+            
+            <div class="qr-container">
+                <div id="qrcode"></div>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+                <button class="download-btn" onclick="downloadQR('png')">
+                    📥 Télécharger PNG
+                </button>
+                <button class="download-btn secondary" onclick="downloadQR('svg')">
+                    📥 Télécharger SVG
+                </button>
+            </div>
+            
+            <div style="margin-top: 3rem; padding: 1.5rem; background: var(--bg-secondary); border-radius: 15px; text-align: left;">
+                <h3 style="color: var(--gold-primary); margin-bottom: 1rem;">💡 Conseils d'utilisation</h3>
+                <ul style="color: var(--text-secondary); line-height: 2;">
+                    <li>Imprimez ce QR code sur des supports de qualité</li>
+                    <li>Placez-le sur les tables, la vitrine ou les flyers</li>
+                    <li>Le QR code fonctionne avec tous les smartphones</li>
+                    <li>Aucune application n'est nécessaire</li>
+                    <li>Les clients accèdent directement au menu</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // URL du menu (à adapter avec votre domaine)
+        const menuUrl = window.location.origin + '/menu-pili-pili/';
+        
+        // Afficher l'URL
+        document.getElementById('menuUrl').textContent = menuUrl;
+        
+        // Générer le QR Code
+        QRCode.toCanvas(document.getElementById('qrcode'), menuUrl, {
+            width: 300,
+            margin: 2,
+            color: {
+                dark: '#0A0A0A',
+                light: '#FFFFFF'
+            }
+        }, function (error) {
+            if (error) console.error(error);
+        });
+        
+        // Fonction de téléchargement
+        function downloadQR(format) {
+            const canvas = document.querySelector('#qrcode canvas');
+            
+            if (format === 'png') {
+                const link = document.createElement('a');
+                link.download = 'pili-pili-qr-code.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } else if (format === 'svg') {
+                QRCode.toString(menuUrl, {
+                    type: 'svg',
+                    width: 300,
+                    margin: 2,
+                    color: {
+                        dark: '#0A0A0A',
+                        light: '#FFFFFF'
+                    }
+                }, function (err, svg) {
+                    if (err) return console.error(err);
+                    
+                    const blob = new Blob([svg], { type: 'image/svg+xml' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.download = 'pili-pili-qr-code.svg';
+                    link.href = url;
+                    link.click();
+                    URL.revokeObjectURL(url);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

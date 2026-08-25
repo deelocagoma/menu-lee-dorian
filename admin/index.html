@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0C0C0C">
+    <title>Admin - Pili-Pili Lounge</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <img src="../assets/logo.jpg" alt="Pili-Pili Lounge" class="login-logo">
+            <h1 class="login-title">Administration</h1>
+            <p class="login-subtitle">Pili-Pili Lounge</p>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="••••••••"
+                        required
+                    >
+                </div>
+                
+                <div class="error-message" id="errorMessage" style="display: none;">
+                    Mot de passe incorrect
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    Se connecter
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = 'Pilipili#2030';
+        
+        if (sessionStorage.getItem('pilipili_admin')) {
+            window.location.href = 'dashboard.html';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            if (password === ADMIN_PASSWORD) {
+                sessionStorage.setItem('pilipili_admin', 'true');
+                window.location.href = 'dashboard.html';
+            } else {
+                errorMessage.style.display = 'block';
+                document.getElementById('password').value = '';
+            }
+        });
+    </script>
+</body>
+</html>

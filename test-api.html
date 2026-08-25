@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API JSONBin.io</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .log {
+            background: #2a2a2a;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { border-left: 4px solid #27ae60; }
+        .error { border-left: 4px solid #e74c3c; }
+        button {
+            padding: 10px 20px;
+            background: #c41e1e;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test API JSONBin.io</h1>
+    <button onclick="testCreateBin()">Créer un bin</button>
+    <button onclick="testReadBin()">Lire le bin</button>
+    <button onclick="clearStorage()">Effacer localStorage</button>
+    
+    <div id="logs"></div>
+
+    <script>
+        const MASTER_KEY = '$2a$10$q94z0iyNLwf.aYQIH.DWvu0rTWEIbvKOl4Wl/Ufoe/Ugu21V2EcPC';
+        
+        function log(message, type = 'info') {
+            const logs = document.getElementById('logs');
+            const div = document.createElement('div');
+            div.className = `log ${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logs.insertBefore(div, logs.firstChild);
+        }
+        
+        async function testCreateBin() {
+            log('Tentative de création du bin...');
+            
+            try {
+                const response = await fetch('https://api.jsonbin.io/v3/b', {
+                    method: 'POST',
+                    headers: {
+                        'X-Master-Key': MASTER_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        test: true,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+                
+                log(`Statut: ${response.status} ${response.statusText}`);
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    log(`Réponse complète: ${JSON.stringify(result, null, 2)}`, 'success');
+                    log(`result.metadata.id: ${result.metadata?.id}`);
+                    log(`result.record._id: ${result.record?._id}`);
+                    log(`result.id: ${result.id}`);
+                    
+                    // Essayer différentes solutions pour l'ID
+                    const binId = result.metadata?.id || result.record?._id || result.id;
+                    if (binId) {
+                        log(`Bin ID trouvé: ${binId}`, 'success');
+                        localStorage.setItem('pilipili_binId', binId);
+                        log('Bin ID sauvegardé dans localStorage', 'success');
+                    } else {
+                        log('Aucun ID trouvé dans la réponse', 'error');
+                    }
+                } else {
+                    const error = await response.json();
+                    log(`Erreur: ${JSON.stringify(error)}`, 'error');
+                }
+            } catch (e) {
+                log(`Erreur réseau: ${e.message}`, 'error');
+            }
+        }
+        
+        async function testReadBin() {
+            const binId = localStorage.getItem('pilipili_binId');
+            
+            if (!binId) {
+                log('Aucun bin ID trouvé dans localStorage', 'error');
+                return;
+            }
+            
+            log(`Lecture du bin ${binId}...`);
+            
+            try {
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+                    headers: {
+                        'X-Master-Key': MASTER_KEY
+                    }
+                });
+                
+                log(`Statut: ${response.status} ${response.statusText}`);
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    log(`Données: ${JSON.stringify(result.record)}`, 'success');
+                } else {
+                    const error = await response.json();
+                    log(`Erreur: ${JSON.stringify(error)}`, 'error');
+                }
+            } catch (e) {
+                log(`Erreur réseau: ${e.message}`, 'error');
+            }
+        }
+        
+        function clearStorage() {
+            localStorage.removeItem('pilipili_binId');
+            log('localStorage effacé', 'success');
+        }
+        
+        // Afficher le bin ID actuel
+        const currentBinId = localStorage.getItem('pilipili_binId');
+        log(`Bin ID actuel: ${currentBinId || 'aucun'}`);
+    </script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0C0C0C">
+    <title>Admin - Pili-Pili Lounge</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <script>
+        if (!sessionStorage.getItem('pilipili_admin')) {
+            window.location.href = 'index.html';
+        }
+    </script>
+
+    <header class="admin-header">
+        <div class="admin-header-content">
+            <img src="../assets/logo.jpg" alt="Pili-Pili" class="admin-logo">
+            <h1>Administration</h1>
+            <button class="logout-btn" onclick="logout()">Déconnexion</button>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <!-- Plats -->
+        <section class="admin-section" id="itemsSection">
+            <div class="section-header">
+                <h2>Plats</h2>
+                <button class="add-btn" onclick="showItemForm(null, 'plat')">+ Ajouter</button>
+            </div>
+
+            <div class="settings-group">
+                <label class="settings-label">Affichage des plats</label>
+                <div class="display-options">
+                    <button class="display-option active" data-display="grid" onclick="adminApp.setDisplayMode('grid')">
+                        <div class="display-icon">
+                            <div class="grid-preview">
+                                <span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <span>Grille</span>
+                    </button>
+                    <button class="display-option" data-display="list" onclick="adminApp.setDisplayMode('list')">
+                        <div class="display-icon">
+                            <div class="list-preview">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <span>Liste</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="items-list" id="itemsList"></div>
+        </section>
+
+        <!-- Boissons -->
+        <section class="admin-section" id="drinksSection" style="display: none;">
+            <div class="section-header">
+                <h2>Boissons</h2>
+                <button class="add-btn" onclick="showItemForm(null, 'boisson')">+ Ajouter</button>
+            </div>
+
+            <div class="settings-group">
+                <label class="settings-label">Affichage des boissons</label>
+                <div class="display-options">
+                    <button class="display-option active" data-display="grid" onclick="adminApp.setDisplayMode('grid')">
+                        <div class="display-icon">
+                            <div class="grid-preview">
+                                <span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <span>Grille</span>
+                    </button>
+                    <button class="display-option" data-display="list" onclick="adminApp.setDisplayMode('list')">
+                        <div class="display-icon">
+                            <div class="list-preview">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <span>Liste</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="items-list" id="drinksList"></div>
+        </section>
+
+        <!-- Catégories -->
+        <section class="admin-section" id="categoriesSection" style="display: none;">
+            <div class="section-header">
+                <h2>Catégories</h2>
+                <button class="add-btn" onclick="showCategoryForm()">+ Ajouter</button>
+            </div>
+            <div class="categories-list" id="categoriesList"></div>
+        </section>
+
+        <!-- Restaurant -->
+        <section class="admin-section" id="restaurantSection" style="display: none;">
+            <div class="section-header">
+                <h2>Informations</h2>
+            </div>
+
+            <form id="restaurantForm" class="admin-form">
+                <div class="form-group">
+                    <label for="restaurantName">Nom</label>
+                    <input type="text" id="restaurantName" required>
+                </div>
+                <div class="form-group">
+                    <label for="restaurantAddress">Adresse</label>
+                    <input type="text" id="restaurantAddress" required>
+                </div>
+                <div class="form-group">
+                    <label for="restaurantPhone">Téléphone</label>
+                    <input type="tel" id="restaurantPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="restaurantHours">Horaires</label>
+                    <input type="text" id="restaurantHours" placeholder="Lun-Dim: 12h-23h" required>
+                </div>
+                <h3 class="form-subtitle">Réseaux Sociaux</h3>
+                <div class="form-group">
+                    <label for="facebook">Facebook</label>
+                    <input type="url" id="facebook" placeholder="https://facebook.com/...">
+                </div>
+                <div class="form-group">
+                    <label for="instagram">Instagram</label>
+                    <input type="url" id="instagram" placeholder="https://instagram.com/...">
+                </div>
+                <div class="form-group">
+                    <label for="whatsapp">WhatsApp</label>
+                    <input type="tel" id="whatsapp" placeholder="Ex: 241074412256">
+                </div>
+                <button type="submit" class="save-btn">Enregistrer</button>
+            </form>
+        </section>
+
+    </main>
+
+    <!-- Navigation inférieure -->
+    <nav class="admin-bottom-nav">
+        <button class="admin-nav-item active" data-section="items">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path>
+                <path d="M7 2v20"></path>
+                <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>
+            </svg>
+            <span>Plats</span>
+        </button>
+        <button class="admin-nav-item" data-section="drinks">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 22h8"></path>
+                <path d="M12 11v11"></path>
+                <path d="m19 3-7 8-7-8Z"></path>
+            </svg>
+            <span>Boissons</span>
+        </button>
+        <button class="admin-nav-item" data-section="categories">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span>Catégories</span>
+        </button>
+        <button class="admin-nav-item" data-section="restaurant">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            <span>Infos</span>
+        </button>
+    </nav>
+
+    <!-- Modal Plat -->
+    <div class="modal" id="itemModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="itemModalTitle">Ajouter un plat</h3>
+                <button class="close-btn" onclick="closeItemModal()">&times;</button>
+            </div>
+            <form id="itemForm">
+                <input type="hidden" id="itemId">
+                <input type="hidden" id="itemType">
+                
+                <div class="photo-upload">
+                    <label class="photo-upload-label" id="photoUploadLabel">Photo du plat</label>
+                    <div class="photo-upload-area">
+                        <div class="photo-preview" id="photoPreview" onclick="document.getElementById('photoFile').click()">
+                            <span class="photo-preview-placeholder">Ajouter</span>
+                        </div>
+                        <div class="photo-url-input">
+                            <input type="file" id="photoFile" accept="image/*" class="photo-upload-input" onchange="handlePhotoUpload(event)">
+                            <div class="form-group" style="margin-bottom: 8px;">
+                                <input type="url" id="itemImage" placeholder="Ou collez une URL d'image" onchange="previewImageUrl(event)">
+                            </div>
+                            <small>Ou sélectionnez une image (max 500 Ko)</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="itemName">Nom</label>
+                    <input type="text" id="itemName" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemDescription">Description</label>
+                    <textarea id="itemDescription" rows="3" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="itemPrice">Prix (FCFA)</label>
+                        <input type="number" id="itemPrice" min="0" required>
+                    </div>
+                    <div class="form-group" id="itemCategoryGroup">
+                        <label for="itemCategory">Catégorie</label>
+                        <select id="itemCategory"></select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="itemBadge">Badge</label>
+                        <select id="itemBadge">
+                            <option value="">Aucun</option>
+                            <option value="popular">Populaire</option>
+                            <option value="new">Nouveau</option>
+                        </select>
+                    </div>
+                    <div class="checkbox-group" id="itemSpecialGroup">
+                        <input type="checkbox" id="itemSpecial">
+                        <label for="itemSpecial" id="itemSpecialLabel">Plat phare</label>
+                    </div>
+                </div>
+                <div class="checkbox-group" id="itemActiveGroup">
+                    <input type="checkbox" id="itemActive" checked>
+                    <label for="itemActive">Visible sur le menu</label>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeItemModal()">Annuler</button>
+                    <button type="submit" class="save-btn">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Catégorie -->
+    <div class="modal" id="categoryModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="categoryModalTitle">Ajouter une catégorie</h3>
+                <button class="close-btn" onclick="closeCategoryModal()">&times;</button>
+            </div>
+            <form id="categoryForm">
+                <input type="hidden" id="categoryId">
+                <div class="form-group">
+                    <label for="categoryName">Nom</label>
+                    <input type="text" id="categoryName" required>
+                </div>
+                <div class="form-group">
+                    <label for="categoryOrder">Ordre</label>
+                    <input type="number" id="categoryOrder" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="categoryUnit">Unité de mesure</label>
+                    <select id="categoryUnit">
+                        <option value="plat">Plat</option>
+                        <option value="bouteille">Bouteille</option>
+                        <option value="verre">Verre</option>
+                        <option value="canette">Canette</option>
+                        <option value="portion">Portion</option>
+                        <option value="piece">Pièce</option>
+                    </select>
+                    <small>Unité affichée dans la sélection client</small>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeCategoryModal()">Annuler</button>
+                    <button type="submit" class="save-btn">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Confirmation -->
+    <div class="modal" id="confirmModal" style="display: none;">
+        <div class="modal-content modal-small">
+            <h3 id="confirmTitle">Confirmer</h3>
+            <p id="confirmMessage" style="color: var(--text-secondary); margin: 16px 0;">Êtes-vous sûr ?</p>
+            <div class="form-actions">
+                <button class="cancel-btn" onclick="closeConfirmModal()">Annuler</button>
+                <button class="delete-btn" id="confirmBtn">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+</html>
