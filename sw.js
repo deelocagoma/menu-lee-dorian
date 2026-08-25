@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pili-pili-v2';
+const CACHE_NAME = 'pili-pili-v3';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting(); // Force SW activation
@@ -30,24 +30,34 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  // Ignorer les requêtes non-GET (ex: POST pour l'upload d'images ou update API)
+  // Ignorer les requêtes non-GET
   if (e.request.method !== 'GET') return;
 
+  const url = e.request.url;
+
+  // Laisser passer directement sans cache : images externes, API JSONBin, ImgBB
+  if (
+    url.includes('i.ibb.co') ||
+    url.includes('imgbb.com') ||
+    url.includes('jsonbin.io') ||
+    url.includes('api.') ||
+    url.includes('fonts.googleapis.com') ||
+    url.includes('fonts.gstatic.com')
+  ) {
+    return; // Ne pas intercepter, laisser le navigateur gérer normalement
+  }
+
+  // Pour les ressources locales uniquement : network-first
   e.respondWith(
     fetch(e.request)
       .then((response) => {
-        // Optionnel : mettre en cache les requêtes réussies (même externes)
         const resClone = response.clone();
         caches.open(CACHE_NAME).then((cache) => {
-          // On ne cache que les requêtes http/https (évite les erreurs sur extensions chrome etc)
-          if (e.request.url.startsWith('http')) {
-             cache.put(e.request, resClone);
-          }
+          cache.put(e.request, resClone);
         });
         return response;
       })
       .catch(() => {
-        // Si pas de réseau, on cherche dans le cache
         return caches.match(e.request);
       })
   );

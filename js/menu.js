@@ -1,7 +1,10 @@
 // Menu Pili-Pili Lounge - Application Mobile Premium
 class MenuApp {
     constructor() {
-        this.binId = localStorage.getItem('pilipili_binId');
+        // Priorité : binId hardcodé dans config.js, sinon localStorage
+        this.binId = JSONBIN_CONFIG.binId || localStorage.getItem('pilipili_binId');
+        // Synchroniser le localStorage
+        if (this.binId) localStorage.setItem('pilipili_binId', this.binId);
         this.menuData = null;
         this.allItems = [];
         this.currentFilter = 'all';
