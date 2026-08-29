@@ -142,21 +142,20 @@ class AdminApp {
     }
 
     renderCurrentSection() {
-        console.log('[ADMIN] renderCurrentSection:', this.currentSection);
         document.querySelectorAll('.admin-section').forEach(section => {
             section.style.display = 'none';
         });
         
         const section = document.getElementById(`${this.currentSection}Section`);
-        console.log('[ADMIN] target section:', section);
-                
+        if (section) section.style.display = 'block';
+        
         switch (this.currentSection) {
             case 'items': this.renderItems('plat', 'itemsList'); break;
             case 'drinks': this.renderItems('boisson', 'drinksList'); break;
             case 'categories': this.renderCategories(); break;
             case 'restaurant': this.renderRestaurant(); break;
             case 'logo': break;
-                    }
+        }
     }
 
     showToast(message) {
