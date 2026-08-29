@@ -565,6 +565,24 @@ class AdminApp {
         }
     }
 
+    async saveTheme(e) {
+        e.preventDefault();
+        
+        this.menuData.settings = this.menuData.settings || {};
+        this.menuData.settings.theme = {
+            primary: document.getElementById('themePrimary').value,
+            secondary: document.getElementById('themeSecondary').value,
+            background: document.getElementById('themeBackground').value,
+            text: document.getElementById('themeText').value,
+            titleFont: document.getElementById('themeTitleFont').value,
+            bodyFont: document.getElementById('themeBodyFont').value
+        };
+        
+        if (await this.saveMenu()) {
+            alert('Thème enregistré !');
+        }
+    }
+
     // ==================== UTILITAIRES ====================
     
     setupForms() {

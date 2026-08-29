@@ -1157,7 +1157,7 @@ body {
    HEADER TOOLBAR
    ============================================ */
 .header-toolbar {
-    display: flex;
+    display: flex !important;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;

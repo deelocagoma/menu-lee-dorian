@@ -539,10 +539,25 @@ class MenuApp {
         const theme = this.menuData.settings?.theme || {};
         const root = document.documentElement;
         
-        if (theme.primary) root.style.setProperty('--sage', theme.primary);
-        if (theme.secondary) root.style.setProperty('--text-primary', theme.secondary);
-        if (theme.background) root.style.setProperty('--bg-body', theme.background);
-        if (theme.text) root.style.setProperty('--text-secondary', theme.text);
+        if (theme.primary) {
+            root.style.setProperty('--sage', theme.primary);
+            root.style.setProperty('--sage-hover', this.darkenColor(theme.primary, 20));
+            root.style.setProperty('--sage-glow', this.hexToRgba(theme.primary, 0.15));
+        }
+        if (theme.secondary) {
+            root.style.setProperty('--text-primary', theme.secondary);
+            root.style.setProperty('--text-secondary', this.adjustColorOpacity(theme.secondary, 0.7));
+            root.style.setProperty('--text-muted', this.adjustColorOpacity(theme.secondary, 0.5));
+        }
+        if (theme.background) {
+            root.style.setProperty('--bg-primary', theme.background);
+            root.style.setProperty('--bg-secondary', theme.background);
+            root.style.setProperty('--bg-card', '#FFFFFF');
+            root.style.setProperty('--bg-elevated', '#FFFFFF');
+        }
+        if (theme.text) {
+            root.style.setProperty('--text-secondary', theme.text);
+        }
         if (theme.titleFont) {
             const titleEl = document.getElementById('headerTitle');
             if (titleEl) titleEl.style.fontFamily = theme.titleFont;
@@ -550,6 +565,27 @@ class MenuApp {
         if (theme.bodyFont) {
             document.body.style.fontFamily = theme.bodyFont;
         }
+    }
+    
+    darkenColor(hex, percent) {
+        const num = parseInt(hex.replace('#', ''), 16);
+        const amt = Math.round(2.55 * percent);
+        const R = Math.max(0, (num >> 16) - amt);
+        const G = Math.max(0, ((num >> 8) & 0x00FF) - amt);
+        const B = Math.max(0, (num & 0x0000FF) - amt);
+        return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
+    }
+    
+    hexToRgba(hex, alpha) {
+        const num = parseInt(hex.replace('#', ''), 16);
+        const R = (num >> 16) & 255;
+        const G = (num >> 8) & 255;
+        const B = num & 255;
+        return 'rgba(' + R + ',' + G + ',' + B + ',' + alpha + ')';
+    }
+    
+    adjustColorOpacity(hex, alpha) {
+        return this.hexToRgba(hex, alpha);
     }
 
     renderCategories() {
