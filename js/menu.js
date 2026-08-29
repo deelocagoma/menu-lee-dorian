@@ -94,12 +94,8 @@ class MenuApp {
         const count = document.getElementById('selectionCount');
         const total = this.getSelectionCount();
         
-        if (total > 0) {
-            fab.style.display = 'flex';
-            count.textContent = total;
-        } else {
-            fab.style.display = 'none';
-        }
+        fab.style.display = 'flex';
+        count.textContent = total;
     }
 
     updateMenuCards() {
