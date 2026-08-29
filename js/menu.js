@@ -702,7 +702,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 if (isIos() && !isInStandaloneMode() && !localStorage.getItem('pwa_dismissed')) {
     pwaBanner.style.display = 'flex';
-    document.querySelector('.pwa-desc').textContent = 'Appuyez sur Partager puis "Sur l\'ecran d\'accueil"';
+    document.querySelector('.pwa-desc').textContent = 'Touchez le bouton Partager, puis sélectionnez « Sur l\'écran d\'accueil »';
     pwaInstallBtn.style.display = 'none';
 }
 
