@@ -324,126 +324,27 @@ class MenuApp {
         this.renderAll();
         this.renderRestaurantCard();
     }
-        const title = document.getElementById('headerTitle');
-        const coordsEl = document.getElementById('headerToolCoords');
-        const fontSelect = document.getElementById('titleFontSelect');
-        if (!toolbar || !logo || !title || !coordsEl || !fontSelect) return;
 
-        toolbar.style.display = 'flex';
+    renderCategories() {
+        const container = document.getElementById('categoriesScroll');
+        
+        const categories = [...this.menuData.categories]
+            .sort((a, b) => a.order - b.order);
 
-        const stateKey = 'leet-dorian-header-state';
-        const step = 5;
+        container.innerHTML = `
+            <button class="category-chip active" data-filter="all">Tout</button>
+            <button class="category-chip" data-filter="drinks">Boissons</button>
+            ${categories.map(cat => `
+                <button class="category-chip" data-filter="category-${cat.id}">${cat.name}</button>
+            `).join('')}
+        `;
 
-        function parseTranslate(el) {
-            const m = (el.style.transform || '').match(/translate\(([^p]+)px,\s*([^p]+)px\)/);
-            return m ? { x: parseFloat(m[1]), y: parseFloat(m[2]) } : { x: 0, y: 0 };
-        }
-
-        function applyTranslate(el, x, y) {
-            el.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
-        }
-
-        function getState() {
-            const logoPos = parseTranslate(logo);
-            const titlePos = parseTranslate(title);
-            return {
-                logoX: logoPos.x,
-                logoY: logoPos.y,
-                titleX: titlePos.x,
-                titleY: titlePos.y,
-                titleFont: title.style.fontFamily || "'Playfair Display', serif",
-                titleSize: title.style.fontSize || '1.25rem'
-            };
-        }
-
-        function applyState(state) {
-            applyTranslate(logo, state.logoX || 0, state.logoY || 0);
-            applyTranslate(title, state.titleX || 0, state.titleY || 0);
-            title.style.fontFamily = state.titleFont || "'Playfair Display', serif";
-            title.style.fontSize = state.titleSize || '1.25rem';
-            if (fontSelect) fontSelect.value = state.titleFont || "'Playfair Display', serif";
-        }
-
-        function updateCoords() {
-            const logoPos = parseTranslate(logo);
-            const titlePos = parseTranslate(title);
-            coordsEl.textContent = Math.round(titlePos.x) + ',' + Math.round(titlePos.y);
-        }
-
-        const saved = localStorage.getItem(stateKey);
-        if (saved) {
-            try { applyState(JSON.parse(saved)); } catch (e) {}
-        }
-        updateCoords();
-
-        function saveState() {
-            localStorage.setItem(stateKey, JSON.stringify(getState()));
-            updateCoords();
-        }
-
-        document.getElementById('logoLeftBtn').addEventListener('click', function() {
-            var pos = parseTranslate(logo);
-            applyTranslate(logo, pos.x - step, pos.y);
-            saveState();
-        });
-
-        document.getElementById('logoRightBtn').addEventListener('click', function() {
-            var pos = parseTranslate(logo);
-            applyTranslate(logo, pos.x + step, pos.y);
-            saveState();
-        });
-
-        document.getElementById('logoUpBtn').addEventListener('click', function() {
-            var pos = parseTranslate(logo);
-            applyTranslate(logo, pos.x, pos.y - step);
-            saveState();
-        });
-
-        document.getElementById('logoDownBtn').addEventListener('click', function() {
-            var pos = parseTranslate(logo);
-            applyTranslate(logo, pos.x, pos.y + step);
-            saveState();
-        });
-
-        document.getElementById('titleLeftBtn').addEventListener('click', function() {
-            var pos = parseTranslate(title);
-            applyTranslate(title, pos.x - step, pos.y);
-            saveState();
-        });
-
-        document.getElementById('titleRightBtn').addEventListener('click', function() {
-            var pos = parseTranslate(title);
-            applyTranslate(title, pos.x + step, pos.y);
-            saveState();
-        });
-
-        document.getElementById('titleUpBtn').addEventListener('click', function() {
-            var pos = parseTranslate(title);
-            applyTranslate(title, pos.x, pos.y - step);
-            saveState();
-        });
-
-        document.getElementById('titleDownBtn').addEventListener('click', function() {
-            var pos = parseTranslate(title);
-            applyTranslate(title, pos.x, pos.y + step);
-            saveState();
-        });
-
-        document.getElementById('titleBigBtn').addEventListener('click', function() {
-            var current = parseFloat(title.style.fontSize || 20);
-            title.style.fontSize = Math.min(40, current + step) + 'px';
-            saveState();
-        });
-
-        document.getElementById('titleSmallBtn').addEventListener('click', function() {
-            var current = parseFloat(title.style.fontSize || 20);
-            title.style.fontSize = Math.max(12, current - step) + 'px';
-            saveState();
-        });
-
-        fontSelect.addEventListener('change', function() {
-            title.style.fontFamily = this.value;
-            saveState();
+        container.querySelectorAll('.category-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                container.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                this.filterMenu(chip.dataset.filter);
+            });
         });
     }
 
