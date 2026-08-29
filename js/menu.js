@@ -415,6 +415,7 @@ class MenuApp {
 
         container.innerHTML = `
             <button class="category-chip active" data-filter="all">Tout</button>
+            <button class="category-chip" data-filter="drinks">Boissons</button>
             ${categories.map(cat => `
                 <button class="category-chip" data-filter="category-${cat.id}">${cat.name}</button>
             `).join('')}
