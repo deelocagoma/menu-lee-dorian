@@ -322,12 +322,8 @@ class MenuApp {
         loading.style.display = 'none';
         document.getElementById('heroSection').style.display = 'block';
         this.renderAll();
-                        this.initHeaderToolbar();
+        this.renderRestaurantCard();
     }
-
-    initHeaderToolbar() {
-        const toolbar = document.getElementById('headerToolbar');
-        const logo = document.getElementById('headerLogo');
         const title = document.getElementById('headerTitle');
         const coordsEl = document.getElementById('headerToolCoords');
         const fontSelect = document.getElementById('titleFontSelect');
