@@ -17,7 +17,6 @@ class MenuApp {
             }
             await this.loadMenu();
             this.setupSearch();
-            this.setupScrollTop();
             this.setupSelection();
             this.updateSelectionFab();
         } catch (error) {
@@ -732,21 +731,6 @@ class MenuApp {
         container.innerHTML = html;
     }
 
-    setupScrollTop() {
-        const fab = document.getElementById('scrollTopBtn');
-        
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 400) {
-                fab.classList.add('visible');
-            } else {
-                fab.classList.remove('visible');
-            }
-        });
-
-        fab.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
 }
 
 // ==================== FONCTIONS GLOBALES ====================
