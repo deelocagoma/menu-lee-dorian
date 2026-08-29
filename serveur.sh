@@ -1,7 +1,7 @@
 #!/bin/bash
-# Script pour lancer le serveur local du menu Pili-Pili Lounge
+# Script pour lancer le serveur local du menu LEET-DORIAN
 
-echo "🍽️  Démarrage du serveur local pour Pili-Pili Lounge..."
+echo "🍽️  Démarrage du serveur local pour LEET-DORIAN..."
 echo ""
 echo "📋 Menu public : http://localhost:8000"
 echo "🔧 Espace admin : http://localhost:8000/admin/"
