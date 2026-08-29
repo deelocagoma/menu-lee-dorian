@@ -23,7 +23,7 @@
     --radius-md: 12px;
     --radius-lg: 16px;
     --radius-xl: 24px;
-    --header-height: 56px;
+    --header-height: 80px;
 }
 
 /* Reset */
@@ -83,11 +83,9 @@ body {
 }
 
 .header-logo {
-    height: 60px;
+    height: 80px;
     width: auto;
     display: block;
-    margin-top: 30px;
-    margin-left: 0px;
 }
 
 .header-title h1 {
