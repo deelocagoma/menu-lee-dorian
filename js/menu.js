@@ -322,7 +322,8 @@ class MenuApp {
     }
 
     applyCustomLogo() {
-        const logoData = this.menuData.settings?.logo;
+        const localLogo = localStorage.getItem('leetdorian_logo');
+        const logoData = localLogo ? JSON.parse(localLogo) : (this.menuData.settings?.logo);
         if (!logoData?.svg) return;
 
         const logoImg = document.getElementById('headerLogo');
