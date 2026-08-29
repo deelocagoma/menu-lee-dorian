@@ -129,11 +129,17 @@ class AdminApp {
     }
 
     renderCartSettings() {
+        console.log('[CART-SETTINGS] renderCartSettings called');
+        const section = document.getElementById('cartSettingsSection');
+        console.log('[CART-SETTINGS] section element:', section);
+        if (section) section.style.display = 'block';
+        
         const debug = document.getElementById('cartSettingsDebug');
-        if (debug) debug.style.display = 'block';
+        if (debug) { debug.style.display = 'block'; console.log('[CART-SETTINGS] debug shown'); }
         
         const xInput = document.getElementById('cartPosX');
         const yInput = document.getElementById('cartPosY');
+        console.log('[CART-SETTINGS] inputs:', xInput, yInput);
         
         if (!xInput || !yInput) return;
         
@@ -146,6 +152,7 @@ class AdminApp {
         const yVal = document.getElementById('cartPosYValue');
         if (xVal) xVal.textContent = savedPos.x + 'px';
         if (yVal) yVal.textContent = savedPos.y + 'px';
+        console.log('[CART-SETTINGS] rendered');
     }
 
     setupNavigation() {
@@ -162,11 +169,13 @@ class AdminApp {
     }
 
     renderCurrentSection() {
+        console.log('[ADMIN] renderCurrentSection:', this.currentSection);
         document.querySelectorAll('.admin-section').forEach(section => {
             section.style.display = 'none';
         });
         
         const section = document.getElementById(`${this.currentSection}Section`);
+        console.log('[ADMIN] target section:', section);
         if (section) section.style.display = 'block';
         
         switch (this.currentSection) {
