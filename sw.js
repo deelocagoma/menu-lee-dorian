@@ -12,7 +12,8 @@ self.addEventListener('install', (e) => {
         '/js/menu.js',
         '/js/admin.js',
         '/js/config.js',
-        '/assets/logo.svg'
+        '/assets/logo.svg',
+        '/assets/logo-resto-leet-dorian.png'
       ]);
     })
   );
