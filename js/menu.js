@@ -318,6 +318,24 @@ class MenuApp {
         document.getElementById('heroSection').style.display = 'block';
         this.renderAll();
         this.renderRestaurantCard();
+        this.applyCustomLogo();
+    }
+
+    applyCustomLogo() {
+        const logoData = this.menuData.settings?.logo;
+        if (!logoData?.svg) return;
+
+        const logoImg = document.getElementById('headerLogo');
+        const container = document.getElementById('headerLogoContainer');
+        if (!logoImg || !container) return;
+
+        const blob = new Blob([logoData.svg], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        logoImg.src = url;
+        logoImg.style.display = 'block';
+        container.style.display = 'flex';
+
+        logoImg.onload = () => URL.revokeObjectURL(url);
     }
 
     renderCategories() {
