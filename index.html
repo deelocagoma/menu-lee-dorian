@@ -14,8 +14,8 @@
     <meta name="apple-mobile-web-app-title" content="LEET-DORIAN">
 
     <style>
-        #cartFab { opacity: 0 !important; pointer-events: none !important; }
-        #cartPanel { display: none !important; }
+        #cartFab:not(.visible) { opacity: 0 !important; pointer-events: none !important; }
+        #cartPanel:not(.visible) { display: none !important; }
         .loading-screen { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.25s ease; }
         .loading-screen.hidden { opacity: 0; pointer-events: none; }
     </style>

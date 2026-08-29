@@ -578,7 +578,7 @@ class MenuApp {
                     </div>
                     ${badgeHtml ? `<div class="menu-card-badges">${badgeHtml}</div>` : ''}
                 </div>
-                ${qty > 0 ? `<div class="item-qty-badge">${qty}</div>` : ''}
+                <div class="item-qty-badge" style="display: ${qty > 0 ? 'flex' : 'none'}">${qty}</div>
             </div>
         `;
     }
