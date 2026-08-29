@@ -153,10 +153,39 @@
         <div class="section-header">
             <h2>Créateur de Logo</h2>
         </div>
-        <iframe src="logo-builder.html" style="width: 100%; height: 600px; border: none; border-radius: 8px;"></iframe>
+        <iframe src="/admin/logo-builder.html" style="width: 100%; height: 600px; border: none; border-radius: 8px;"></iframe>
     </section>
 
-    </main>
+        <section class="admin-section" id="cartSettingsSection" style="display: none;">
+        <div class="section-header">
+            <h2>Position du panier</h2>
+        </div>
+        <div class="settings-group">
+            <label class="settings-label">Position horizontale (X)</label>
+            <input type="range" id="cartPosX" min="0" max="100" value="24" style="width:100%">
+            <div style="display:flex;justify-content:space-between;margin-top:8px">
+                <span>Gauche</span>
+                <span id="cartPosXValue">24px</span>
+                <span>Droite</span>
+            </div>
+        </div>
+        <div class="settings-group" style="margin-top:20px">
+            <label class="settings-label">Position verticale (Y)</label>
+            <input type="range" id="cartPosY" min="0" max="100" value="24" style="width:100%">
+            <div style="display:flex;justify-content:space-between;margin-top:8px">
+                <span>Haut</span>
+                <span id="cartPosYValue">24px</span>
+                <span>Bas</span>
+            </div>
+        </div>
+        <div class="settings-group" style="margin-top:20px">
+            <button class="add-btn" onclick="saveCartPosition()">Enregistrer la position</button>
+            <button class="add-btn" style="background:var(--text-secondary);margin-left:10px" onclick="resetCartPosition()">Reinitialiser</button>
+        </div>
+        <div id="cartSaveStatus" style="margin-top:10px"></div>
+    </section>
+
+</main>
 
     <!-- Navigation inférieure -->
     <nav class="admin-bottom-nav">
@@ -199,6 +228,14 @@
                 <path d="M2 12l10 5 10-5"></path>
             </svg>
             <span>Logo</span>
+        </button>
+        <button class="admin-nav-item" data-section="cart-settings">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span>Panier</span>
         </button>
 
     </nav>
@@ -314,5 +351,66 @@
 
     <script src="../js/config.js"></script>
     <script src="../js/admin.js"></script>
+    <script>
+        const CONFIG = {
+            masterKey: '$2a$10$q94z0iyNLwf.aYQIH.DWvu0rTWEIbvKOl4Wl/Ufoe/Ugu21V2EcPC',
+            binId: '6a91f15cf5f4af5e294f4dc1'
+        };
+
+        function updateCartPositionPreview() {
+            const x = document.getElementById('cartPosX').value;
+            const y = document.getElementById('cartPosY').value;
+            document.getElementById('cartPosXValue').textContent = x + 'px';
+            document.getElementById('cartPosYValue').textContent = y + 'px';
+        }
+
+        function saveCartPosition() {
+            const x = document.getElementById('cartPosX').value;
+            const y = document.getElementById('cartPosY').value;
+            const status = document.getElementById('cartSaveStatus');
+            
+            fetch(`https://api.jsonbin.io/v3/b/${CONFIG.binId}`, {
+                method: 'GET',
+                headers: { 'X-Master-Key': CONFIG.masterKey }
+            })
+            .then(r => r.json())
+            .then(result => {
+                const data = result.record || {};
+                if (!data.settings) data.settings = {};
+                data.settings.cartPosition = { x: parseInt(x), y: parseInt(y), unit: 'px' };
+                
+                return fetch(`https://api.jsonbin.io/v3/b/${CONFIG.binId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'X-Master-Key': CONFIG.masterKey,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+            })
+            .then(r => {
+                if (r.ok) {
+                    status.textContent = 'Position enregistree avec succes !';
+                    status.style.color = '#155724';
+                } else {
+                    throw new Error('Erreur');
+                }
+            })
+            .catch(err => {
+                status.textContent = 'Erreur: ' + err.message;
+                status.style.color = '#721c24';
+            });
+        }
+
+        function resetCartPosition() {
+            document.getElementById('cartPosX').value = 24;
+            document.getElementById('cartPosY').value = 24;
+            updateCartPositionPreview();
+            saveCartPosition();
+        }
+
+        document.getElementById('cartPosX').addEventListener('input', updateCartPositionPreview);
+        document.getElementById('cartPosY').addEventListener('input', updateCartPositionPreview);
+    </script>
 </body>
 </html>

@@ -128,6 +128,22 @@ class AdminApp {
         }
     }
 
+    renderCartSettings() {
+        const xInput = document.getElementById('cartPosX');
+        const yInput = document.getElementById('cartPosY');
+        
+        if (!xInput || !yInput) return;
+        
+        const savedPos = this.menuData?.settings?.cartPosition || { x: 24, y: 24 };
+        xInput.value = savedPos.x;
+        yInput.value = savedPos.y;
+        
+        const xVal = document.getElementById('cartPosXValue');
+        const yVal = document.getElementById('cartPosYValue');
+        if (xVal) xVal.textContent = savedPos.x + 'px';
+        if (yVal) yVal.textContent = savedPos.y + 'px';
+    }
+
     setupNavigation() {
         const bottomNavItems = document.querySelectorAll('.admin-nav-item');
         
@@ -154,7 +170,8 @@ class AdminApp {
             case 'drinks': this.renderItems('boisson', 'drinksList'); break;
             case 'categories': this.renderCategories(); break;
             case 'restaurant': this.renderRestaurant(); break;
-            case 'theme': break;
+            case 'logo': break;
+            case 'cart-settings': this.renderCartSettings(); break;
         }
     }
 
