@@ -41,7 +41,7 @@
             <div class="header-brand" id="headerBrand">
                 <img src="assets/logo.svg" alt="LEET-DORIAN" class="header-logo" id="headerLogo">
                 <div class="header-title">
-                    <h1>LEET-DORIAN</h1>
+                    <h1 id="headerTitle">LEET-DORIAN</h1>
                 </div>
             </div>
             <div class="header-actions">
@@ -57,8 +57,54 @@
                         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                     </svg>
                 </a>
+                <button class="icon-btn" id="toggleHeaderToolbar" aria-label="Ajuster le header" title="Ajuster le header">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"></path>
+                    </svg>
+                </button>
             </div>
         </div>
+
+        <div class="header-toolbar" id="headerToolbar" style="display: none;">
+            <div class="header-tool-group">
+                <span class="header-tool-label">LOGO</span>
+                <button class="header-tool-btn" id="logoLeftBtn" aria-label="Gauche">←</button>
+                <button class="header-tool-btn" id="logoRightBtn" aria-label="Droite">→</button>
+                <button class="header-tool-btn" id="logoUpBtn" aria-label="Haut">↑</button>
+                <button class="header-tool-btn" id="logoDownBtn" aria-label="Bas">↓</button>
+            </div>
+            <div class="header-tool-separator"></div>
+            <div class="header-tool-group">
+                <span class="header-tool-label">TITRE</span>
+                <button class="header-tool-btn" id="titleLeftBtn" aria-label="Gauche">←</button>
+                <button class="header-tool-btn" id="titleRightBtn" aria-label="Droite">→</button>
+                <button class="header-tool-btn" id="titleUpBtn" aria-label="Haut">↑</button>
+                <button class="header-tool-btn" id="titleDownBtn" aria-label="Bas">↓</button>
+            </div>
+            <div class="header-tool-separator"></div>
+            <div class="header-tool-group">
+                <span class="header-tool-label">POLICE</span>
+                <select class="header-tool-select" id="titleFontSelect">
+                    <option value="'Playfair Display', serif">Playfair</option>
+                    <option value="'Lato', sans-serif">Lato</option>
+                    <option value="'Georgia', serif">Georgia</option>
+                    <option value="'Arial', sans-serif">Arial</option>
+                </select>
+            </div>
+            <div class="header-tool-separator"></div>
+            <div class="header-tool-group">
+                <span class="header-tool-label">TAILLE</span>
+                <button class="header-tool-btn" id="titleBigBtn" aria-label="Agrandir">T+</button>
+                <button class="header-tool-btn" id="titleSmallBtn" aria-label="Réduire">T−</button>
+            </div>
+            <div class="header-tool-separator"></div>
+            <div class="header-tool-group">
+                <span class="header-tool-label">POS</span>
+                <span class="header-tool-value" id="headerToolCoords">0,0</span>
+            </div>
+        </div>
+    </header>
         
         <div class="search-bar" id="searchBar">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
