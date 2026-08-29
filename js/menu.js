@@ -94,8 +94,13 @@ class MenuApp {
         const count = document.getElementById('selectionCount');
         const total = this.getSelectionCount();
         
-        fab.style.display = 'flex';
         count.textContent = total;
+        
+        if (total > 0) {
+            fab.classList.add('visible');
+        } else {
+            fab.classList.remove('visible');
+        }
     }
 
     updateMenuCards() {
