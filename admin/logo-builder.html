@@ -131,6 +131,11 @@
             width: 100%;
         }
 
+        .control-group input[type="range"]:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .control-group .range-value {
             display: inline-block;
             margin-left: 10px;
@@ -181,6 +186,15 @@
 
         .btn-success:hover {
             background: #218838;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
         }
 
         .status {
@@ -241,8 +255,10 @@
             <div class="preview-section">
                 <div class="logo-preview" id="logoPreview">
                     <svg id="logoSvg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <text id="letter1" x="88" y="110" font-size="170" font-family="Georgia" fill="#5E7057" text-anchor="middle">L</text>
-                        <text id="letter2" x="150" y="120" font-size="60" font-family="Arial" fill="#1F2A24" text-anchor="middle">B</text>
+                        <g id="lettersGroup">
+                            <text id="letter1" x="88" y="110" font-size="170" font-family="Georgia" fill="#5E7057" text-anchor="middle">L</text>
+                            <text id="letter2" x="150" y="120" font-size="60" font-family="Arial" fill="#1F2A24" text-anchor="middle">B</text>
+                        </g>
                     </svg>
                 </div>
             </div>
@@ -321,6 +337,7 @@
                 <div class="button-group">
                     <button class="btn btn-success" onclick="saveLogo()">💾 Enregistrer le logo</button>
                     <button class="btn btn-secondary" onclick="resetLogo()">🔄 Réinitialiser</button>
+                    <button class="btn btn-primary" id="mergeBtn" onclick="toggleMerge()">🔗 Fusionner les lettres</button>
                     <button class="btn btn-primary" onclick="downloadLogo()">📥 Télécharger SVG</button>
                 </div>
 
@@ -340,25 +357,105 @@
             letter1: { char: 'L', x: 88, y: 110, size: 170, color: '#5E7057', font: 'Georgia' },
             letter2: { char: 'D', x: 154, y: 126, size: 150, color: '#5E7057', font: 'Georgia' }
         };
+        let isMerged = false;
+        let groupTransform = { x: 0, y: 0, scale: 1 };
+
+        function toggleMerge() {
+            const btn = document.getElementById('mergeBtn');
+            const group = document.getElementById('lettersGroup');
+            
+            if (!isMerged) {
+                const letter1 = document.getElementById('letter1');
+                const letter2 = document.getElementById('letter2');
+                
+                const x1 = parseFloat(letter1.getAttribute('x'));
+                const y1 = parseFloat(letter1.getAttribute('y'));
+                const x2 = parseFloat(letter2.getAttribute('x'));
+                const y2 = parseFloat(letter2.getAttribute('y'));
+                
+                const centerX = (x1 + x2) / 2;
+                const centerY = (y1 + y2) / 2;
+                
+                letter1.setAttribute('x', x1 - centerX);
+                letter1.setAttribute('y', y1 - centerY);
+                letter2.setAttribute('x', x2 - centerX);
+                letter2.setAttribute('y', y2 - centerY);
+                
+                groupTransform = { x: centerX, y: centerY, scale: 1 };
+                group.setAttribute('transform', `translate(${centerX}, ${centerY}) scale(1)`);
+                
+                isMerged = true;
+                btn.textContent = '🔓 Séparer les lettres';
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-warning');
+                
+                document.getElementById('letter1X').disabled = true;
+                document.getElementById('letter1Y').disabled = true;
+                document.getElementById('letter2X').disabled = true;
+                document.getElementById('letter2Y').disabled = true;
+            } else {
+                const letter1 = document.getElementById('letter1');
+                const letter2 = document.getElementById('letter2');
+                const group = document.getElementById('lettersGroup');
+                
+                const x1 = parseFloat(letter1.getAttribute('x'));
+                const y1 = parseFloat(letter1.getAttribute('y'));
+                const x2 = parseFloat(letter2.getAttribute('x'));
+                const y2 = parseFloat(letter2.getAttribute('y'));
+                
+                letter1.setAttribute('x', x1 + groupTransform.x);
+                letter1.setAttribute('y', y1 + groupTransform.y);
+                letter2.setAttribute('x', x2 + groupTransform.x);
+                letter2.setAttribute('y', y2 + groupTransform.y);
+                
+                group.removeAttribute('transform');
+                
+                isMerged = false;
+                btn.textContent = '🔗 Fusionner les lettres';
+                btn.classList.remove('btn-warning');
+                btn.classList.add('btn-primary');
+                
+                document.getElementById('letter1X').disabled = false;
+                document.getElementById('letter1Y').disabled = false;
+                document.getElementById('letter2X').disabled = false;
+                document.getElementById('letter2Y').disabled = false;
+            }
+        }
 
         function updatePreview() {
-            const svg = document.getElementById('logoSvg');
             const letter1 = document.getElementById('letter1');
             const letter2 = document.getElementById('letter2');
+            const group = document.getElementById('lettersGroup');
 
-            letter1.setAttribute('x', logoState.letter1.x);
-            letter1.setAttribute('y', logoState.letter1.y);
-            letter1.setAttribute('font-size', logoState.letter1.size);
-            letter1.setAttribute('fill', logoState.letter1.color);
-            letter1.setAttribute('font-family', logoState.letter1.font);
-            letter1.textContent = logoState.letter1.char;
+            if (!isMerged) {
+                letter1.setAttribute('x', logoState.letter1.x);
+                letter1.setAttribute('y', logoState.letter1.y);
+                letter1.setAttribute('font-size', logoState.letter1.size);
+                letter1.setAttribute('fill', logoState.letter1.color);
+                letter1.setAttribute('font-family', logoState.letter1.font);
+                letter1.textContent = logoState.letter1.char;
 
-            letter2.setAttribute('x', logoState.letter2.x);
-            letter2.setAttribute('y', logoState.letter2.y);
-            letter2.setAttribute('font-size', logoState.letter2.size);
-            letter2.setAttribute('fill', logoState.letter2.color);
-            letter2.setAttribute('font-family', logoState.letter2.font);
-            letter2.textContent = logoState.letter2.char;
+                letter2.setAttribute('x', logoState.letter2.x);
+                letter2.setAttribute('y', logoState.letter2.y);
+                letter2.setAttribute('font-size', logoState.letter2.size);
+                letter2.setAttribute('fill', logoState.letter2.color);
+                letter2.setAttribute('font-family', logoState.letter2.font);
+                letter2.textContent = logoState.letter2.char;
+                
+                group.removeAttribute('transform');
+            } else {
+                letter1.setAttribute('fill', logoState.letter1.color);
+                letter1.setAttribute('font-family', logoState.letter1.font);
+                letter1.textContent = logoState.letter1.char;
+
+                letter2.setAttribute('fill', logoState.letter2.color);
+                letter2.setAttribute('font-family', logoState.letter2.font);
+                letter2.textContent = logoState.letter2.char;
+                
+                const baseSize = (logoState.letter1.size + logoState.letter2.size) / 2;
+                const scale = baseSize / 160;
+                group.setAttribute('transform', `translate(${groupTransform.x}, ${groupTransform.y}) scale(${scale})`);
+            }
         }
 
         function setupControls() {
@@ -383,6 +480,12 @@
             document.getElementById('letter1Size').addEventListener('input', (e) => {
                 logoState.letter1.size = parseInt(e.target.value);
                 document.getElementById('letter1SizeValue').textContent = e.target.value;
+                if (isMerged) {
+                    const baseSize = (logoState.letter1.size + logoState.letter2.size) / 2;
+                    const scale = baseSize / 160;
+                    document.getElementById('lettersGroup').setAttribute('transform', 
+                        `translate(${groupTransform.x}, ${groupTransform.y}) scale(${scale})`);
+                }
                 updatePreview();
             });
 
@@ -417,6 +520,12 @@
             document.getElementById('letter2Size').addEventListener('input', (e) => {
                 logoState.letter2.size = parseInt(e.target.value);
                 document.getElementById('letter2SizeValue').textContent = e.target.value;
+                if (isMerged) {
+                    const baseSize = (logoState.letter1.size + logoState.letter2.size) / 2;
+                    const scale = baseSize / 160;
+                    document.getElementById('lettersGroup').setAttribute('transform', 
+                        `translate(${groupTransform.x}, ${groupTransform.y}) scale(${scale})`);
+                }
                 updatePreview();
             });
 
@@ -432,6 +541,17 @@
         }
 
         function generateLogoSVG() {
+            if (isMerged) {
+                const baseSize = (logoState.letter1.size + logoState.letter2.size) / 2;
+                const scale = baseSize / 160;
+                const transform = `translate(${groupTransform.x}, ${groupTransform.y}) scale(${scale})`;
+                return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+                    <g transform="${transform}">
+                        <text x="${logoState.letter1.x - groupTransform.x}" y="${logoState.letter1.y - groupTransform.y}" font-size="${logoState.letter1.size}" font-family="${logoState.letter1.font}" fill="${logoState.letter1.color}" text-anchor="middle">${logoState.letter1.char}</text>
+                        <text x="${logoState.letter2.x - groupTransform.x}" y="${logoState.letter2.y - groupTransform.y}" font-size="${logoState.letter2.size}" font-family="${logoState.letter2.font}" fill="${logoState.letter2.color}" text-anchor="middle">${logoState.letter2.char}</text>
+                    </g>
+                </svg>`;
+            }
             return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
                 <text x="${logoState.letter1.x}" y="${logoState.letter1.y}" font-size="${logoState.letter1.size}" font-family="${logoState.letter1.font}" fill="${logoState.letter1.color}" text-anchor="middle">${logoState.letter1.char}</text>
                 <text x="${logoState.letter2.x}" y="${logoState.letter2.y}" font-size="${logoState.letter2.size}" font-family="${logoState.letter2.font}" fill="${logoState.letter2.color}" text-anchor="middle">${logoState.letter2.char}</text>
