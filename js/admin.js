@@ -154,6 +154,7 @@ class AdminApp {
             case 'drinks': this.renderItems('boisson', 'drinksList'); break;
             case 'categories': this.renderCategories(); break;
             case 'restaurant': this.renderRestaurant(); break;
+            case 'theme': break;
         }
     }
 
