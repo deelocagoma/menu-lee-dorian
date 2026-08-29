@@ -141,11 +141,10 @@ class MenuApp {
         let isDragging = false;
         let startX, startY, initialX, initialY;
         
-        const savedPosition = JSON.parse(localStorage.getItem('leetdorian_cart_position') || '{"x":24,"y":24}');
-        element.style.right = 'auto';
-        element.style.bottom = 'auto';
-        element.style.left = savedPosition.x + 'px';
-        element.style.top = savedPosition.y + 'px';
+        element.style.right = '24px';
+        element.style.bottom = '24px';
+        element.style.left = 'auto';
+        element.style.top = 'auto';
         
         element.addEventListener('mousedown', dragStart);
         element.addEventListener('touchstart', dragStart, { passive: false });
@@ -184,18 +183,14 @@ class MenuApp {
             
             element.style.left = newX + 'px';
             element.style.top = newY + 'px';
+            element.style.right = 'auto';
+            element.style.bottom = 'auto';
         }
         
         function dragEnd() {
             if (!isDragging) return;
             isDragging = false;
             element.style.transition = 'all 0.25s ease';
-            
-            const pos = {
-                x: element.offsetLeft,
-                y: element.offsetTop
-            };
-            localStorage.setItem('leetdorian_cart_position', JSON.stringify(pos));
             
             document.removeEventListener('mousemove', drag);
             document.removeEventListener('mouseup', dragEnd);
@@ -825,10 +820,7 @@ function closeCartPanel() {
     if (panel) panel.classList.remove('visible');
 }
 
-function resetCartPosition() {
-    localStorage.removeItem('leetdorian_cart_position');
-    location.reload();
-}
+
 
 function handleCartPanelClick(event) {
     const panel = document.getElementById('cartPanel');

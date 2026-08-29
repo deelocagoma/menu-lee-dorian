@@ -702,25 +702,7 @@ body {
     justify-content: center;
 }
 
-.cart-reset-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    color: var(--text-secondary);
-    font-size: 1.1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-}
 
-.cart-reset-btn:active {
-    background: var(--bg-card);
-    transform: scale(0.9);
-}
 
 .cart-panel-body {
     flex: 1;
