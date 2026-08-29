@@ -18,7 +18,7 @@ class MenuApp {
             await this.loadMenu();
             this.setupSearch();
             this.setupCart();
-            this.updateCartFab();
+            
         } catch (error) {
             console.error('Erreur init:', error);
             this.showError();
@@ -37,7 +37,7 @@ class MenuApp {
 
     saveSelection() {
         localStorage.setItem('pilipili_selection', JSON.stringify(this.selection));
-        this.updateCartFab();
+        
     }
 
     addToSelection(itemId) {
@@ -49,8 +49,8 @@ class MenuApp {
         }
         this.saveSelection();
         this.updateMenuCards();
-        this.updateCartFab();
-        this.renderCartPanel();
+        
+        this.renderSelectionModal();
     }
 
     removeFromSelection(itemId) {
@@ -64,16 +64,16 @@ class MenuApp {
         }
         this.saveSelection();
         this.updateMenuCards();
-        this.updateCartFab();
-        this.renderCartPanel();
+        
+        this.renderSelectionModal();
     }
 
     clearSelection() {
         this.selection = [];
         this.saveSelection();
         this.updateMenuCards();
-        this.updateCartFab();
-        this.renderCartPanel();
+        
+        this.renderSelectionModal();
     }
 
     getSelectionCount() {
@@ -90,20 +90,6 @@ class MenuApp {
     getItemQty(itemId) {
         const found = this.selection.find(s => s.itemId === itemId);
         return found ? found.qty : 0;
-    }
-
-    updateCartFab() {
-        const fab = document.getElementById('cartFab');
-        const count = document.getElementById('cartCount');
-        const total = this.getSelectionCount();
-        
-        count.textContent = total;
-        
-        if (total > 0) {
-            fab.classList.add('visible');
-        } else {
-            fab.classList.remove('visible');
-        }
     }
 
     updateMenuCards() {
@@ -129,288 +115,12 @@ class MenuApp {
     }
 
     setupCart() {
-        const fab = document.getElementById('cartFab');
+        const fab = document.getElementById('selectionFab');
         fab.addEventListener('click', () => {
-            this.renderCartPanel();
-            document.getElementById('cartPanel').classList.add('visible');
+            this.renderSelectionModal();
+            document.getElementById('selectionModal').classList.add('visible');
         });
-        this.makeCartDraggable(fab);
-    }
-
-    makeCartDraggable(element) {
-        let isDragging = false;
-        let startX, startY, initialX, initialY;
-        
-        const cartPos = this.menuData.settings?.cartPosition;
-        if (cartPos) {
-            element.style.right = 'auto';
-            element.style.bottom = 'auto';
-            element.style.left = cartPos.x + 'px';
-            element.style.top = cartPos.y + 'px';
-        } else {
-            element.style.right = '24px';
-            element.style.bottom = '24px';
-            element.style.left = 'auto';
-            element.style.top = 'auto';
-        }
-        
-        element.addEventListener('mousedown', dragStart);
-        element.addEventListener('touchstart', dragStart, { passive: false });
-        
-        function dragStart(e) {
-            if (e.target.closest('.cart-fab-count')) return;
-            isDragging = true;
-            element.style.transition = 'none';
-            
-            const clientX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
-            const clientY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
-            
-            startX = clientX;
-            startY = clientY;
-            initialX = element.offsetLeft;
-            initialY = element.offsetTop;
-            
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('mouseup', dragEnd);
-            document.addEventListener('touchmove', drag, { passive: false });
-            document.addEventListener('touchend', dragEnd);
-        }
-        
-        function drag(e) {
-            if (!isDragging) return;
-            e.preventDefault();
-            
-            const clientX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
-            const clientY = e.type === 'mousemove' ? e.clientY : e.touches[0].clientY;
-            
-            const deltaX = clientX - startX;
-            const deltaY = clientY - startY;
-            
-            const newX = Math.max(0, Math.min(window.innerWidth - element.offsetWidth, initialX + deltaX));
-            const newY = Math.max(0, Math.min(window.innerHeight - element.offsetHeight, initialY + deltaY));
-            
-            element.style.left = newX + 'px';
-            element.style.top = newY + 'px';
-            element.style.right = 'auto';
-            element.style.bottom = 'auto';
-        }
-        
-        function dragEnd() {
-            if (!isDragging) return;
-            isDragging = false;
-            element.style.transition = 'all 0.25s ease';
-            
-            document.removeEventListener('mousemove', drag);
-            document.removeEventListener('mouseup', dragEnd);
-            document.removeEventListener('touchmove', drag);
-            document.removeEventListener('touchend', dragEnd);
-        }
-    }
-
-    renderCartPanel() {
-        const body = document.getElementById('cartPanelBody');
-        const totalEl = document.getElementById('cartTotal');
-        
-        if (this.selection.length === 0) {
-            body.innerHTML = `
-                <div class="empty-state" style="padding: 40px 0;">
-                    <div class="empty-state-icon">+</div>
-                    <h3 class="empty-state-title">Vide</h3>
-                    <p class="empty-state-desc">Ajoutez des elements depuis le menu</p>
-                </div>
-            `;
-            totalEl.textContent = '';
-            return;
-        }
-
-        body.innerHTML = this.selection.map(s => {
-            const item = this.allItems.find(i => i.id === s.itemId);
-            if (!item) return '';
-            
-            const isBoisson = (item.type || 'plat') === 'boisson';
-            let unitLabel;
-            if (isBoisson) {
-                unitLabel = s.qty > 1 ? 'boissons' : 'boisson';
-            } else {
-                const category = this.menuData.categories.find(c => c.id === item.categoryId);
-                const unit = category?.unit || 'plat';
-                unitLabel = `${unit}${s.qty > 1 ? 's' : ''}`;
             }
-
-            return `
-                <div class="cart-item">
-                    <div class="cart-item-info">
-                        <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-meta">${s.qty} ${unitLabel} - ${this.formatPrice(item.price * s.qty)}</div>
-                    </div>
-                    <div class="cart-item-qty">
-                        <button class="cart-qty-btn" onclick="menuApp.removeFromSelection(${item.id})">−</button>
-                        <span class="cart-qty-value">${s.qty}</span>
-                        <button class="cart-qty-btn" onclick="menuApp.addToSelection(${item.id})">+</button>
-                    </div>
-                </div>
-            `;
-        }).join('');
-
-        const total = this.getSelectionTotal();
-        totalEl.textContent = this.formatPrice(total);
-    }
-
-    getHeaders() {
-        return {
-            'X-Master-Key': JSONBIN_CONFIG.masterKey,
-            'Content-Type': 'application/json'
-        };
-    }
-
-    async createBin() {
-        const defaultData = {
-            settings: {
-                restaurantInfoVisible: true
-            },
-            restaurant: {
-                name: 'LEET-DORIAN',
-                address: 'Montagne Sainte, Libreville',
-                phone: '074 41 22 56',
-                hours: 'Lun-Dim: 12h - 23h',
-                social: {
-                    facebook: '',
-                    instagram: '',
-                    whatsapp: '241074412256'
-                }
-            },
-            categories: [
-                { id: 1, name: 'Entrees', order: 1, unit: 'plat' },
-                { id: 2, name: 'Plats', order: 2, unit: 'plat' },
-                { id: 3, name: 'Grillades', order: 3, unit: 'plat' },
-                { id: 4, name: 'Boissons', order: 4, unit: 'bouteille' },
-                { id: 5, name: 'Desserts', order: 5, unit: 'portion' }
-            ],
-            items: [
-                {
-                    id: 1,
-                    name: 'Salade Pili-Pili',
-                    description: 'Salade fraiche avec piment et vinaigrette epicee',
-                    price: 3500,
-                    categoryId: 1,
-                    type: 'plat',
-                    image: '',
-                    badge: 'new',
-                    isSpecial: false,
-                    isActive: true
-                },
-                {
-                    id: 2,
-                    name: 'Poulet Braisé',
-                    description: 'Poulet marine aux epices locales, grille au feu de bois',
-                    price: 8500,
-                    categoryId: 3,
-                    type: 'plat',
-                    image: '',
-                    badge: 'popular',
-                    isSpecial: true,
-                    isActive: true
-                },
-                {
-                    id: 3,
-                    name: 'Poisson Grillé',
-                    description: 'Poisson frais grille avec sauce tomate epicee',
-                    price: 12000,
-                    categoryId: 3,
-                    type: 'plat',
-                    image: '',
-                    badge: 'popular',
-                    isSpecial: true,
-                    isActive: true
-                },
-                {
-                    id: 4,
-                    name: 'Jus de Bissap',
-                    description: "Jus d'hibiscus frais, sucre a votre gout",
-                    price: 1500,
-                    categoryId: null,
-                    type: 'boisson',
-                    image: '',
-                    badge: null,
-                    isSpecial: false,
-                    isActive: true
-                },
-                {
-                    id: 5,
-                    name: 'Tarte aux fruits',
-                    description: 'Tarte maison avec fruits frais de saison',
-                    price: 3000,
-                    categoryId: 5,
-                    type: 'plat',
-                    image: '',
-                    badge: 'new',
-                    isSpecial: false,
-                    isActive: true
-                }
-            ],
-            lastUpdate: new Date().toISOString()
-        };
-
-        const response = await fetch('https://api.jsonbin.io/v3/b', {
-            method: 'POST',
-            headers: this.getHeaders(),
-            body: JSON.stringify(defaultData)
-        });
-
-        if (!response.ok) {
-            throw new Error(`Erreur creation bin: ${response.status}`);
-        }
-
-        const result = await response.json();
-        this.binId = result.metadata?.id;
-        
-        if (!this.binId) {
-            throw new Error('ID du bin non trouve');
-        }
-    }
-
-    async loadMenu() {
-        const loading = document.getElementById('loading');
-
-        if (!this.binId) {
-            throw new Error('Aucun binId disponible');
-        }
-
-        const response = await fetch(`https://api.jsonbin.io/v3/b/${this.binId}/latest`, {
-            headers: this.getHeaders()
-        });
-
-        if (!response.ok) {
-            throw new Error(`Erreur chargement: ${response.status}`);
-        }
-
-        const result = await response.json();
-        this.menuData = result.record;
-        this.allItems = this.menuData.items.filter(item => item.isActive);
-        
-        loading.style.display = 'none';
-        document.getElementById('heroSection').style.display = 'block';
-        this.renderAll();
-        this.renderRestaurantCard();
-        this.applyCustomLogo();
-        console.log('[MENU] settings.cartPosition:', this.menuData.settings?.cartPosition);
-        this.applyCartPosition();
-    }
-
-    applyCartPosition() {
-        const cartPos = this.menuData.settings?.cartPosition || { x: 24, y: 24 };
-        const fab = document.getElementById('cartFab');
-        console.log('[CART-POS] Applying position:', cartPos, 'fab:', !!fab);
-        if (!fab) return;
-
-        requestAnimationFrame(() => {
-            fab.style.right = 'auto';
-            fab.style.bottom = 'auto';
-            fab.style.left = cartPos.x + 'px';
-            fab.style.top = cartPos.y + 'px';
-            console.log('[CART-POS] Applied left:', fab.style.left, 'top:', fab.style.top);
-        });
-    }
 
     applyCustomLogo() {
         const localLogo = localStorage.getItem('leetdorian_logo');
@@ -675,7 +385,7 @@ class MenuApp {
         event.stopPropagation();
         const qty = this.getItemQty(itemId);
         const card = event.currentTarget.closest('.menu-card');
-        const fab = document.getElementById('cartFab');
+        const fab = document.getElementById('selectionFab');
         
         if (qty > 0) {
             this.removeFromSelection(itemId);
@@ -840,19 +550,7 @@ class MenuApp {
 
 let menuApp;
 
-function closeCartPanel() {
-    const panel = document.getElementById('cartPanel');
-    if (panel) panel.classList.remove('visible');
-}
 
-
-
-function handleCartPanelClick(event) {
-    const panel = document.getElementById('cartPanel');
-    if (panel && event.target === panel) {
-        panel.classList.remove('visible');
-    }
-}
 
 function clearSelection() {
     if (menuApp) {
@@ -862,7 +560,7 @@ function clearSelection() {
 
 document.addEventListener('DOMContentLoaded', () => {
     menuApp = new MenuApp();
-    document.getElementById('cartPanel').addEventListener('click', handleCartPanelClick);
+    document.getElementById('selectionModal').addEventListener('click', handleSelectionModalClick);
 });
 
 // ============================================

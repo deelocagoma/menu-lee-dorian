@@ -128,33 +128,6 @@ class AdminApp {
         }
     }
 
-    renderCartSettings() {
-        console.log('[CART-SETTINGS] renderCartSettings called');
-        const section = document.getElementById('cartSettingsSection');
-        console.log('[CART-SETTINGS] section element:', section);
-        if (section) section.style.display = 'block';
-        
-        const debug = document.getElementById('cartSettingsDebug');
-        if (debug) { debug.style.display = 'block'; console.log('[CART-SETTINGS] debug shown'); }
-        
-        const xInput = document.getElementById('cartPosX');
-        const yInput = document.getElementById('cartPosY');
-        console.log('[CART-SETTINGS] inputs:', xInput, yInput);
-        
-        if (!xInput || !yInput) return;
-        
-        const settings = this.menuData?.settings || {};
-        const savedPos = settings.cartPosition || { x: 24, y: 24 };
-        xInput.value = savedPos.x;
-        yInput.value = savedPos.y;
-        
-        const xVal = document.getElementById('cartPosXValue');
-        const yVal = document.getElementById('cartPosYValue');
-        if (xVal) xVal.textContent = savedPos.x + 'px';
-        if (yVal) yVal.textContent = savedPos.y + 'px';
-        console.log('[CART-SETTINGS] rendered');
-    }
-
     setupNavigation() {
         const bottomNavItems = document.querySelectorAll('.admin-nav-item');
         
@@ -176,16 +149,14 @@ class AdminApp {
         
         const section = document.getElementById(`${this.currentSection}Section`);
         console.log('[ADMIN] target section:', section);
-        if (section) section.style.display = 'block';
-        
+                
         switch (this.currentSection) {
             case 'items': this.renderItems('plat', 'itemsList'); break;
             case 'drinks': this.renderItems('boisson', 'drinksList'); break;
             case 'categories': this.renderCategories(); break;
             case 'restaurant': this.renderRestaurant(); break;
             case 'logo': break;
-            case 'cart-settings': this.renderCartSettings(); break;
-        }
+                    }
     }
 
     showToast(message) {
