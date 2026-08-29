@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Injecteur de démo - LEET-DORIAN</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #F6F4EE;
+            color: #1F2A24;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            color: #5E7057;
+            margin-bottom: 10px;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 6px;
+            margin: 15px 0;
+            display: none;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            display: block;
+        }
+        button {
+            background: #5E7057;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #4A5944;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Injecteur de démo LEET-DORIAN</h1>
+        <p>Ce script va ajouter 10 plats et 10 boissons avec des images dans la base de données.</p>
+        
+        <button onclick="injectDemo()">Injecter la démo</button>
+        <button onclick="clearDemo()">Effacer la démo</button>
+        
+        <div id="status" class="status"></div>
+        
+        <div id="log" class="log"></div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            masterKey: '$2a$10$q94z0iyNLwf.aYQIH.DWvu0rTWEIbvKOl4Wl/Ufoe/Ugu21V2EcPC',
+            accessKey: '$2a$10$Noao9RAZSt9fuJ.tlTGUWuop0KGzd77DmqZiTNHZgGQiAHZGgSdTq',
+            binId: '6a91f15cf5f4af5e294f4dc1'
+        };
+
+        const PLATS = [
+            { name: 'Salade Pili-Pili', price: 3500, categoryId: 1, image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop' },
+            { name: 'Poulet Braisé', price: 8500, categoryId: 3, image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&h=300&fit=crop' },
+            { name: 'Poisson Grillé', price: 12000, categoryId: 3, image: 'https://images.unsplash.com/photo-1534604973900-c43ab4c2e0ab?w=400&h=300&fit=crop' },
+            { name: 'Mafé', price: 4500, categoryId: 2, image: 'https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=400&h=300&fit=crop' },
+            { name: 'Ndolé', price: 5000, categoryId: 2, image: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400&h=300&fit=crop' },
+            { name: 'Saka Saka', price: 4000, categoryId: 2, image: 'https://images.unsplash.com/photo-1605569047560-4b4c0b3c5e5e?w=400&h=300&fit=crop' },
+            { name: 'Riz Sauce', price: 3500, categoryId: 2, image: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400&h=300&fit=crop' },
+            { name: 'Attiéké Poisson', price: 6500, categoryId: 2, image: 'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=400&h=300&fit=crop' },
+            { name: 'Frites Poulet', price: 5500, categoryId: 2, image: 'https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=400&h=300&fit=crop' },
+            { name: 'Brochettes', price: 4000, categoryId: 3, image: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=400&h=300&fit=crop' }
+        ];
+
+        const BOISSONS = [
+            { name: 'Jus de Bissap', price: 1500, image: 'https://images.unsplash.com/photo-1546173159-315724a31696?w=400&h=300&fit=crop' },
+            { name: 'Jus de Gingembre', price: 1500, image: 'https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&h=300&fit=crop' },
+            { name: 'Jus de Mangue', price: 2000, image: 'https://images.unsplash.com/photo-1556881286-fc6915169721?w=400&h=300&fit=crop' },
+            { name: 'Coca-Cola', price: 1000, image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&h=300&fit=crop' },
+            { name: 'Fanta', price: 1000, image: 'https://images.unsplash.com/photo-1625772299848-4b0b8b3b3b3b?w=400&h=300&fit=crop' },
+            { name: 'Sprite', price: 1000, image: 'https://images.unsplash.com/photo-1625772299848-4b0b8b3b3b3b?w=400&h=300&fit=crop' },
+            { name: 'Eau Minérale', price: 500, image: 'https://images.unsplash.com/photo-1560023907-5f339617ea31?w=400&h=300&fit=crop' },
+            { name: 'Bière', price: 2500, image: 'https://images.unsplash.com/photo-1535958636474-3ed9f5eae8a5?w=400&h=300&fit=crop' },
+            { name: 'Whisky', price: 5000, image: 'https://images.unsplash.com/photo-1569529465841-dfecdab7503b?w=400&h=300&fit=crop' },
+            { name: 'Vin', price: 6000, image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&h=300&fit=crop' }
+        ];
+
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML += message + '<br>';
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function showStatus(type, message) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status ' + type;
+            statusDiv.textContent = message;
+        }
+
+        async function loadBin() {
+            const response = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.binId}/latest`, {
+                headers: {
+                    'X-Master-Key': CONFIG.masterKey
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('Erreur chargement bin: ' + response.status);
+            }
+            
+            const result = await response.json();
+            return result.record;
+        }
+
+        async function saveBin(data) {
+            const response = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.binId}`, {
+                method: 'PUT',
+                headers: {
+                    'X-Master-Key': CONFIG.masterKey,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            
+            if (!response.ok) {
+                throw new Error('Erreur sauvegarde: ' + response.status);
+            }
+            
+            return await response.json();
+        }
+
+        async function injectDemo() {
+            showStatus('info', 'Chargement de la base de données...');
+            log('Début de l\'injection...');
+            
+            try {
+                const data = await loadBin();
+                log('Base de données chargée');
+                
+                const newPlats = PLATS.map((plat, index) => ({
+                    id: index + 1,
+                    name: plat.name,
+                    description: 'Délicieux plat préparé avec soin',
+                    price: plat.price,
+                    categoryId: plat.categoryId,
+                    type: 'plat',
+                    image: plat.image,
+                    badge: index < 2 ? 'new' : (index < 4 ? 'popular' : null),
+                    isSpecial: index < 3,
+                    isActive: true
+                }));
+                
+                const newBoissons = BOISSONS.map((boisson, index) => ({
+                    id: 11 + index,
+                    name: boisson.name,
+                    description: 'Boisson fraîche et désaltérante',
+                    price: boisson.price,
+                    categoryId: null,
+                    type: 'boisson',
+                    image: boisson.image,
+                    badge: null,
+                    isSpecial: false,
+                    isActive: true
+                }));
+                
+                data.items = [...newPlats, ...newBoissons];
+                data.lastUpdate = new Date().toISOString();
+                
+                log('Sauvegarde des données...');
+                await saveBin(data);
+                
+                showStatus('success', 'Démo injectée avec succès ! 10 plats et 10 boissons ajoutés.');
+                log('✓ Injection terminée avec succès');
+            } catch (error) {
+                showStatus('error', 'Erreur: ' + error.message);
+                log('✗ Erreur: ' + error.message);
+            }
+        }
+
+        async function clearDemo() {
+            showStatus('info', 'Effacement de la démo...');
+            log('Effacement des données de démo...');
+            
+            try {
+                const data = await loadBin();
+                data.items = [];
+                data.lastUpdate = new Date().toISOString();
+                
+                await saveBin(data);
+                
+                showStatus('success', 'Démo effacée avec succès !');
+                log('✓ Données effacées');
+            } catch (error) {
+                showStatus('error', 'Erreur: ' + error.message);
+                log('✗ Erreur: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
