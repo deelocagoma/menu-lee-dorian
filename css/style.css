@@ -675,6 +675,247 @@ body {
 /* ============================================
    VERSION BUREAU & TABLETTE (>768px)
    ============================================ */
+/* FAB sélection */
+.selection-fab {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--sage), var(--sage-hover));
+    border: none;
+    color: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 24px rgba(94, 112, 87, 0.35);
+    z-index: 998;
+    transition: all 0.3s ease;
+}
+
+.selection-fab:active {
+    transform: scale(0.9);
+}
+
+.selection-fab svg {
+    width: 24px;
+    height: 24px;
+}
+
+.selection-fab-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 11px;
+    background: var(--sage);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-primary);
+}
+
+/* Modal sélection */
+#selectionModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(31, 42, 36, 0.5);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 2000;
+}
+
+#selectionModal .modal-content {
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+    width: 100%;
+    max-width: 500px;
+    background: var(--bg-card);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    animation: slideUpModal 0.3s ease;
+}
+
+@keyframes slideUpModal {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-card);
+}
+
+.modal-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.close-btn {
+    width: 32px;
+    height: 32px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.close-btn:active {
+    background: var(--bg-card);
+}
+
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 24px;
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: var(--bg-card);
+}
+
+.selection-total {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--sage);
+}
+
+.clear-selection-btn {
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.clear-selection-btn:active {
+    background: var(--bg-elevated);
+}
+
+.selection-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.selection-item:last-child {
+    border-bottom: none;
+}
+
+.selection-item-image {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.selection-item-no-image {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-elevated);
+    flex-shrink: 0;
+}
+
+.selection-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.selection-item-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+}
+
+.selection-item-price {
+    font-size: 0.85rem;
+    color: var(--sage);
+    font-weight: 600;
+}
+
+.selection-item-qty {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.qty-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.qty-btn:active {
+    background: var(--bg-card);
+    transform: scale(0.9);
+}
+
+.qty-value {
+    font-size: 1rem;
+    font-weight: 700;
+    min-width: 20px;
+    text-align: center;
+}
+
+@keyframes addedToSelection {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+.select-btn.animating {
+    animation: addedToSelection 0.35s ease;
+}
+
 @media (max-width: 767px) {
     .header-top {
         padding: 0 12px;

@@ -156,7 +156,28 @@
         </section>
     </main>
 
+    <button class="selection-fab" id="selectionFab" aria-label="Ma selection">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <span class="selection-fab-count" id="selectionCount">0</span>
+    </button>
 
+    <div class="modal" id="selectionModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ma selection</h3>
+                <button class="close-btn" onclick="closeSelectionModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="selectionBody"></div>
+            <div class="modal-footer">
+                <div class="selection-total" id="selectionTotal"></div>
+                <button class="clear-selection-btn" onclick="clearSelection()">Vider</button>
+            </div>
+        </div>
+    </div>
 
     <script src="js/config.js"></script>
     <script src="js/menu.js"></script>

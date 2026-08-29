@@ -17,7 +17,7 @@ class MenuApp {
             }
             await this.loadMenu();
             this.setupSearch();
-            this.setupCart();
+            this.setupSelection();
             
         } catch (error) {
             console.error('Erreur init:', error);
@@ -114,13 +114,13 @@ class MenuApp {
         });
     }
 
-    setupCart() {
+    setupSelection() {
         const fab = document.getElementById('selectionFab');
         fab.addEventListener('click', () => {
             this.renderSelectionModal();
-            document.getElementById('selectionModal').classList.add('visible');
+            document.getElementById('selectionModal').style.display = 'flex';
         });
-            }
+    }
 
     applyCustomLogo() {
         const localLogo = localStorage.getItem('leetdorian_logo');
