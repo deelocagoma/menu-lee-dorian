@@ -134,6 +134,74 @@ class MenuApp {
             this.renderCartPanel();
             document.getElementById('cartPanel').classList.add('visible');
         });
+        this.makeCartDraggable(fab);
+    }
+
+    makeCartDraggable(element) {
+        let isDragging = false;
+        let startX, startY, initialX, initialY;
+        
+        const savedPosition = JSON.parse(localStorage.getItem('leetdorian_cart_position') || '{"x":24,"y":24}');
+        element.style.right = 'auto';
+        element.style.bottom = 'auto';
+        element.style.left = savedPosition.x + 'px';
+        element.style.top = savedPosition.y + 'px';
+        
+        element.addEventListener('mousedown', dragStart);
+        element.addEventListener('touchstart', dragStart, { passive: false });
+        
+        function dragStart(e) {
+            if (e.target.closest('.cart-fab-count')) return;
+            isDragging = true;
+            element.style.transition = 'none';
+            
+            const clientX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+            const clientY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
+            
+            startX = clientX;
+            startY = clientY;
+            initialX = element.offsetLeft;
+            initialY = element.offsetTop;
+            
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+            document.addEventListener('touchmove', drag, { passive: false });
+            document.addEventListener('touchend', dragEnd);
+        }
+        
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            
+            const clientX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
+            const clientY = e.type === 'mousemove' ? e.clientY : e.touches[0].clientY;
+            
+            const deltaX = clientX - startX;
+            const deltaY = clientY - startY;
+            
+            const newX = Math.max(0, Math.min(window.innerWidth - element.offsetWidth, initialX + deltaX));
+            const newY = Math.max(0, Math.min(window.innerHeight - element.offsetHeight, initialY + deltaY));
+            
+            element.style.left = newX + 'px';
+            element.style.top = newY + 'px';
+        }
+        
+        function dragEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            element.style.transition = 'all 0.25s ease';
+            
+            const pos = {
+                x: element.offsetLeft,
+                y: element.offsetTop
+            };
+            localStorage.setItem('leetdorian_cart_position', JSON.stringify(pos));
+            
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('mouseup', dragEnd);
+            document.removeEventListener('touchmove', drag);
+            document.removeEventListener('touchend', dragEnd);
+        }
     }
 
     renderCartPanel() {
@@ -755,6 +823,11 @@ let menuApp;
 function closeCartPanel() {
     const panel = document.getElementById('cartPanel');
     if (panel) panel.classList.remove('visible');
+}
+
+function resetCartPosition() {
+    localStorage.removeItem('leetdorian_cart_position');
+    location.reload();
 }
 
 function handleCartPanelClick(event) {

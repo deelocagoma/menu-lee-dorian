@@ -161,7 +161,10 @@
     <div class="cart-panel" id="cartPanel">
         <div class="cart-panel-header">
             <h3>Ma selection</h3>
-            <button class="cart-close-btn" onclick="closeCartPanel()">&times;</button>
+            <div style="display:flex;gap:8px;align-items:center">
+                <button class="cart-reset-btn" onclick="resetCartPosition()" title="Repositionner le panier">⇄</button>
+                <button class="cart-close-btn" onclick="closeCartPanel()">&times;</button>
+            </div>
         </div>
         <div class="cart-panel-body" id="cartPanelBody"></div>
         <div class="cart-panel-footer">
