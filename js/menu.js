@@ -756,6 +756,13 @@ function closeSelectionModal() {
     document.getElementById('selectionModal').style.display = 'none';
 }
 
+function handleSelectionModalClick(event) {
+    const modal = document.getElementById('selectionModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}
+
 function clearSelection() {
     if (menuApp) {
         menuApp.clearSelection();
@@ -764,6 +771,7 @@ function clearSelection() {
 
 document.addEventListener('DOMContentLoaded', () => {
     menuApp = new MenuApp();
+    document.getElementById('selectionModal').addEventListener('click', handleSelectionModalClick);
 });
 
 // ============================================
