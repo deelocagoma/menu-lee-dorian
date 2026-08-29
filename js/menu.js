@@ -49,6 +49,7 @@ class MenuApp {
         }
         this.saveSelection();
         this.updateMenuCards();
+        this.updateCartFab();
         this.renderCartPanel();
     }
 
@@ -63,6 +64,7 @@ class MenuApp {
         }
         this.saveSelection();
         this.updateMenuCards();
+        this.updateCartFab();
         this.renderCartPanel();
     }
 
@@ -70,6 +72,7 @@ class MenuApp {
         this.selection = [];
         this.saveSelection();
         this.updateMenuCards();
+        this.updateCartFab();
         this.renderCartPanel();
     }
 
@@ -565,16 +568,16 @@ class MenuApp {
                         <div class="menu-card-header-right">
                             <span class="menu-card-price">${this.formatPrice(item.price)}</span>
                             ${descIcon}
+                            <button class="select-btn ${qty > 0 ? 'selected' : ''}" onclick="menuApp.toggleSelectItem(${item.id}, event)" aria-label="Ajouter au panier">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 5v14"></path>
+                                    <path d="M5 12h14"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                     ${badgeHtml ? `<div class="menu-card-badges">${badgeHtml}</div>` : ''}
                 </div>
-                <button class="select-btn ${qty > 0 ? 'selected' : ''}" onclick="menuApp.toggleSelectItem(${item.id}, event)" aria-label="Ajouter au panier">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 5v14"></path>
-                        <path d="M5 12h14"></path>
-                    </svg>
-                </button>
                 ${qty > 0 ? `<div class="item-qty-badge">${qty}</div>` : ''}
             </div>
         `;

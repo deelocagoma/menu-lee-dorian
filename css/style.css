@@ -456,7 +456,7 @@ body {
 .menu-card-header-right {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     flex-shrink: 0;
 }
 
@@ -498,22 +498,19 @@ body {
 
 /* Bouton ajout */
 .select-btn {
-    position: absolute;
-    bottom: 14px;
-    right: 14px;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background: var(--text-primary);
     border: none;
     color: var(--bg-primary);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: var(--shadow-sm);
-    z-index: 4;
+    flex-shrink: 0;
 }
 
 .select-btn:active {
