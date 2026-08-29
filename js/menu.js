@@ -385,18 +385,21 @@ class MenuApp {
         this.renderAll();
         this.renderRestaurantCard();
         this.applyCustomLogo();
+        console.log('[MENU] settings.cartPosition:', this.menuData.settings?.cartPosition);
         this.applyCartPosition();
     }
 
     applyCartPosition() {
         const cartPos = this.menuData.settings?.cartPosition || { x: 24, y: 24 };
         const fab = document.getElementById('cartFab');
+        console.log('[CART-POS] Applying position:', cartPos, 'fab:', !!fab);
         if (!fab) return;
 
         fab.style.right = 'auto';
         fab.style.bottom = 'auto';
         fab.style.left = cartPos.x + 'px';
         fab.style.top = cartPos.y + 'px';
+        console.log('[CART-POS] Applied left:', fab.style.left, 'top:', fab.style.top);
     }
 
     applyCustomLogo() {

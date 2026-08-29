@@ -368,6 +368,7 @@
             const x = document.getElementById('cartPosX').value;
             const y = document.getElementById('cartPosY').value;
             const status = document.getElementById('cartSaveStatus');
+            console.log('[CART-SAVE] Saving position:', x, y);
             
             fetch(`https://api.jsonbin.io/v3/b/${CONFIG.binId}`, {
                 method: 'GET',
@@ -375,6 +376,7 @@
             })
             .then(r => r.json())
             .then(result => {
+                console.log('[CART-SAVE] GET result:', result);
                 const data = result.record || {};
                 if (!data.settings) data.settings = {};
                 data.settings.cartPosition = { x: parseInt(x), y: parseInt(y), unit: 'px' };
@@ -389,6 +391,7 @@
                 });
             })
             .then(r => {
+                console.log('[CART-SAVE] PUT status:', r.status);
                 if (r.ok) {
                     status.textContent = 'Position enregistree avec succes !';
                     status.style.color = '#155724';
@@ -397,6 +400,7 @@
                 }
             })
             .catch(err => {
+                console.error('[CART-SAVE] Error:', err);
                 status.textContent = 'Erreur: ' + err.message;
                 status.style.color = '#721c24';
             });
