@@ -86,6 +86,7 @@
         
         <button onclick="injectDemo()">Injecter la démo</button>
         <button onclick="clearDemo()">Effacer la démo</button>
+        <button onclick="window.location.href='/'">Voir le site</button>
         
         <div id="status" class="status"></div>
         
@@ -211,6 +212,9 @@
                 
                 showStatus('success', 'Démo injectée avec succès ! 10 plats et 10 boissons ajoutés.');
                 log('✓ Injection terminée avec succès');
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1500);
             } catch (error) {
                 showStatus('error', 'Erreur: ' + error.message);
                 log('✗ Erreur: ' + error.message);
