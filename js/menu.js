@@ -209,6 +209,13 @@ class MenuApp {
         this.renderMenu();
     }
 
+    getHeaders() {
+        return {
+            'X-Master-Key': JSONBIN_CONFIG.masterKey,
+            'Content-Type': 'application/json'
+        };
+    }
+
     renderRestaurantCard() {
         const section = document.getElementById('restaurantCard');
         if (!section || !this.menuData?.restaurant) return;
