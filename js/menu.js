@@ -25,6 +25,31 @@ class MenuApp {
         }
     }
 
+    async loadMenu() {
+        const loading = document.getElementById('loading');
+
+        if (!this.binId) {
+            throw new Error('Aucun binId disponible');
+        }
+
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${this.binId}/latest`, {
+            headers: this.getHeaders()
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erreur chargement: ${response.status}`);
+        }
+
+        const result = await response.json();
+        this.menuData = result.record;
+        this.allItems = this.menuData.items.filter(item => item.isActive);
+        
+        loading.style.display = 'none';
+        document.getElementById('heroSection').style.display = 'block';
+        this.renderAll();
+        this.renderRestaurantCard();
+    }
+
     // ==================== SÉLECTION ====================
     
     loadSelection() {
@@ -550,7 +575,16 @@ class MenuApp {
 
 let menuApp;
 
+function closeSelectionModal() {
+    document.getElementById('selectionModal').style.display = 'none';
+}
 
+function handleSelectionModalClick(event) {
+    const modal = document.getElementById('selectionModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}
 
 function clearSelection() {
     if (menuApp) {
