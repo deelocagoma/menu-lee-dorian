@@ -129,6 +129,9 @@ class AdminApp {
     }
 
     renderCartSettings() {
+        const debug = document.getElementById('cartSettingsDebug');
+        if (debug) debug.style.display = 'block';
+        
         const xInput = document.getElementById('cartPosX');
         const yInput = document.getElementById('cartPosY');
         
