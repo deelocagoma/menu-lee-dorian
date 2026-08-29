@@ -2,7 +2,7 @@
 const JSONBIN_CONFIG = {
     masterKey: '$2a$10$q94z0iyNLwf.aYQIH.DWvu0rTWEIbvKOl4Wl/Ufoe/Ugu21V2EcPC',
     accessKey: '$2a$10$Noao9RAZSt9fuJ.tlTGUWuop0KGzd77DmqZiTNHZgGQiAHZGgSdTq',
-    binId: '6a8d6e91da38895dfe0e348f' // Bin principal Pili-Pili Lounge
+    binId: '6a91f15cf5f4af5e294f4dc1'
 };
 
 // URL de base de l'application

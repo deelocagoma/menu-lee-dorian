@@ -4,48 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#121212">
-    <title>New Pili Pili</title>
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#5E7057">
+    <title>LEET-DORIAN</title>
     
-    <!-- PWA -->
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="assets/logo.jpg">
-    <meta name="apple-mobile-web-app-title" content="New Pili Pili">
+    <link rel="apple-touch-icon" href="assets/logo.svg">
+    <meta name="apple-mobile-web-app-title" content="LEET-DORIAN">
 
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- PWA Install Banner -->
     <div id="pwaInstallBanner" class="pwa-banner" style="display: none;">
-        <img src="assets/logo.jpg" alt="Logo" class="pwa-logo">
         <div class="pwa-info">
-            <span class="pwa-title">New Pili Pili</span>
+            <span class="pwa-title">LEET-DORIAN</span>
             <span class="pwa-desc">Installer l'application sur votre écran d'accueil</span>
         </div>
         <button id="pwaInstallBtn" class="pwa-btn">Installer</button>
         <button id="pwaCloseBtn" class="pwa-close">✕</button>
     </div>
 
-    <!-- Header -->
     <header class="app-header">
         <div class="header-top">
-            <div class="header-brand">
-                <img src="assets/logo.jpg" alt="New Pili-Pili Lounge" class="header-logo">
+            <div class="header-brand" id="headerBrand">
+                <img src="assets/logo.svg" alt="LEET-DORIAN" class="header-logo" id="headerLogo">
                 <div class="header-title">
-                    <h1>New Pili-Pili</h1>
-                    <span class="header-subtitle">LOUNGE</span>
+                    <h1>LEET-DORIAN</h1>
                 </div>
             </div>
             <div class="header-actions">
-                <button class="icon-btn" id="searchBtn">
+                <button class="icon-btn" id="searchBtn" aria-label="Rechercher">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <path d="m21 21-4.35-4.35"></path>
                     </svg>
                 </button>
-                <a href="admin/" class="icon-btn admin-link">
+                <a href="admin/" class="icon-btn admin-link" aria-label="Administration">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
@@ -60,7 +55,7 @@
                 <path d="m21 21-4.35-4.35"></path>
             </svg>
             <input type="text" id="searchInput" placeholder="Rechercher...">
-            <button class="search-close" id="searchClose">
+            <button class="search-close" id="searchClose" aria-label="Fermer">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 6 6 18"></path>
                     <path d="m6 6 12 12"></path>
@@ -69,75 +64,100 @@
         </div>
     </header>
 
-    <!-- Contenu -->
     <main class="app-content" id="appContent">
         <div class="loading" id="loading">
-            <div class="loading-spinner"></div>
+            <div class="skeleton-loader" id="skeletonLoader">
+                <div class="skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line medium"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line medium"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line medium"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line medium"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line medium"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line medium"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Titre de page dynamique -->
-        <h1 class="page-title" id="pageTitle" style="display: none;"></h1>
-
-        <!-- Menu Phare -->
-        <section class="featured-section" id="featuredSection" style="display: none;">
-            <div class="section-header">
-                <h2>NOS PLATS PHARES</h2>
-            </div>
-            <div class="featured-scroll" id="featuredScroll"></div>
+        <section class="hero" id="heroSection" style="display: none;">
+            <p class="hero-subtitle">Menu & boissons</p>
         </section>
 
-        <!-- Catégories -->
         <div class="categories-scroll" id="categoriesScroll"></div>
 
-        <!-- Plats -->
         <section class="menu-section" id="menuSection"></section>
+
+        <section class="restaurant-info" id="restaurantInfo" style="display: none;">
+            <div class="restaurant-info-inner">
+                <h2 class="restaurant-info-name" id="restaurantInfoName"></h2>
+                <div class="restaurant-info-items">
+                    <div class="restaurant-info-item" id="restaurantInfoAddress" style="display: none;">
+                        <span class="restaurant-info-icon" aria-hidden="true"><i class="icon-address"></i></span>
+                        <span class="restaurant-info-text"></span>
+                    </div>
+                    <div class="restaurant-info-item" id="restaurantInfoPhone" style="display: none;">
+                        <span class="restaurant-info-icon" aria-hidden="true"><i class="icon-phone"></i></span>
+                        <a class="restaurant-info-text restaurant-info-link" href="tel:"></a>
+                    </div>
+                    <div class="restaurant-info-item" id="restaurantInfoWhatsapp" style="display: none;">
+                        <span class="restaurant-info-icon" aria-hidden="true"><i class="icon-whatsapp"></i></span>
+                        <a class="restaurant-info-text restaurant-info-link" href="https://wa.me/" target="_blank" rel="noopener"></a>
+                    </div>
+                    <div class="restaurant-info-item" id="restaurantInfoHours" style="display: none;">
+                        <span class="restaurant-info-icon" aria-hidden="true"><i class="icon-hours"></i></span>
+                        <span class="restaurant-info-text"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- Navigation bas -->
-    <nav class="bottom-nav">
-        <button class="nav-item active" data-category="all">
-            <!-- Icône Utensils (Plats) -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path>
-                <path d="M7 2v20"></path>
-                <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>
-            </svg>
-            <span>Plats</span>
-        </button>
-        <button class="nav-item" data-category="popular">
-            <!-- Icône Étoile (Plats phares) -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-            </svg>
-            <span>Plats phares</span>
-        </button>
-        <button class="nav-item" data-category="drinks">
-            <!-- Icône Verre/Cocktail (Boissons) -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M8 22h8"></path>
-                <path d="M12 11v11"></path>
-                <path d="m19 3-7 8-7-8Z"></path>
-            </svg>
-            <span>Boissons</span>
-        </button>
-        <button class="nav-item" data-category="new">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M12 6v6l4 2"></path>
-            </svg>
-            <span>Nouveautés</span>
-        </button>
-    </nav>
-
-    <!-- Scroll to top -->
-    <button class="fab" id="scrollTopBtn">
+    <button class="fab" id="scrollTopBtn" aria-label="Retour en haut">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 15l-6-6-6 6"></path>
         </svg>
     </button>
 
-    <!-- Bouton sélection flottant -->
-    <button class="selection-fab" id="selectionFab" style="display: none;">
+    <button class="selection-fab" id="selectionFab" style="display: none;" aria-label="Ma selection">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -146,16 +166,13 @@
         <span class="selection-fab-count" id="selectionCount">0</span>
     </button>
 
-    <!-- Modal Récapitulatif -->
     <div class="modal" id="selectionModal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Ma sélection</h3>
+                <h3>Ma selection</h3>
                 <button class="close-btn" onclick="closeSelectionModal()">&times;</button>
             </div>
-            <div class="modal-body" id="selectionBody">
-                <!-- Liste des plats sélectionnés -->
-            </div>
+            <div class="modal-body" id="selectionBody"></div>
             <div class="modal-footer">
                 <div class="selection-total" id="selectionTotal"></div>
                 <button class="clear-selection-btn" onclick="clearSelection()">Vider</button>

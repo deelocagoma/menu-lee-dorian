@@ -1,10 +1,7 @@
-// Admin Pili-Pili Lounge - Version Premium
+// Admin LEET-DORIAN - Version Premium
 class AdminApp {
     constructor() {
-        // Priorité : binId hardcodé dans config.js, sinon localStorage
         this.binId = JSONBIN_CONFIG.binId || localStorage.getItem('pilipili_binId');
-        // Synchroniser le localStorage avec le binId utilisé
-        if (this.binId) localStorage.setItem('pilipili_binId', this.binId);
         this.menuData = null;
         this.currentSection = 'items';
         this.photoData = null;
@@ -13,8 +10,7 @@ class AdminApp {
 
     async init() {
         if (!this.binId) {
-            window.location.href = '../index.html';
-            return;
+            await this.createBin();
         }
         
         await this.loadMenu();
@@ -29,15 +25,68 @@ class AdminApp {
         };
     }
 
+    async createBin() {
+        const defaultData = {
+            restaurant: {
+                name: 'LEET-DORIAN',
+                address: 'Montagne Sainte, Libreville',
+                phone: '074 41 22 56',
+                hours: 'Lun-Dim: 12h - 23h',
+                social: {
+                    facebook: '',
+                    instagram: '',
+                    whatsapp: '241074412256'
+                }
+            },
+            categories: [
+                { id: 1, name: 'Entrees', order: 1, unit: 'plat' },
+                { id: 2, name: 'Plats', order: 2, unit: 'plat' },
+                { id: 3, name: 'Grillades', order: 3, unit: 'plat' },
+                { id: 4, name: 'Boissons', order: 4, unit: 'bouteille' },
+                { id: 5, name: 'Desserts', order: 5, unit: 'portion' }
+            ],
+            items: [],
+            lastUpdate: new Date().toISOString()
+        };
+
+        console.log('[ADMIN] Création d\'un nouveau bin...');
+        const response = await fetch('https://api.jsonbin.io/v3/b', {
+            method: 'POST',
+            headers: this.getHeaders(),
+            body: JSON.stringify(defaultData)
+        });
+
+        console.log('[ADMIN] Réponse création bin:', response.status, response.statusText);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('[ADMIN] Erreur création bin:', response.status, errorText);
+            throw new Error(`Erreur creation bin: ${response.status}`);
+        }
+
+        const result = await response.json();
+        this.binId = result.metadata?.id;
+        
+        console.log('[ADMIN] Bin créé, ID:', this.binId);
+        
+        if (!this.binId) {
+            throw new Error('ID du bin non trouve');
+        }
+    }
+
     async loadMenu() {
         try {
+            console.log('[ADMIN] Chargement du menu, binId:', this.binId);
             const response = await fetch(`https://api.jsonbin.io/v3/b/${this.binId}/latest`, {
                 headers: this.getHeaders()
             });
 
+            console.log('[ADMIN] Réponse chargement:', response.status, response.statusText);
+            
             if (response.ok) {
                 const result = await response.json();
                 this.menuData = result.record;
+                console.log('[ADMIN] Menu chargé, nombre d\'items:', this.menuData.items?.length);
                 this.renderCurrentSection();
             } else {
                 throw new Error('Erreur de chargement');
@@ -52,20 +101,29 @@ class AdminApp {
         try {
             this.menuData.lastUpdate = new Date().toISOString();
             
+            console.log('[ADMIN] Sauvegarde du menu, binId:', this.binId);
+            console.log('[ADMIN] Données à sauvegarder:', JSON.stringify(this.menuData).substring(0, 200));
+            
             const response = await fetch(`https://api.jsonbin.io/v3/b/${this.binId}`, {
                 method: 'PUT',
                 headers: this.getHeaders(),
                 body: JSON.stringify(this.menuData)
             });
 
+            console.log('[ADMIN] Réponse sauvegarde:', response.status, response.statusText);
+            
             if (response.ok) {
+                const result = await response.json();
+                console.log('[ADMIN] Sauvegarde réussie:', result);
                 return true;
             } else {
-                throw new Error('Erreur de sauvegarde');
+                const errorText = await response.text();
+                console.error('[ADMIN] Erreur sauvegarde:', response.status, errorText);
+                throw new Error(`Erreur de sauvegarde: ${response.status}`);
             }
         } catch (error) {
-            console.error('Erreur sauvegarde:', error);
-            alert('Erreur de sauvegarde.');
+            console.error('[ADMIN] Erreur sauvegarde:', error);
+            alert(`Erreur de sauvegarde: ${error.message}`);
             return false;
         }
     }
@@ -97,6 +155,14 @@ class AdminApp {
             case 'categories': this.renderCategories(); break;
             case 'restaurant': this.renderRestaurant(); break;
         }
+    }
+
+    showToast(message) {
+        const toast = document.getElementById('adminToast');
+        if (!toast) return;
+        toast.textContent = message;
+        toast.classList.add('visible');
+        setTimeout(() => toast.classList.remove('visible'), 2500);
     }
 
     // ==================== PLATS ====================
@@ -192,12 +258,11 @@ class AdminApp {
         
         // Adapter les libellés
         document.getElementById('photoUploadLabel').textContent = isBoisson ? 'Photo de la boisson' : 'Photo du plat';
-        document.getElementById('itemSpecialLabel').textContent = isBoisson ? 'Boisson phare' : 'Plat phare';
         
         // Masquer/afficher les champs non pertinents pour les boissons
         document.getElementById('itemCategoryGroup').style.display = isBoisson ? 'none' : '';
-        document.getElementById('itemSpecialGroup').style.display = isBoisson ? 'none' : '';
-        document.getElementById('itemActiveGroup').style.display = isBoisson ? 'none' : '';
+        document.getElementById('itemDescriptionGroup').style.display = isBoisson ? 'none' : '';
+        document.getElementById('itemBadgeGroup').style.display = isBoisson ? 'none' : '';
 
         if (itemId) {
             const item = this.menuData.items.find(i => i.id === itemId);
@@ -210,10 +275,7 @@ class AdminApp {
             document.getElementById('itemDescription').value = item.description;
             document.getElementById('itemPrice').value = item.price;
             document.getElementById('itemCategory').value = item.categoryId;
-            document.getElementById('itemImage').value = item.image || '';
             document.getElementById('itemBadge').value = item.badge || '';
-            document.getElementById('itemSpecial').checked = item.isSpecial;
-            document.getElementById('itemActive').checked = item.isActive;
             
             if (item.image) {
                 this.photoData = item.image;
@@ -224,7 +286,6 @@ class AdminApp {
             form.reset();
             document.getElementById('itemId').value = '';
             document.getElementById('itemType').value = actualType;
-            document.getElementById('itemActive').checked = true;
         }
         
         modal.style.display = 'flex';
@@ -238,7 +299,6 @@ class AdminApp {
         e.preventDefault();
         
         const itemId = document.getElementById('itemId').value;
-        const imageUrl = document.getElementById('itemImage').value.trim();
         
         const itemData = {
             name: document.getElementById('itemName').value.trim(),
@@ -246,10 +306,9 @@ class AdminApp {
             price: parseInt(document.getElementById('itemPrice').value),
             categoryId: parseInt(document.getElementById('itemCategory').value),
             type: document.getElementById('itemType').value || 'plat',
-            image: this.photoData || imageUrl || '',
+            image: this.photoData || '',
             badge: document.getElementById('itemBadge').value || null,
-            isSpecial: document.getElementById('itemSpecial').checked,
-            isActive: document.getElementById('itemActive').checked
+            isActive: true
         };
         
         if (itemId) {
@@ -267,6 +326,7 @@ class AdminApp {
         if (await this.saveMenu()) {
             this.closeItemModal();
             this.renderCurrentSection();
+            this.showToast('Enregistrement réussi');
         }
     }
 
@@ -430,7 +490,7 @@ class AdminApp {
     renderRestaurant() {
         if (!this.menuData.restaurant) {
             this.menuData.restaurant = {
-                name: 'Pili-Pili Lounge',
+                name: 'LEET-DORIAN',
                 address: '',
                 phone: '',
                 hours: '',
@@ -451,6 +511,7 @@ class AdminApp {
         document.getElementById('facebook').value = restaurant.social?.facebook || '';
         document.getElementById('instagram').value = restaurant.social?.instagram || '';
         document.getElementById('whatsapp').value = restaurant.social?.whatsapp || '';
+        document.getElementById('restaurantInfoVisible').checked = this.menuData.settings.restaurantInfoVisible !== false;
     }
 
     async setDisplayMode(mode) {
@@ -486,6 +547,9 @@ class AdminApp {
                 whatsapp: document.getElementById('whatsapp').value.trim()
             }
         };
+        
+        this.menuData.settings = this.menuData.settings || {};
+        this.menuData.settings.restaurantInfoVisible = document.getElementById('restaurantInfoVisible').checked;
         
         if (await this.saveMenu()) {
             alert('Enregistré !');
@@ -556,14 +620,13 @@ async function handlePhotoUpload(event) {
         if (result.success) {
             adminApp.photoData = result.data.url;
             preview.innerHTML = '<img src="' + result.data.url + '" alt="Apercu">';
-            document.getElementById('itemImage').value = result.data.url;
         } else {
             throw new Error('Erreur upload');
         }
     } catch (error) {
         console.error('Erreur upload:', error);
         preview.innerHTML = '<span class="photo-preview-placeholder">Erreur</span>';
-        alert('Erreur lors de l\'upload. Essayez une URL directe.');
+        alert('Erreur lors de l\'upload.');
     }
 }
 
@@ -619,15 +682,6 @@ function blobToBase64(blob) {
     });
 }
 
-function previewImageUrl(event) {
-    var url = event.target.value.trim();
-    if (url) {
-        adminApp.photoData = url;
-        var preview = document.getElementById('photoPreview');
-        preview.innerHTML = '<img src="' + url + '" alt="Apercu" onerror="this.parentElement.innerHTML=\'<span class=\\\'photo-preview-placeholder\\\'>Erreur</span>\'">';
-    }
-}
-
 // ==================== FONCTIONS GLOBALES ====================
 
 function showItemForm(itemId = null, type = 'plat') {
@@ -654,6 +708,80 @@ function logout() {
     sessionStorage.removeItem('pilipili_admin');
     window.location.href = 'index.html';
 }
+
+function resetDatabase() {
+    if (confirm('Réinitialiser la base de données ? Tous les plats et catégories seront perdus.')) {
+        if (!adminApp || !adminApp.binId) {
+            alert('Impossible de réinitialiser : base de données non disponible.');
+            return;
+        }
+
+        const defaultData = {
+            restaurant: {
+                name: 'LEET-DORIAN',
+                address: '',
+                phone: '',
+                hours: '',
+                social: {}
+            },
+            categories: [
+                { id: 1, name: 'Entrees', order: 1, unit: 'plat' },
+                { id: 2, name: 'Plats', order: 2, unit: 'plat' },
+                { id: 3, name: 'Grillades', order: 3, unit: 'plat' },
+                { id: 4, name: 'Boissons', order: 4, unit: 'bouteille' },
+                { id: 5, name: 'Desserts', order: 5, unit: 'portion' }
+            ],
+            items: [],
+            settings: {
+                restaurantInfoVisible: true
+            },
+            lastUpdate: new Date().toISOString()
+        };
+
+        fetch('https://api.jsonbin.io/v3/b/' + adminApp.binId, {
+            method: 'PUT',
+            headers: adminApp.getHeaders(),
+            body: JSON.stringify(defaultData)
+        }).then(() => {
+            alert('Base de données réinitialisée !');
+            window.location.reload();
+        }).catch(() => {
+            alert('Erreur lors de la réinitialisation.');
+        });
+    }
+}
+
+// ============================================
+// ADMIN LOGO STATE PERSISTENCE
+// ============================================
+(function() {
+    const logo = document.querySelector('.admin-logo');
+    const title = document.querySelector('.admin-header h1');
+    if (!logo || !title) return;
+
+    const stateKey = 'leet-dorian-admin-logo-state';
+
+    function parseTranslate(el) {
+        const m = (el.style.transform || '').match(/translate\(([^p]+)px,\s*([^p]+)px\)/);
+        return m ? { x: parseFloat(m[1]), y: parseFloat(m[2]) } : { x: 0, y: 0 };
+    }
+
+    function applyTranslate(el, x, y) {
+        el.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    function applyState(state) {
+        applyTranslate(logo, state.logoX || 0, state.logoY || 0);
+        applyTranslate(title, state.titleX || 0, state.titleY || 0);
+        logo.style.height = state.logoHeight || '42px';
+        title.style.fontSize = state.titleSize || '1rem';
+    }
+
+    const saved = localStorage.getItem(stateKey);
+    if (saved) {
+        try { applyState(JSON.parse(saved)); } catch {}
+    }
+})();
 
 // Initialisation
 let adminApp;

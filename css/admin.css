@@ -3,20 +3,20 @@
    ============================================ */
 
 :root {
-    --bg-primary: #111111;
-    --bg-secondary: #181818;
-    --bg-card: #1E1E1E;
-    --bg-elevated: #262626;
-    --red-primary: #C8102E;
-    --red-hover: #E8192C;
-    --gold: #D4A853;
-    --text-primary: #F5F5F5;
-    --text-secondary: #8A8A8A;
-    --text-muted: #555555;
-    --border: rgba(255, 255, 255, 0.06);
-    --border-hover: rgba(255, 255, 255, 0.12);
-    --success: #2ECC71;
-    --danger: #E74C3C;
+    --bg-primary: #F6F4EE;
+    --bg-secondary: #F6F4EE;
+    --bg-card: #FFFFFF;
+    --bg-elevated: #FFFFFF;
+    --sage: #5E7057;
+    --sage-hover: #4A5A45;
+    --gold: #6B7B4C;
+    --text-primary: #1F2A24;
+    --text-secondary: #4A5A52;
+    --text-muted: #8A948E;
+    --border: rgba(31, 42, 36, 0.08);
+    --border-hover: rgba(31, 42, 36, 0.15);
+    --success: #5E7057;
+    --danger: #8B4A3A;
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
@@ -30,16 +30,14 @@
 }
 
 html {
-    overflow-x: hidden;
 }
 
 body {
-    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--bg-primary);
     color: var(--text-primary);
     line-height: 1.5;
     min-height: 100vh;
-    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -68,10 +66,10 @@ body {
 }
 
 .login-logo {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    object-fit: cover;
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-top: 8px;
     margin-bottom: 24px;
 }
 
@@ -82,7 +80,7 @@ body {
 }
 
 .login-subtitle {
-    font-family: 'Pacifico', cursive;
+    font-family: 'Playfair Display', serif;
     font-size: 1rem;
     color: var(--text-muted);
     margin-bottom: 32px;
@@ -314,9 +312,9 @@ body {
     left: 0;
     right: 0;
     height: 64px;
-    background: rgba(17, 17, 17, 0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(246, 244, 238, 0.95);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     border-top: 1px solid var(--border);
     display: flex;
     align-items: center;
@@ -420,13 +418,15 @@ body {
    HEADER ADMIN
    ============================================ */
 .admin-header {
-    background: rgba(12, 12, 12, 0.95);
+    background: rgba(246, 244, 238, 0.92);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    padding: 16px 20px;
+    padding: 10px 20px;
     border-bottom: 1px solid var(--border);
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 100;
 }
 
@@ -439,10 +439,12 @@ body {
 }
 
 .admin-logo {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
+    width: auto;
+    height: 42px;
+    object-fit: contain;
+    position: relative;
+    cursor: grab;
+    user-select: none;
 }
 
 .admin-header h1 {
@@ -450,6 +452,9 @@ body {
     font-weight: 600;
     flex: 1;
     text-align: center;
+    position: relative;
+    cursor: grab;
+    user-select: none;
 }
 
 .logout-btn {
@@ -470,14 +475,47 @@ body {
     background: var(--bg-elevated);
 }
 
+.admin-logout {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-toast {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-120%);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px 20px;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-lg);
+    z-index: 3000;
+    opacity: 0;
+    transition: all 0.35s ease;
+    pointer-events: none;
+}
+
+.admin-toast.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
 /* ============================================
    CONTENU ADMIN
    ============================================ */
 .admin-main {
     max-width: 800px;
     margin: 0 auto;
-    padding: 24px 20px;
-    padding-bottom: 100px;
+    padding: 72px 20px 100px;
 }
 
 .admin-section {
@@ -905,7 +943,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(31, 42, 36, 0.5);
     display: flex;
     align-items: flex-end;
     justify-content: center;

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Générateur QR Code - Pili-Pili Lounge</title>
+    <title>Générateur QR Code - LEET-DORIAN</title>
     <link rel="stylesheet" href="../css/admin.css">
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <style>
         .qr-section {
@@ -50,7 +50,7 @@
             border: none;
             border-radius: 10px;
             color: white;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Lato', sans-serif;
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.3s ease;
@@ -68,7 +68,7 @@
 <body>
     <header class="admin-header">
         <div class="admin-header-content">
-            <img src="../assets/logo.jpg" alt="Pili-Pili Lounge" class="admin-logo">
+            <img src="../assets/logo.svg" alt="LEET-DORIAN" class="admin-logo">
             <h1>Générateur QR Code</h1>
             <a href="dashboard.html" class="logout-btn">← Retour Admin</a>
         </div>
@@ -111,7 +111,7 @@
 
     <script>
         // URL du menu (à adapter avec votre domaine)
-        const menuUrl = window.location.origin + '/menu-pili-pili/';
+        const menuUrl = window.location.origin + '/leet-dorian/';
         
         // Afficher l'URL
         document.getElementById('menuUrl').textContent = menuUrl;
@@ -134,7 +134,7 @@
             
             if (format === 'png') {
                 const link = document.createElement('a');
-                link.download = 'pili-pili-qr-code.png';
+                    link.download = 'leet-dorian-qr-code.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             } else if (format === 'svg') {
@@ -152,7 +152,7 @@
                     const blob = new Blob([svg], { type: 'image/svg+xml' });
                     const url = URL.createObjectURL(blob);
                     const link = document.createElement('a');
-                    link.download = 'pili-pili-qr-code.svg';
+                    link.download = 'leet-dorian-qr-code.svg';
                     link.href = url;
                     link.click();
                     URL.revokeObjectURL(url);

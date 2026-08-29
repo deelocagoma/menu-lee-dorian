@@ -1,16 +1,18 @@
-const CACHE_NAME = 'pili-pili-v3';
+const CACHE_NAME = 'leet-dorian-v2';
 
 self.addEventListener('install', (e) => {
-  self.skipWaiting(); // Force SW activation
+  self.skipWaiting();
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll([
         '/',
         '/index.html',
         '/css/style.css',
+        '/css/admin.css',
         '/js/menu.js',
+        '/js/admin.js',
         '/js/config.js',
-        '/assets/logo.jpg'
+        '/assets/logo.svg'
       ]);
     })
   );
@@ -30,12 +32,10 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  // Ignorer les requêtes non-GET
   if (e.request.method !== 'GET') return;
 
   const url = e.request.url;
 
-  // Laisser passer directement sans cache : images externes, API JSONBin, ImgBB
   if (
     url.includes('i.ibb.co') ||
     url.includes('imgbb.com') ||
@@ -44,10 +44,9 @@ self.addEventListener('fetch', (e) => {
     url.includes('fonts.googleapis.com') ||
     url.includes('fonts.gstatic.com')
   ) {
-    return; // Ne pas intercepter, laisser le navigateur gérer normalement
+    return;
   }
 
-  // Pour les ressources locales uniquement : network-first
   e.respondWith(
     fetch(e.request)
       .then((response) => {

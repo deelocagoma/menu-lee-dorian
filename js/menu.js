@@ -1,10 +1,7 @@
-// Menu Pili-Pili Lounge - Application Mobile Premium
+// Menu LEET-DORIAN - Application Mobile Premium
 class MenuApp {
     constructor() {
-        // Priorité : binId hardcodé dans config.js, sinon localStorage
         this.binId = JSONBIN_CONFIG.binId || localStorage.getItem('pilipili_binId');
-        // Synchroniser le localStorage
-        if (this.binId) localStorage.setItem('pilipili_binId', this.binId);
         this.menuData = null;
         this.allItems = [];
         this.currentFilter = 'all';
@@ -14,12 +11,12 @@ class MenuApp {
 
     async init() {
         try {
+            console.log('[MENU] binId utilisé:', this.binId);
             if (!this.binId) {
                 await this.createBin();
             }
             await this.loadMenu();
             this.setupSearch();
-            this.setupNavigation();
             this.setupScrollTop();
             this.setupSelection();
             this.updateSelectionFab();
@@ -145,7 +142,7 @@ class MenuApp {
                 <div class="empty-state" style="padding: 40px 0;">
                     <div class="empty-state-icon">+</div>
                     <h3 class="empty-state-title">Vide</h3>
-                    <p class="empty-state-desc">Ajoutez des éléments depuis le menu</p>
+                    <p class="empty-state-desc">Ajoutez des elements depuis le menu</p>
                 </div>
             `;
             totalEl.textContent = '';
@@ -199,8 +196,11 @@ class MenuApp {
 
     async createBin() {
         const defaultData = {
+            settings: {
+                restaurantInfoVisible: true
+            },
             restaurant: {
-                name: 'Pili-Pili Lounge',
+                name: 'LEET-DORIAN',
                 address: 'Montagne Sainte, Libreville',
                 phone: '074 41 22 56',
                 hours: 'Lun-Dim: 12h - 23h',
@@ -211,7 +211,7 @@ class MenuApp {
                 }
             },
             categories: [
-                { id: 1, name: 'Entrées', order: 1, unit: 'plat' },
+                { id: 1, name: 'Entrees', order: 1, unit: 'plat' },
                 { id: 2, name: 'Plats', order: 2, unit: 'plat' },
                 { id: 3, name: 'Grillades', order: 3, unit: 'plat' },
                 { id: 4, name: 'Boissons', order: 4, unit: 'bouteille' },
@@ -221,7 +221,7 @@ class MenuApp {
                 {
                     id: 1,
                     name: 'Salade Pili-Pili',
-                    description: 'Salade fraîche avec piment et vinaigrette épicée',
+                    description: 'Salade fraiche avec piment et vinaigrette epicee',
                     price: 3500,
                     categoryId: 1,
                     type: 'plat',
@@ -233,7 +233,7 @@ class MenuApp {
                 {
                     id: 2,
                     name: 'Poulet Braisé',
-                    description: 'Poulet mariné aux épices locales, grillé au feu de bois',
+                    description: 'Poulet marine aux epices locales, grille au feu de bois',
                     price: 8500,
                     categoryId: 3,
                     type: 'plat',
@@ -245,7 +245,7 @@ class MenuApp {
                 {
                     id: 3,
                     name: 'Poisson Grillé',
-                    description: 'Poisson frais grillé avec sauce tomate épicée',
+                    description: 'Poisson frais grille avec sauce tomate epicee',
                     price: 12000,
                     categoryId: 3,
                     type: 'plat',
@@ -257,7 +257,7 @@ class MenuApp {
                 {
                     id: 4,
                     name: 'Jus de Bissap',
-                    description: 'Jus d\'hibiscus frais, sucré à votre goût',
+                    description: "Jus d'hibiscus frais, sucre a votre gout",
                     price: 1500,
                     categoryId: null,
                     type: 'boisson',
@@ -289,17 +289,15 @@ class MenuApp {
         });
 
         if (!response.ok) {
-            throw new Error(`Erreur création bin: ${response.status}`);
+            throw new Error(`Erreur creation bin: ${response.status}`);
         }
 
         const result = await response.json();
         this.binId = result.metadata?.id;
         
         if (!this.binId) {
-            throw new Error('ID du bin non trouvé');
+            throw new Error('ID du bin non trouve');
         }
-
-        localStorage.setItem('pilipili_binId', this.binId);
     }
 
     async loadMenu() {
@@ -322,7 +320,9 @@ class MenuApp {
         this.allItems = this.menuData.items.filter(item => item.isActive);
         
         loading.style.display = 'none';
+        document.getElementById('heroSection').style.display = 'block';
         this.renderAll();
+        this.renderRestaurantInfo();
     }
 
     showError() {
@@ -331,9 +331,9 @@ class MenuApp {
             <div class="empty-state">
                 <div class="empty-state-icon">!</div>
                 <h3 class="empty-state-title">Erreur de chargement</h3>
-                <p class="empty-state-desc">Vérifiez votre connexion</p>
+                <p class="empty-state-desc">Verifiez votre connexion</p>
                 <button onclick="localStorage.removeItem('pilipili_binId'); location.reload();">
-                    Réessayer
+                    Reessayer
                 </button>
             </div>
         `;
@@ -343,19 +343,74 @@ class MenuApp {
         if (!this.menuData) return;
 
         this.renderCategories();
-        this.renderFeatured();
         this.renderMenu();
-        this.renderRestaurantInfo();
+    }
+
+    renderRestaurantInfo() {
+        const section = document.getElementById('restaurantInfo');
+        if (!section || !this.menuData?.restaurant) return;
+
+        if (this.menuData.settings?.restaurantInfoVisible === false) {
+            section.style.display = 'none';
+            return;
+        }
+
+        const restaurant = this.menuData.restaurant;
+        const hasInfo = restaurant.name || restaurant.address || restaurant.phone || restaurant.hours || restaurant.social?.whatsapp;
+        if (!hasInfo) {
+            section.style.display = 'none';
+            return;
+        }
+
+        section.style.display = 'block';
+
+        const nameEl = document.getElementById('restaurantInfoName');
+        if (nameEl) nameEl.textContent = restaurant.name || '';
+
+        const addressItem = document.getElementById('restaurantInfoAddress');
+        const addressText = addressItem?.querySelector('.restaurant-info-text');
+        if (restaurant.address && addressItem && addressText) {
+            addressText.textContent = restaurant.address;
+            addressItem.style.display = 'inline-flex';
+        } else if (addressItem) {
+            addressItem.style.display = 'none';
+        }
+
+        const phoneItem = document.getElementById('restaurantInfoPhone');
+        const phoneLink = phoneItem?.querySelector('.restaurant-info-link');
+        if (restaurant.phone && phoneItem && phoneLink) {
+            phoneLink.textContent = restaurant.phone;
+            phoneLink.href = 'tel:' + restaurant.phone.replace(/[^0-9+]/g, '');
+            phoneItem.style.display = 'inline-flex';
+        } else if (phoneItem) {
+            phoneItem.style.display = 'none';
+        }
+
+        const whatsappItem = document.getElementById('restaurantInfoWhatsapp');
+        const whatsappLink = whatsappItem?.querySelector('.restaurant-info-link');
+        if (restaurant.social?.whatsapp && whatsappItem && whatsappLink) {
+            whatsappLink.textContent = restaurant.social.whatsapp;
+            const phoneNumber = restaurant.social.whatsapp.replace(/[^0-9]/g, '');
+            whatsappLink.href = 'https://wa.me/' + phoneNumber;
+            whatsappItem.style.display = 'inline-flex';
+        } else if (whatsappItem) {
+            whatsappItem.style.display = 'none';
+        }
+
+        const hoursItem = document.getElementById('restaurantInfoHours');
+        const hoursText = hoursItem?.querySelector('.restaurant-info-text');
+        if (restaurant.hours && hoursItem && hoursText) {
+            hoursText.textContent = restaurant.hours;
+            hoursItem.style.display = 'inline-flex';
+        } else if (hoursItem) {
+            hoursItem.style.display = 'none';
+        }
     }
 
     renderCategories() {
         const container = document.getElementById('categoriesScroll');
         
-        // On récupère toutes les catégories qui contiennent des plats (pas des boissons)
-        // Pour être sûr, on prend toutes les catégories sauf celle des boissons si on a une propriété type,
-        // ou alors on laisse les catégories de plats classiques.
         const categories = [...this.menuData.categories]
-            .filter(cat => cat.name.toLowerCase() !== 'boissons') // On exclut "Boissons" du haut car c'est en bas
             .sort((a, b) => a.order - b.order);
 
         container.innerHTML = `
@@ -369,92 +424,21 @@ class MenuApp {
             chip.addEventListener('click', () => {
                 container.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
                 chip.classList.add('active');
-                
-                // Activer "Accueil" dans la nav bar du bas puisqu'on navigue dans les sous-catégories
-                document.querySelectorAll('.bottom-nav .nav-item').forEach(nav => {
-                    nav.classList.toggle('active', nav.dataset.category === 'all');
-                });
-                
                 this.filterMenu(chip.dataset.filter);
             });
         });
-    }
-
-    renderFeatured(expanded = false) {
-        const section = document.getElementById('featuredSection');
-        const container = document.getElementById('featuredScroll');
-        // Exclure les boissons des plats phares (par type ET par nom de catégorie)
-        const drinkCatIds = new Set(
-            (this.menuData.categories || [])
-                .filter(c => c.name.toLowerCase().includes('boisson') || c.name.toLowerCase().includes('drink'))
-                .map(c => c.id)
-        );
-        const specialItems = this.allItems.filter(item =>
-            item.isSpecial &&
-            (item.type || 'plat') !== 'boisson' &&
-            !drinkCatIds.has(item.categoryId)
-        );
-
-        if (specialItems.length === 0) {
-            section.style.display = 'none';
-            return;
-        }
-
-        section.style.display = 'block';
-        
-        const maxInitial = 3;
-        const toShow = expanded ? specialItems : specialItems.slice(0, maxInitial);
-        
-        let html = toShow.map(item => this.renderFeaturedCard(item)).join('');
-        
-        if (!expanded && specialItems.length > maxInitial) {
-            html += `
-                <button class="see-more-btn" onclick="menuApp.renderFeatured(true)">
-                    Voir plus (${specialItems.length - maxInitial})
-                </button>
-            `;
-        } else if (expanded && specialItems.length > maxInitial) {
-            html += `
-                <button class="see-more-btn" onclick="menuApp.renderFeatured(false)">
-                    Voir moins
-                </button>
-            `;
-        }
-
-        container.innerHTML = html;
-    }
-
-    renderFeaturedCard(item) {
-        const imageHtml = item.image 
-            ? `<img src="${item.image}" alt="${item.name}" class="featured-card-image">`
-            : `<div class="featured-card-no-image"></div>`;
-
-        return `
-            <div class="featured-card">
-                ${imageHtml}
-                <div class="featured-card-content">
-                    <div class="featured-card-header">
-                        <h3 class="featured-card-name">${item.name}</h3>
-                        <span class="featured-card-price">${this.formatPrice(item.price)}</span>
-                    </div>
-                    <p class="featured-card-desc">${item.description}</p>
-                </div>
-            </div>
-        `;
     }
 
     renderMenu(filter = 'all') {
         const container = document.getElementById('menuSection');
         const categories = [...this.menuData.categories].sort((a, b) => a.order - b.order);
         
-        // IDs de catégories considérées comme "boissons" (par nom)
         const drinkCategoryIds = new Set(
             categories
                 .filter(c => c.name.toLowerCase().includes('boisson') || c.name.toLowerCase().includes('drink'))
                 .map(c => c.id)
         );
         
-        // Fonction utilitaire : est-ce que cet item est une boisson ?
         const isBoisson = item =>
             (item.type || 'plat') === 'boisson' || drinkCategoryIds.has(item.categoryId);
         
@@ -470,81 +454,106 @@ class MenuApp {
             items = items.filter(item => item.badge === 'new' && !isBoisson(item));
         } else if (filter.startsWith('category-')) {
             const catId = parseInt(filter.replace('category-', ''));
-            items = items.filter(item => item.categoryId === catId && !isBoisson(item));
+            items = items.filter(item => item.categoryId === catId);
         } else {
-            // "all" : uniquement les plats
-            items = items.filter(item => !isBoisson(item));
+            items = items;
         }
 
         if (items.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">0</div>
-                    <h3 class="empty-state-title">${isDrinksFilter ? 'Aucune boisson' : 'Aucun plat'}</h3>
-                    <p class="empty-state-desc">Essayez une autre catégorie</p>
+                    <h3 class="empty-state-title">${isDrinksFilter ? 'Aucune boisson' : 'Aucun resultat'}</h3>
+                    <p class="empty-state-desc">Essayez une autre categorie</p>
                 </div>
             `;
             return;
         }
 
         if (isDrinksFilter) {
-            // Drinks: show flat list without category grouping
             container.innerHTML = `
-                <div class="menu-category">
+                <div class="drinks-grid">
                     ${items.map(item => this.renderMenuCard(item)).join('')}
                 </div>
             `;
         } else {
-            const groupedItems = {};
-            items.forEach(item => {
-                if (!groupedItems[item.categoryId]) {
-                    groupedItems[item.categoryId] = [];
-                }
-                groupedItems[item.categoryId].push(item);
-            });
+            const plats = items.filter(item => !isBoisson(item));
+            const boissons = items.filter(item => isBoisson(item));
+            let html = '';
 
-            container.innerHTML = categories
-                .filter(cat => groupedItems[cat.id])
-                .map(category => {
-                    const categoryItems = groupedItems[category.id];
-                    return `
-                        <div class="menu-category">
-                            <h2 class="category-title">${category.name}</h2>
-                            ${categoryItems.map(item => this.renderMenuCard(item)).join('')}
+            if (plats.length > 0) {
+                const groupedItems = {};
+                plats.forEach(item => {
+                    if (!groupedItems[item.categoryId]) {
+                        groupedItems[item.categoryId] = [];
+                    }
+                    groupedItems[item.categoryId].push(item);
+                });
+
+                html += categories
+                    .filter(cat => groupedItems[cat.id])
+                    .map(category => {
+                        const categoryItems = groupedItems[category.id];
+                        return `
+                            <div class="menu-category">
+                                <h2 class="category-title">${category.name}</h2>
+                                <div class="menu-grid">
+                                    ${categoryItems.map(item => this.renderMenuCard(item)).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+            }
+
+            if (boissons.length > 0) {
+                html += `
+                    <div class="drinks-separator">
+                        <div class="drinks-separator-line"></div>
+                        <span class="drinks-separator-label">Boissons</span>
+                        <div class="drinks-separator-line"></div>
+                    </div>
+                    <div class="menu-category">
+                        <div class="drinks-grid">
+                            ${boissons.map(item => this.renderMenuCard(item)).join('')}
                         </div>
-                    `;
-                }).join('');
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
         }
     }
 
     renderMenuCard(item) {
         const imageHtml = item.image 
-            ? `<img src="${item.image}" alt="${item.name}" class="menu-card-image">`
+            ? `<img src="${item.image}" alt="${item.name}" class="menu-card-image" loading="lazy">`
             : `<div class="menu-card-no-image"></div>`;
 
-        const badgeHtml = item.badge ? this.getBadgeHtml(item.badge) : '';
+        const isBoisson = (item.type || 'plat') === 'boisson';
+        const badgeHtml = (!isBoisson && item.badge) ? this.getBadgeHtml(item.badge) : '';
         const qty = this.getItemQty(item.id);
+        const descIcon = (!isBoisson && item.description) ? `<svg class="menu-card-desc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>` : '';
 
         return `
             <div class="menu-card" data-item-id="${item.id}">
-                <div class="menu-card-inner">
-                    ${imageHtml}
-                    <div class="menu-card-info">
-                        <div class="menu-card-header">
-                            <h3 class="menu-card-name">${item.name}</h3>
+                ${imageHtml}
+                <div class="menu-card-body">
+                    <div class="menu-card-header">
+                        <h3 class="menu-card-name">${item.name}</h3>
+                        <div class="menu-card-header-right">
                             <span class="menu-card-price">${this.formatPrice(item.price)}</span>
+                            ${descIcon}
                         </div>
-                        <p class="menu-card-desc">${item.description}</p>
-                        ${badgeHtml ? `<div class="menu-card-badges">${badgeHtml}</div>` : ''}
                     </div>
-                    <button class="select-btn ${qty > 0 ? 'selected' : ''}" onclick="menuApp.toggleSelectItem(${item.id}, event)">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 5v14"></path>
-                            <path d="M5 12h14"></path>
-                        </svg>
-                    </button>
-                    ${qty > 0 ? `<div class="item-qty-badge">${qty}</div>` : ''}
+                    ${badgeHtml ? `<div class="menu-card-badges">${badgeHtml}</div>` : ''}
                 </div>
+                <button class="select-btn ${qty > 0 ? 'selected' : ''}" onclick="menuApp.toggleSelectItem(${item.id}, event)" aria-label="Ajouter au panier">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 5v14"></path>
+                        <path d="M5 12h14"></path>
+                    </svg>
+                </button>
+                ${qty > 0 ? `<div class="item-qty-badge">${qty}</div>` : ''}
             </div>
         `;
     }
@@ -552,17 +561,26 @@ class MenuApp {
     toggleSelectItem(itemId, event) {
         event.stopPropagation();
         const qty = this.getItemQty(itemId);
+        const card = event.currentTarget.closest('.menu-card');
+        const fab = document.getElementById('selectionFab');
         
         if (qty > 0) {
             this.removeFromSelection(itemId);
         } else {
             this.addToSelection(itemId);
+            if (card) {
+                card.classList.add('just-added');
+                setTimeout(() => card.classList.remove('just-added'), 350);
+            }
+            if (fab) {
+                fab.classList.add('pulse');
+                setTimeout(() => fab.classList.remove('pulse'), 500);
+            }
         }
         
-        // Animation
         const btn = event.currentTarget;
         btn.classList.add('animating');
-        setTimeout(() => btn.classList.remove('animating'), 300);
+        setTimeout(() => btn.classList.remove('animating'), 350);
     }
 
     renderRestaurantInfo() {
@@ -577,21 +595,21 @@ class MenuApp {
                     <div class="info-icon">...</div>
                     <div class="info-text">
                         <div class="info-label">Adresse</div>
-                        <div class="info-value">${restaurant.address || 'Non renseigné'}</div>
+                        <div class="info-value">${restaurant.address || 'Non renseigne'}</div>
                     </div>
                 </div>
                 <div class="info-item">
                     <div class="info-icon">...</div>
                     <div class="info-text">
-                        <div class="info-label">Téléphone</div>
-                        <div class="info-value">${restaurant.phone || 'Non renseigné'}</div>
+                        <div class="info-label">Telephone</div>
+                        <div class="info-value">${restaurant.phone || 'Non renseigne'}</div>
                     </div>
                 </div>
                 <div class="info-item">
                     <div class="info-icon">...</div>
                     <div class="info-text">
                         <div class="info-label">Horaires</div>
-                        <div class="info-value">${restaurant.hours || 'Non renseigné'}</div>
+                        <div class="info-value">${restaurant.hours || 'Non renseigne'}</div>
                     </div>
                 </div>
                 ${restaurant.social && (restaurant.social.facebook || restaurant.social.instagram || restaurant.social.whatsapp) ? `
@@ -607,36 +625,7 @@ class MenuApp {
 
     filterMenu(filter) {
         this.currentFilter = filter;
-        
-        const isFoodMenu = filter === 'all' || filter.startsWith('category-');
-        
-        const featuredSection = document.getElementById('featuredSection');
-        const categoriesScroll = document.getElementById('categoriesScroll');
-        const pageTitle = document.getElementById('pageTitle');
-        
-        if (isFoodMenu) {
-            // Page "Plats" : on affiche les catégories et les plats phares, pas besoin de titre supplémentaire
-            categoriesScroll.style.display = 'flex';
-            pageTitle.style.display = 'none';
-            this.renderFeatured(); 
-        } else {
-            // Autres pages : on cache le featured et les catégories, et on affiche un titre
-            featuredSection.style.display = 'none';
-            categoriesScroll.style.display = 'none';
-            
-            const titles = {
-                'popular': '⭐ Plats phares',
-                'drinks': '🍸 Nos boissons',
-                'new': '✨ Nouveautés'
-            };
-            
-            pageTitle.textContent = titles[filter] || '';
-            pageTitle.style.display = titles[filter] ? 'block' : 'none';
-        }
-
         this.renderMenu(filter);
-        
-        // Scroll remonter en haut quand on change de page
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -684,11 +673,9 @@ class MenuApp {
                 const matchesQuery = item.name.toLowerCase().includes(query) ||
                     item.description.toLowerCase().includes(query);
                 
-                // Si on est sur l'onglet boissons, chercher seulement parmi les boissons
                 if (this.currentFilter === 'drinks') {
                     return matchesQuery && (item.type || 'plat') === 'boisson';
                 }
-                // Sinon, chercher seulement parmi les plats
                 return matchesQuery && (item.type || 'plat') !== 'boisson';
             });
 
@@ -703,7 +690,7 @@ class MenuApp {
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">0</div>
-                    <h3 class="empty-state-title">Aucun résultat</h3>
+                    <h3 class="empty-state-title">Aucun resultat</h3>
                     <p class="empty-state-desc">Essayez autre chose</p>
                 </div>
             `;
@@ -718,7 +705,9 @@ class MenuApp {
             html += `
                 <div class="menu-category">
                     <h2 class="category-title">Plats</h2>
-                    ${plats.map(item => this.renderMenuCard(item)).join('')}
+                    <div class="menu-grid">
+                        ${plats.map(item => this.renderMenuCard(item)).join('')}
+                    </div>
                 </div>
             `;
         }
@@ -726,40 +715,13 @@ class MenuApp {
             html += `
                 <div class="menu-category">
                     <h2 class="category-title">Boissons</h2>
-                    ${boissons.map(item => this.renderMenuCard(item)).join('')}
+                    <div class="drinks-grid">
+                        ${boissons.map(item => this.renderMenuCard(item)).join('')}
+                    </div>
                 </div>
             `;
         }
         container.innerHTML = html;
-    }
-
-    setupNavigation() {
-        const bottomNavItems = document.querySelectorAll('.bottom-nav .nav-item');
-        
-        bottomNavItems.forEach(item => {
-            item.addEventListener('click', () => {
-                bottomNavItems.forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-                
-                const filter = item.dataset.category;
-                this.filterMenu(filter);
-
-                // Update category chips
-                const chips = document.querySelectorAll('.category-chip');
-                let foundMatch = false;
-                chips.forEach(chip => {
-                    if (chip.dataset.filter === filter) {
-                        chip.classList.add('active');
-                        foundMatch = true;
-                    } else {
-                        chip.classList.remove('active');
-                    }
-                });
-                
-                // If we clicked a bottom nav item (like drinks or popular) that isn't a chip,
-                // and it's not "all", we don't highlight any chip.
-            });
-        });
     }
 
     setupScrollTop() {
@@ -813,31 +775,26 @@ const pwaBanner = document.getElementById('pwaInstallBanner');
 const pwaInstallBtn = document.getElementById('pwaInstallBtn');
 const pwaCloseBtn = document.getElementById('pwaCloseBtn');
 
-// Detect iOS
 const isIos = () => {
     const userAgent = window.navigator.userAgent.toLowerCase();
     return /iphone|ipad|ipod/.test(userAgent);
 };
-// Detect if app is already installed
+
 const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
 
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the mini-infobar from appearing on mobile
     e.preventDefault();
-    // Stash the event so it can be triggered later.
     deferredPrompt = e;
     
-    // Show banner if not dismissed before
     if (!localStorage.getItem('pwa_dismissed')) {
         pwaBanner.style.display = 'flex';
     }
 });
 
-// For iOS, there is no beforeinstallprompt, so we check manually
 if (isIos() && !isInStandaloneMode() && !localStorage.getItem('pwa_dismissed')) {
     pwaBanner.style.display = 'flex';
-    document.querySelector('.pwa-desc').textContent = 'Appuyez sur Partager puis "Sur l\'écran d\'accueil"';
-    pwaInstallBtn.style.display = 'none'; // iOS users must use the browser menu
+    document.querySelector('.pwa-desc').textContent = 'Appuyez sur Partager puis "Sur l\'ecran d\'accueil"';
+    pwaInstallBtn.style.display = 'none';
 }
 
 if (pwaInstallBtn) {
@@ -858,3 +815,4 @@ if (pwaCloseBtn) {
         localStorage.setItem('pwa_dismissed', 'true');
     });
 }
+

@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0C0C0C">
-    <title>Admin - Pili-Pili Lounge</title>
+    <title>Admin - LEET-DORIAN</title>
     <link rel="stylesheet" href="../css/admin.css">
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="login-page">
     <div class="login-container">
         <div class="login-card">
-            <img src="../assets/logo.jpg" alt="Pili-Pili Lounge" class="login-logo">
+            <img src="../assets/logo.svg" alt="LEET-DORIAN" class="login-logo">
             <h1 class="login-title">Administration</h1>
-            <p class="login-subtitle">Pili-Pili Lounge</p>
+            <p class="login-subtitle">LEET-DORIAN</p>
             
             <form id="loginForm" class="login-form">
                 <div class="form-group">
@@ -59,6 +59,34 @@
                 document.getElementById('password').value = '';
             }
         });
+    </script>
+
+    <script>
+        (function() {
+            const logo = document.querySelector('.login-logo');
+            if (!logo) return;
+
+            const stateKey = 'leet-dorian-login-logo-state';
+
+            function parseTranslate(el) {
+                const m = (el.style.transform || '').match(/translate\(([^p]+)px,\s*([^p]+)px\)/);
+                return m ? { x: parseFloat(m[1]), y: parseFloat(m[2]) } : { x: 0, y: 0 };
+            }
+
+            function applyTranslate(el, x, y) {
+                el.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+            }
+
+            function applyState(state) {
+                applyTranslate(logo, state.x || 0, state.y || 0);
+                logo.style.height = state.height || '120px';
+            }
+
+            const saved = localStorage.getItem(stateKey);
+            if (saved) {
+                try { applyState(JSON.parse(saved)); } catch (e) {}
+            }
+        })();
     </script>
 </body>
 </html>
