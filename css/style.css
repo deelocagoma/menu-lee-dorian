@@ -596,8 +596,6 @@ body {
    ============================================ */
 .cart-fab {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
     width: 52px;
     height: 52px;
     border-radius: 50%;
@@ -917,8 +915,6 @@ body {
     }
 
     .cart-fab {
-        bottom: 16px;
-        right: 16px;
         width: 48px;
         height: 48px;
     }
