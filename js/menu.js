@@ -322,9 +322,7 @@ class MenuApp {
         loading.style.display = 'none';
         document.getElementById('heroSection').style.display = 'block';
         this.renderAll();
-        this.renderRestaurantInfo();
-        this.applyTheme();
-        this.initHeaderToolbar();
+                        this.initHeaderToolbar();
     }
 
     initHeaderToolbar() {
@@ -474,14 +472,9 @@ class MenuApp {
         this.renderMenu();
     }
 
-    renderRestaurantInfo() {
-        const section = document.getElementById('restaurantInfo');
+    renderRestaurantCard() {
+        const section = document.getElementById('restaurantCard');
         if (!section || !this.menuData?.restaurant) return;
-
-        if (this.menuData.settings?.restaurantInfoVisible === false) {
-            section.style.display = 'none';
-            return;
-        }
 
         const restaurant = this.menuData.restaurant;
         const hasInfo = restaurant.name || restaurant.address || restaurant.phone || restaurant.hours || restaurant.social?.whatsapp;
@@ -492,100 +485,36 @@ class MenuApp {
 
         section.style.display = 'block';
 
-        const nameEl = document.getElementById('restaurantInfoName');
+        const nameEl = section.querySelector('.restaurant-card-name');
         if (nameEl) nameEl.textContent = restaurant.name || '';
 
-        const addressItem = document.getElementById('restaurantInfoAddress');
-        const addressText = addressItem?.querySelector('.restaurant-info-text');
-        if (restaurant.address && addressItem && addressText) {
+        const addressRow = document.getElementById('restaurantAddressRow');
+        const addressText = document.getElementById('restaurantAddressText');
+        if (restaurant.address && addressRow && addressText) {
             addressText.textContent = restaurant.address;
-            addressItem.style.display = 'inline-flex';
-        } else if (addressItem) {
-            addressItem.style.display = 'none';
+            addressRow.style.display = 'inline-flex';
+        } else if (addressRow) {
+            addressRow.style.display = 'none';
         }
 
-        const phoneItem = document.getElementById('restaurantInfoPhone');
-        const phoneLink = phoneItem?.querySelector('.restaurant-info-link');
-        if (restaurant.phone && phoneItem && phoneLink) {
+        const phoneRow = document.getElementById('restaurantPhoneRow');
+        const phoneLink = document.getElementById('restaurantPhoneLink');
+        if (restaurant.phone && phoneRow && phoneLink) {
             phoneLink.textContent = restaurant.phone;
             phoneLink.href = 'tel:' + restaurant.phone.replace(/[^0-9+]/g, '');
-            phoneItem.style.display = 'inline-flex';
-        } else if (phoneItem) {
-            phoneItem.style.display = 'none';
+            phoneRow.style.display = 'inline-flex';
+        } else if (phoneRow) {
+            phoneRow.style.display = 'none';
         }
 
-        const whatsappItem = document.getElementById('restaurantInfoWhatsapp');
-        const whatsappLink = whatsappItem?.querySelector('.restaurant-info-link');
-        if (restaurant.social?.whatsapp && whatsappItem && whatsappLink) {
-            whatsappLink.textContent = restaurant.social.whatsapp;
-            const phoneNumber = restaurant.social.whatsapp.replace(/[^0-9]/g, '');
-            whatsappLink.href = 'https://wa.me/' + phoneNumber;
-            whatsappItem.style.display = 'inline-flex';
-        } else if (whatsappItem) {
-            whatsappItem.style.display = 'none';
-        }
-
-        const hoursItem = document.getElementById('restaurantInfoHours');
-        const hoursText = hoursItem?.querySelector('.restaurant-info-text');
-        if (restaurant.hours && hoursItem && hoursText) {
+        const hoursRow = document.getElementById('restaurantHoursRow');
+        const hoursText = document.getElementById('restaurantHoursText');
+        if (restaurant.hours && hoursRow && hoursText) {
             hoursText.textContent = restaurant.hours;
-            hoursItem.style.display = 'inline-flex';
-        } else if (hoursItem) {
-            hoursItem.style.display = 'none';
+            hoursRow.style.display = 'inline-flex';
+        } else if (hoursRow) {
+            hoursRow.style.display = 'none';
         }
-    }
-
-    applyTheme() {
-        const theme = this.menuData.settings?.theme || {};
-        const root = document.documentElement;
-        
-        if (theme.primary) {
-            root.style.setProperty('--sage', theme.primary);
-            root.style.setProperty('--sage-hover', this.darkenColor(theme.primary, 20));
-            root.style.setProperty('--sage-glow', this.hexToRgba(theme.primary, 0.15));
-        }
-        if (theme.secondary) {
-            root.style.setProperty('--text-primary', theme.secondary);
-            root.style.setProperty('--text-secondary', this.adjustColorOpacity(theme.secondary, 0.7));
-            root.style.setProperty('--text-muted', this.adjustColorOpacity(theme.secondary, 0.5));
-        }
-        if (theme.background) {
-            root.style.setProperty('--bg-primary', theme.background);
-            root.style.setProperty('--bg-secondary', theme.background);
-            root.style.setProperty('--bg-card', '#FFFFFF');
-            root.style.setProperty('--bg-elevated', '#FFFFFF');
-        }
-        if (theme.text) {
-            root.style.setProperty('--text-secondary', theme.text);
-        }
-        if (theme.titleFont) {
-            const titleEl = document.getElementById('headerTitle');
-            if (titleEl) titleEl.style.fontFamily = theme.titleFont;
-        }
-        if (theme.bodyFont) {
-            document.body.style.fontFamily = theme.bodyFont;
-        }
-    }
-    
-    darkenColor(hex, percent) {
-        const num = parseInt(hex.replace('#', ''), 16);
-        const amt = Math.round(2.55 * percent);
-        const R = Math.max(0, (num >> 16) - amt);
-        const G = Math.max(0, ((num >> 8) & 0x00FF) - amt);
-        const B = Math.max(0, (num & 0x0000FF) - amt);
-        return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
-    }
-    
-    hexToRgba(hex, alpha) {
-        const num = parseInt(hex.replace('#', ''), 16);
-        const R = (num >> 16) & 255;
-        const G = (num >> 8) & 255;
-        const B = num & 255;
-        return 'rgba(' + R + ',' + G + ',' + B + ',' + alpha + ')';
-    }
-    
-    adjustColorOpacity(hex, alpha) {
-        return this.hexToRgba(hex, alpha);
     }
 
     renderCategories() {
