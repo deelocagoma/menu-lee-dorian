@@ -18,6 +18,7 @@ class MenuApp {
             await this.loadMenu();
             this.setupSearch();
             this.setupSelection();
+            this.updateSelectionFab();
             
         } catch (error) {
             console.error('Erreur init:', error);
@@ -62,7 +63,7 @@ class MenuApp {
 
     saveSelection() {
         localStorage.setItem('pilipili_selection', JSON.stringify(this.selection));
-        
+        this.updateSelectionFab();
     }
 
     addToSelection(itemId) {
@@ -115,6 +116,15 @@ class MenuApp {
     getItemQty(itemId) {
         const found = this.selection.find(s => s.itemId === itemId);
         return found ? found.qty : 0;
+    }
+
+    updateSelectionFab() {
+        const fab = document.getElementById('selectionFab');
+        const count = document.getElementById('selectionCount');
+        const total = this.getSelectionCount();
+        
+        fab.style.display = 'flex';
+        count.textContent = total;
     }
 
     updateMenuCards() {
@@ -207,6 +217,60 @@ class MenuApp {
 
         this.renderCategories();
         this.renderMenu();
+    }
+
+    renderSelectionModal() {
+        const body = document.getElementById('selectionBody');
+        const totalEl = document.getElementById('selectionTotal');
+        
+        if (this.selection.length === 0) {
+            body.innerHTML = `
+                <div class="empty-state" style="padding: 40px 0;">
+                    <div class="empty-state-icon">+</div>
+                    <h3 class="empty-state-title">Vide</h3>
+                    <p class="empty-state-desc">Ajoutez des elements depuis le menu</p>
+                </div>
+            `;
+            totalEl.textContent = '';
+            return;
+        }
+
+        body.innerHTML = this.selection.map(s => {
+            const item = this.allItems.find(i => i.id === s.itemId);
+            if (!item) return '';
+            
+            const isBoisson = (item.type || 'plat') === 'boisson';
+            let unitLabel;
+            if (isBoisson) {
+                unitLabel = s.qty > 1 ? 'boissons' : 'boisson';
+            } else {
+                const category = this.menuData.categories.find(c => c.id === item.categoryId);
+                const unit = category?.unit || 'plat';
+                unitLabel = `${unit}${s.qty > 1 ? 's' : ''}`;
+            }
+            
+            const imageHtml = item.image 
+                ? `<img src="${item.image}" alt="${item.name}" class="selection-item-image">`
+                : `<div class="selection-item-no-image"></div>`;
+
+            return `
+                <div class="selection-item">
+                    ${imageHtml}
+                    <div class="selection-item-info">
+                        <div class="selection-item-name">${item.name}</div>
+                        <div class="selection-item-price">${s.qty} ${unitLabel} - ${this.formatPrice(item.price * s.qty)}</div>
+                    </div>
+                    <div class="selection-item-qty">
+                        <button class="qty-btn" onclick="menuApp.removeFromSelection(${item.id})">−</button>
+                        <span class="qty-value">${s.qty}</span>
+                        <button class="qty-btn" onclick="menuApp.addToSelection(${item.id})">+</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        const total = this.getSelectionTotal();
+        totalEl.textContent = this.formatPrice(total);
     }
 
     getHeaders() {
