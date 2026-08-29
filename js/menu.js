@@ -323,6 +323,7 @@ class MenuApp {
         document.getElementById('heroSection').style.display = 'block';
         this.renderAll();
         this.renderRestaurantInfo();
+        this.applyTheme();
         this.initHeaderToolbar();
     }
 
@@ -332,18 +333,12 @@ class MenuApp {
         const title = document.getElementById('headerTitle');
         const coordsEl = document.getElementById('headerToolCoords');
         const fontSelect = document.getElementById('titleFontSelect');
-        const toggleBtn = document.getElementById('toggleHeaderToolbar');
-        if (!toolbar || !logo || !title || !coordsEl || !fontSelect || !toggleBtn) return;
+        if (!toolbar || !logo || !title || !coordsEl || !fontSelect) return;
 
-        toggleBtn.addEventListener('click', function() {
-            const isVisible = toolbar.style.display !== 'none';
-            toolbar.style.display = isVisible ? 'none' : 'flex';
-            toggleBtn.setAttribute('aria-pressed', !isVisible);
-        });
-        toolbar.style.display = 'none';
+        toolbar.style.display = 'flex';
 
         const stateKey = 'leet-dorian-header-state';
-        const step = 2;
+        const step = 5;
 
         function parseTranslate(el) {
             const m = (el.style.transform || '').match(/translate\(([^p]+)px,\s*([^p]+)px\)/);
@@ -537,6 +532,23 @@ class MenuApp {
             hoursItem.style.display = 'inline-flex';
         } else if (hoursItem) {
             hoursItem.style.display = 'none';
+        }
+    }
+
+    applyTheme() {
+        const theme = this.menuData.settings?.theme || {};
+        const root = document.documentElement;
+        
+        if (theme.primary) root.style.setProperty('--sage', theme.primary);
+        if (theme.secondary) root.style.setProperty('--text-primary', theme.secondary);
+        if (theme.background) root.style.setProperty('--bg-body', theme.background);
+        if (theme.text) root.style.setProperty('--text-secondary', theme.text);
+        if (theme.titleFont) {
+            const titleEl = document.getElementById('headerTitle');
+            if (titleEl) titleEl.style.fontFamily = theme.titleFont;
+        }
+        if (theme.bodyFont) {
+            document.body.style.fontFamily = theme.bodyFont;
         }
     }
 
