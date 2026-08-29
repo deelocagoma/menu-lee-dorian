@@ -185,14 +185,17 @@
         document.addEventListener('DOMContentLoaded', () => {
             const ls = document.getElementById('loadingScreen');
             const hide = () => { if (ls) { ls.classList.add('hidden'); setTimeout(() => ls.remove(), 300); } };
-            if (ls) { hide(); }
-            menuApp = new MenuApp();
-            document.getElementById('cartPanel').addEventListener('click', handleCartPanelClick);
+            if (!ls) return;
+            setTimeout(() => {
+                menuApp = new MenuApp();
+                document.getElementById('cartPanel').addEventListener('click', handleCartPanelClick);
+                hide();
+            }, 1600);
         });
         setTimeout(() => {
             const ls = document.getElementById('loadingScreen');
             if (ls && !ls.classList.contains('hidden')) { ls.classList.add('hidden'); setTimeout(() => ls.remove(), 300); }
-        }, 4000);
+        }, 6000);
     </script>
 <script>
         if ('serviceWorker' in navigator) {
