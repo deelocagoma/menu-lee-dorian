@@ -241,7 +241,7 @@
             <div class="preview-section">
                 <div class="logo-preview" id="logoPreview">
                     <svg id="logoSvg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <text id="letter1" x="50" y="120" font-size="60" font-family="Arial" fill="#5E7057" text-anchor="middle">A</text>
+                        <text id="letter1" x="88" y="110" font-size="170" font-family="Georgia" fill="#5E7057" text-anchor="middle">L</text>
                         <text id="letter2" x="150" y="120" font-size="60" font-family="Arial" fill="#1F2A24" text-anchor="middle">B</text>
                     </svg>
                 </div>
@@ -252,19 +252,19 @@
                     <h3>Lettre 1</h3>
                     <div class="control-group">
                         <label for="letter1Input">Lettre</label>
-                        <input type="text" id="letter1Input" maxlength="1" value="A" style="width: 60px; text-align: center; font-size: 1.5rem; font-weight: bold;">
+                        <input type="text" id="letter1Input" maxlength="1" value="L" style="width: 60px; text-align: center; font-size: 1.5rem; font-weight: bold;">
                     </div>
                     <div class="control-group">
-                        <label for="letter1X">Position X: <span class="range-value" id="letter1XValue">50</span></label>
-                        <input type="range" id="letter1X" min="0" max="200" value="50">
+                        <label for="letter1X">Position X: <span class="range-value" id="letter1XValue">88</span></label>
+                        <input type="range" id="letter1X" min="0" max="200" value="88">
                     </div>
                     <div class="control-group">
-                        <label for="letter1Y">Position Y: <span class="range-value" id="letter1YValue">120</span></label>
-                        <input type="range" id="letter1Y" min="0" max="200" value="120">
+                        <label for="letter1Y">Position Y: <span class="range-value" id="letter1YValue">110</span></label>
+                        <input type="range" id="letter1Y" min="0" max="200" value="110">
                     </div>
                     <div class="control-group">
-                        <label for="letter1Size">Taille: <span class="range-value" id="letter1SizeValue">60</span></label>
-                        <input type="range" id="letter1Size" min="20" max="150" value="60">
+                        <label for="letter1Size">Taille: <span class="range-value" id="letter1SizeValue">170</span></label>
+                        <input type="range" id="letter1Size" min="20" max="150" value="170">
                     </div>
                     <div class="control-group">
                         <label for="letter1Color">Couleur</label>
@@ -274,7 +274,7 @@
                         <label for="letter1Font">Police</label>
                         <select id="letter1Font">
                             <option value="Arial">Arial</option>
-                            <option value="Georgia">Georgia</option>
+                            <option value="Georgia" selected>Georgia</option>
                             <option value="Playfair Display">Playfair Display</option>
                             <option value="Lato">Lato</option>
                             <option value="Impact">Impact</option>
@@ -287,19 +287,19 @@
                     <h3>Lettre 2</h3>
                     <div class="control-group">
                         <label for="letter2Input">Lettre</label>
-                        <input type="text" id="letter2Input" maxlength="1" value="B" style="width: 60px; text-align: center; font-size: 1.5rem; font-weight: bold;">
+                        <input type="text" id="letter2Input" maxlength="1" value="D" style="width: 60px; text-align: center; font-size: 1.5rem; font-weight: bold;">
                     </div>
                     <div class="control-group">
-                        <label for="letter2X">Position X: <span class="range-value" id="letter2XValue">150</span></label>
-                        <input type="range" id="letter2X" min="0" max="200" value="150">
+                        <label for="letter2X">Position X: <span class="range-value" id="letter2XValue">154</span></label>
+                        <input type="range" id="letter2X" min="0" max="200" value="154">
                     </div>
                     <div class="control-group">
-                        <label for="letter2Y">Position Y: <span class="range-value" id="letter2YValue">120</span></label>
-                        <input type="range" id="letter2Y" min="0" max="200" value="120">
+                        <label for="letter2Y">Position Y: <span class="range-value" id="letter2YValue">126</span></label>
+                        <input type="range" id="letter2Y" min="0" max="200" value="126">
                     </div>
                     <div class="control-group">
-                        <label for="letter2Size">Taille: <span class="range-value" id="letter2SizeValue">60</span></label>
-                        <input type="range" id="letter2Size" min="20" max="150" value="60">
+                        <label for="letter2Size">Taille: <span class="range-value" id="letter2SizeValue">150</span></label>
+                        <input type="range" id="letter2Size" min="20" max="150" value="150">
                     </div>
                     <div class="control-group">
                         <label for="letter2Color">Couleur</label>
@@ -337,8 +337,8 @@
         };
 
         let logoState = {
-            letter1: { char: 'A', x: 50, y: 120, size: 60, color: '#5E7057', font: 'Arial' },
-            letter2: { char: 'B', x: 150, y: 120, size: 60, color: '#5E7057', font: 'Arial' }
+            letter1: { char: 'L', x: 88, y: 110, size: 170, color: '#5E7057', font: 'Georgia' },
+            letter2: { char: 'D', x: 154, y: 126, size: 150, color: '#5E7057', font: 'Georgia' }
         };
 
         function updatePreview() {
@@ -501,30 +501,30 @@
 
         function resetLogo() {
             logoState = {
-                letter1: { char: 'A', x: 50, y: 120, size: 60, color: '#5E7057', font: 'Arial' },
-                letter2: { char: 'B', x: 150, y: 120, size: 60, color: '#5E7057', font: 'Arial' }
+                letter1: { char: 'L', x: 88, y: 110, size: 170, color: '#5E7057', font: 'Georgia' },
+                letter2: { char: 'D', x: 154, y: 126, size: 150, color: '#5E7057', font: 'Georgia' }
             };
 
-            document.getElementById('letter1Input').value = 'A';
-            document.getElementById('letter1X').value = 50;
-            document.getElementById('letter1Y').value = 120;
-            document.getElementById('letter1Size').value = 60;
+            document.getElementById('letter1Input').value = 'L';
+            document.getElementById('letter1X').value = 88;
+            document.getElementById('letter1Y').value = 110;
+            document.getElementById('letter1Size').value = 170;
             document.getElementById('letter1Color').value = '#5E7057';
-            document.getElementById('letter1Font').value = 'Arial';
+            document.getElementById('letter1Font').value = 'Georgia';
 
-            document.getElementById('letter2Input').value = 'B';
-            document.getElementById('letter2X').value = 150;
-            document.getElementById('letter2Y').value = 120;
-            document.getElementById('letter2Size').value = 60;
+            document.getElementById('letter2Input').value = 'D';
+            document.getElementById('letter2X').value = 154;
+            document.getElementById('letter2Y').value = 126;
+            document.getElementById('letter2Size').value = 150;
             document.getElementById('letter2Color').value = '#1F2A24';
-            document.getElementById('letter2Font').value = 'Arial';
+            document.getElementById('letter2Font').value = 'Georgia';
 
-            document.getElementById('letter1XValue').textContent = '50';
-            document.getElementById('letter1YValue').textContent = '120';
-            document.getElementById('letter1SizeValue').textContent = '60';
-            document.getElementById('letter2XValue').textContent = '150';
-            document.getElementById('letter2YValue').textContent = '120';
-            document.getElementById('letter2SizeValue').textContent = '60';
+            document.getElementById('letter1XValue').textContent = '88';
+            document.getElementById('letter1YValue').textContent = '110';
+            document.getElementById('letter1SizeValue').textContent = '170';
+            document.getElementById('letter2XValue').textContent = '154';
+            document.getElementById('letter2YValue').textContent = '126';
+            document.getElementById('letter2SizeValue').textContent = '150';
 
             updatePreview();
         }
