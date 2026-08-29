@@ -141,10 +141,18 @@ class MenuApp {
         let isDragging = false;
         let startX, startY, initialX, initialY;
         
-        element.style.right = '24px';
-        element.style.bottom = '24px';
-        element.style.left = 'auto';
-        element.style.top = 'auto';
+        const cartPos = this.menuData.settings?.cartPosition;
+        if (cartPos) {
+            element.style.right = 'auto';
+            element.style.bottom = 'auto';
+            element.style.left = cartPos.x + 'px';
+            element.style.top = cartPos.y + 'px';
+        } else {
+            element.style.right = '24px';
+            element.style.bottom = '24px';
+            element.style.left = 'auto';
+            element.style.top = 'auto';
+        }
         
         element.addEventListener('mousedown', dragStart);
         element.addEventListener('touchstart', dragStart, { passive: false });
@@ -395,11 +403,13 @@ class MenuApp {
         console.log('[CART-POS] Applying position:', cartPos, 'fab:', !!fab);
         if (!fab) return;
 
-        fab.style.right = 'auto';
-        fab.style.bottom = 'auto';
-        fab.style.left = cartPos.x + 'px';
-        fab.style.top = cartPos.y + 'px';
-        console.log('[CART-POS] Applied left:', fab.style.left, 'top:', fab.style.top);
+        requestAnimationFrame(() => {
+            fab.style.right = 'auto';
+            fab.style.bottom = 'auto';
+            fab.style.left = cartPos.x + 'px';
+            fab.style.top = cartPos.y + 'px';
+            console.log('[CART-POS] Applied left:', fab.style.left, 'top:', fab.style.top);
+        });
     }
 
     applyCustomLogo() {

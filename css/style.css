@@ -595,9 +595,9 @@ body {
    CART PANEL / FLOATING RIGHT CART
    ============================================ */
 .cart-fab {
-    position: fixed;
-    width: 52px;
-    height: 52px;
+    position: fixed !important;
+    width: 52px !important;
+    height: 52px !important;
     border-radius: 50%;
     background: var(--text-primary);
     color: var(--bg-primary);
@@ -913,8 +913,8 @@ body {
     }
 
     .cart-fab {
-        width: 48px;
-        height: 48px;
+        width: 48px !important;
+        height: 48px !important;
     }
 
     .cart-fab svg {
