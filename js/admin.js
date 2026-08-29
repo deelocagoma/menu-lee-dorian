@@ -134,7 +134,8 @@ class AdminApp {
         
         if (!xInput || !yInput) return;
         
-        const savedPos = this.menuData?.settings?.cartPosition || { x: 24, y: 24 };
+        const settings = this.menuData?.settings || {};
+        const savedPos = settings.cartPosition || { x: 24, y: 24 };
         xInput.value = savedPos.x;
         yInput.value = savedPos.y;
         
