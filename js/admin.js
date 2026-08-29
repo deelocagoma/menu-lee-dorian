@@ -513,14 +513,6 @@ class AdminApp {
         document.getElementById('instagram').value = restaurant.social?.instagram || '';
         document.getElementById('whatsapp').value = restaurant.social?.whatsapp || '';
         document.getElementById('restaurantInfoVisible').checked = this.menuData.settings.restaurantInfoVisible !== false;
-        
-        const theme = this.menuData.settings.theme || {};
-        document.getElementById('themePrimary').value = theme.primary || '#5E7057';
-        document.getElementById('themeSecondary').value = theme.secondary || '#1F2A24';
-        document.getElementById('themeBackground').value = theme.background || '#F6F4EE';
-        document.getElementById('themeText').value = theme.text || '#1F2A24';
-        document.getElementById('themeTitleFont').value = theme.titleFont || "'Playfair Display', serif";
-        document.getElementById('themeBodyFont').value = theme.bodyFont || "'Lato', sans-serif";
     }
 
     async setDisplayMode(mode) {
@@ -565,31 +557,12 @@ class AdminApp {
         }
     }
 
-    async saveTheme(e) {
-        e.preventDefault();
-        
-        this.menuData.settings = this.menuData.settings || {};
-        this.menuData.settings.theme = {
-            primary: document.getElementById('themePrimary').value,
-            secondary: document.getElementById('themeSecondary').value,
-            background: document.getElementById('themeBackground').value,
-            text: document.getElementById('themeText').value,
-            titleFont: document.getElementById('themeTitleFont').value,
-            bodyFont: document.getElementById('themeBodyFont').value
-        };
-        
-        if (await this.saveMenu()) {
-            alert('Thème enregistré !');
-        }
-    }
-
     // ==================== UTILITAIRES ====================
     
     setupForms() {
         document.getElementById('itemForm').addEventListener('submit', (e) => this.saveItem(e));
         document.getElementById('categoryForm').addEventListener('submit', (e) => this.saveCategory(e));
         document.getElementById('restaurantForm').addEventListener('submit', (e) => this.saveRestaurant(e));
-        document.getElementById('themeForm').addEventListener('submit', (e) => this.saveTheme(e));
     }
 
     getBadgeHtml(badge) {
