@@ -1,4 +1,4 @@
-const CACHE_NAME = 'leet-dorian-v2';
+const CACHE_NAME = 'leet-dorian-v3';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
