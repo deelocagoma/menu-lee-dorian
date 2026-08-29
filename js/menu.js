@@ -17,8 +17,8 @@ class MenuApp {
             }
             await this.loadMenu();
             this.setupSearch();
-            this.setupSelection();
-            this.updateSelectionFab();
+            this.setupCart();
+            this.updateCartFab();
         } catch (error) {
             console.error('Erreur init:', error);
             this.showError();
@@ -37,7 +37,7 @@ class MenuApp {
 
     saveSelection() {
         localStorage.setItem('pilipili_selection', JSON.stringify(this.selection));
-        this.updateSelectionFab();
+        this.updateCartFab();
     }
 
     addToSelection(itemId) {
@@ -49,7 +49,7 @@ class MenuApp {
         }
         this.saveSelection();
         this.updateMenuCards();
-        this.renderSelectionModal();
+        this.renderCartPanel();
     }
 
     removeFromSelection(itemId) {
@@ -63,14 +63,14 @@ class MenuApp {
         }
         this.saveSelection();
         this.updateMenuCards();
-        this.renderSelectionModal();
+        this.renderCartPanel();
     }
 
     clearSelection() {
         this.selection = [];
         this.saveSelection();
         this.updateMenuCards();
-        this.renderSelectionModal();
+        this.renderCartPanel();
     }
 
     getSelectionCount() {
@@ -89,9 +89,9 @@ class MenuApp {
         return found ? found.qty : 0;
     }
 
-    updateSelectionFab() {
-        const fab = document.getElementById('selectionFab');
-        const count = document.getElementById('selectionCount');
+    updateCartFab() {
+        const fab = document.getElementById('cartFab');
+        const count = document.getElementById('cartCount');
         const total = this.getSelectionCount();
         
         count.textContent = total;
@@ -125,17 +125,17 @@ class MenuApp {
         });
     }
 
-    setupSelection() {
-        const fab = document.getElementById('selectionFab');
+    setupCart() {
+        const fab = document.getElementById('cartFab');
         fab.addEventListener('click', () => {
-            this.renderSelectionModal();
-            document.getElementById('selectionModal').style.display = 'flex';
+            this.renderCartPanel();
+            document.getElementById('cartPanel').classList.add('visible');
         });
     }
 
-    renderSelectionModal() {
-        const body = document.getElementById('selectionBody');
-        const totalEl = document.getElementById('selectionTotal');
+    renderCartPanel() {
+        const body = document.getElementById('cartPanelBody');
+        const totalEl = document.getElementById('cartTotal');
         
         if (this.selection.length === 0) {
             body.innerHTML = `
@@ -162,22 +162,17 @@ class MenuApp {
                 const unit = category?.unit || 'plat';
                 unitLabel = `${unit}${s.qty > 1 ? 's' : ''}`;
             }
-            
-            const imageHtml = item.image 
-                ? `<img src="${item.image}" alt="${item.name}" class="selection-item-image">`
-                : `<div class="selection-item-no-image"></div>`;
 
             return `
-                <div class="selection-item">
-                    ${imageHtml}
-                    <div class="selection-item-info">
-                        <div class="selection-item-name">${item.name}</div>
-                        <div class="selection-item-price">${s.qty} ${unitLabel} - ${this.formatPrice(item.price * s.qty)}</div>
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-meta">${s.qty} ${unitLabel} - ${this.formatPrice(item.price * s.qty)}</div>
                     </div>
-                    <div class="selection-item-qty">
-                        <button class="qty-btn" onclick="menuApp.removeFromSelection(${item.id})">−</button>
-                        <span class="qty-value">${s.qty}</span>
-                        <button class="qty-btn" onclick="menuApp.addToSelection(${item.id})">+</button>
+                    <div class="cart-item-qty">
+                        <button class="cart-qty-btn" onclick="menuApp.removeFromSelection(${item.id})">−</button>
+                        <span class="cart-qty-value">${s.qty}</span>
+                        <button class="cart-qty-btn" onclick="menuApp.addToSelection(${item.id})">+</button>
                     </div>
                 </div>
             `;
@@ -589,7 +584,7 @@ class MenuApp {
         event.stopPropagation();
         const qty = this.getItemQty(itemId);
         const card = event.currentTarget.closest('.menu-card');
-        const fab = document.getElementById('selectionFab');
+        const fab = document.getElementById('cartFab');
         
         if (qty > 0) {
             this.removeFromSelection(itemId);
@@ -599,10 +594,7 @@ class MenuApp {
                 card.classList.add('just-added');
                 setTimeout(() => card.classList.remove('just-added'), 350);
             }
-            if (fab) {
-                fab.classList.add('pulse');
-                setTimeout(() => fab.classList.remove('pulse'), 500);
-            }
+
         }
         
         const btn = event.currentTarget;
@@ -757,14 +749,15 @@ class MenuApp {
 
 let menuApp;
 
-function closeSelectionModal() {
-    document.getElementById('selectionModal').style.display = 'none';
+function closeCartPanel() {
+    const panel = document.getElementById('cartPanel');
+    if (panel) panel.classList.remove('visible');
 }
 
-function handleSelectionModalClick(event) {
-    const modal = document.getElementById('selectionModal');
-    if (event.target === modal) {
-        modal.style.display = 'none';
+function handleCartPanelClick(event) {
+    const panel = document.getElementById('cartPanel');
+    if (panel && event.target === panel) {
+        panel.classList.remove('visible');
     }
 }
 
@@ -776,7 +769,7 @@ function clearSelection() {
 
 document.addEventListener('DOMContentLoaded', () => {
     menuApp = new MenuApp();
-    document.getElementById('selectionModal').addEventListener('click', handleSelectionModalClick);
+    document.getElementById('cartPanel').addEventListener('click', handleCartPanelClick);
 });
 
 // ============================================
