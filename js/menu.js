@@ -364,7 +364,7 @@ class MenuApp {
         });
     }
 
-    renderMenu(filter = 'all') {
+    renderMenu(filter = 'hotel') {
         const container = document.getElementById('menuSection');
         const categories = [...this.menuData.categories].sort((a, b) => a.order - b.order);
         
@@ -388,6 +388,9 @@ class MenuApp {
         } else if (filter.startsWith('category-')) {
             const catId = parseInt(filter.replace('category-', ''));
             items = items.filter(item => item.categoryId === catId);
+        } else {
+            items = items.filter(item => isChambre(item));
+            sectionLabel = 'Chambres';
         }
 
         if (items.length === 0) {
