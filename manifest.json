@@ -1,7 +1,7 @@
 {
   "name": "LEET-DORIAN",
   "short_name": "LEET-DORIAN",
-  "description": "Menu interactif et administration du LEET-DORIAN",
+  "description": "Réservation de chambres et administration du LEET-DORIAN",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#F6F4EE",

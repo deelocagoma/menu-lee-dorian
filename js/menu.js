@@ -183,7 +183,7 @@ class MenuApp {
 
         container.innerHTML = `
             <button class="category-chip active" data-filter="all">Tout</button>
-            <button class="category-chip" data-filter="drinks">Boissons</button>
+            <button class="category-chip" data-filter="drinks">Petits-déjeuners</button>
             ${categories.map(cat => `
                 <button class="category-chip" data-filter="category-${cat.id}">${cat.name}</button>
             `).join('')}
@@ -239,25 +239,37 @@ class MenuApp {
             const item = this.allItems.find(i => i.id === s.itemId);
             if (!item) return '';
             
-            const isBoisson = (item.type || 'plat') === 'boisson';
+            const isChambre = (item.type || 'chambre') === 'chambre';
             let unitLabel;
-            if (isBoisson) {
-                unitLabel = s.qty > 1 ? 'boissons' : 'boisson';
-            } else {
+            if (isChambre) {
                 const category = this.menuData.categories.find(c => c.id === item.categoryId);
-                const unit = category?.unit || 'plat';
+                const unit = category?.unit || 'chambre';
                 unitLabel = `${unit}${s.qty > 1 ? 's' : ''}`;
+            } else {
+                unitLabel = s.qty > 1 ? 'petits-déjeuners' : 'petit-déjeuner';
             }
             
             const imageHtml = item.image 
                 ? `<img src="${item.image}" alt="${item.name}" class="selection-item-image">`
                 : `<div class="selection-item-no-image"></div>`;
 
+            let hotelDetail = '';
+            if (isChambre) {
+                const parts = [];
+                if (item.capacity) parts.push(`${item.capacity} pers.`);
+                if (item.area) parts.push(item.area);
+                if (item.bedType) parts.push(item.bedType);
+                if (parts.length > 0) {
+                    hotelDetail = `<div class="selection-item-hotel">${parts.join(' · ')}</div>`;
+                }
+            }
+
             return `
                 <div class="selection-item">
                     ${imageHtml}
                     <div class="selection-item-info">
                         <div class="selection-item-name">${item.name}</div>
+                        ${hotelDetail}
                         <div class="selection-item-price">${s.qty} ${unitLabel} - ${this.formatPrice(item.price * s.qty)}</div>
                     </div>
                     <div class="selection-item-qty">
@@ -333,7 +345,7 @@ class MenuApp {
 
         container.innerHTML = `
             <button class="category-chip active" data-filter="all">Tout</button>
-            <button class="category-chip" data-filter="drinks">Boissons</button>
+            <button class="category-chip" data-filter="drinks">Petits-déjeuners</button>
             ${categories.map(cat => `
                 <button class="category-chip" data-filter="category-${cat.id}">${cat.name}</button>
             `).join('')}
@@ -354,23 +366,23 @@ class MenuApp {
         
         const drinkCategoryIds = new Set(
             categories
-                .filter(c => c.name.toLowerCase().includes('boisson') || c.name.toLowerCase().includes('drink'))
+                .filter(c => c.name.toLowerCase().includes('petit') || c.name.toLowerCase().includes('petit_dejeuner'))
                 .map(c => c.id)
         );
         
-        const isBoisson = item =>
-            (item.type || 'plat') === 'boisson' || drinkCategoryIds.has(item.categoryId);
+        const isPetitDejeuner = item =>
+            (item.type || 'chambre') === 'petit_dejeuner' || drinkCategoryIds.has(item.categoryId);
         
         let items = this.allItems;
         let isDrinksFilter = false;
         
         if (filter === 'popular') {
-            items = items.filter(item => item.badge === 'popular' && !isBoisson(item));
+            items = items.filter(item => item.badge === 'popular' && !isPetitDejeuner(item));
         } else if (filter === 'drinks') {
-            items = items.filter(item => isBoisson(item));
+            items = items.filter(item => isPetitDejeuner(item));
             isDrinksFilter = true;
         } else if (filter === 'new') {
-            items = items.filter(item => item.badge === 'new' && !isBoisson(item));
+            items = items.filter(item => item.badge === 'new' && !isPetitDejeuner(item));
         } else if (filter.startsWith('category-')) {
             const catId = parseInt(filter.replace('category-', ''));
             items = items.filter(item => item.categoryId === catId);
@@ -382,7 +394,7 @@ class MenuApp {
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">0</div>
-                    <h3 class="empty-state-title">${isDrinksFilter ? 'Aucune boisson' : 'Aucun resultat'}</h3>
+                    <h3 class="empty-state-title">${isDrinksFilter ? 'Aucun petit-déjeuner' : 'Aucun résultat'}</h3>
                     <p class="empty-state-desc">Essayez une autre categorie</p>
                 </div>
             `;
@@ -396,13 +408,13 @@ class MenuApp {
                 </div>
             `;
         } else {
-            const plats = items.filter(item => !isBoisson(item));
-            const boissons = items.filter(item => isBoisson(item));
+            const chambres = items.filter(item => !isPetitDejeuner(item));
+            const petitsDejeuners = items.filter(item => isPetitDejeuner(item));
             let html = '';
 
-            if (plats.length > 0) {
+            if (chambres.length > 0) {
                 const groupedItems = {};
-                plats.forEach(item => {
+                chambres.forEach(item => {
                     if (!groupedItems[item.categoryId]) {
                         groupedItems[item.categoryId] = [];
                     }
@@ -424,16 +436,16 @@ class MenuApp {
                     }).join('');
             }
 
-            if (boissons.length > 0) {
+            if (petitsDejeuners.length > 0) {
                 html += `
                     <div class="drinks-separator">
                         <div class="drinks-separator-line"></div>
-                        <span class="drinks-separator-label">Boissons</span>
+                        <span class="drinks-separator-label">Petits-déjeuners</span>
                         <div class="drinks-separator-line"></div>
                     </div>
                     <div class="menu-category">
                         <div class="drinks-grid">
-                            ${boissons.map(item => this.renderMenuCard(item)).join('')}
+                            ${petitsDejeuners.map(item => this.renderMenuCard(item)).join('')}
                         </div>
                     </div>
                 `;
@@ -448,10 +460,10 @@ class MenuApp {
             ? `<img src="${item.image}" alt="${item.name}" class="menu-card-image" loading="lazy">`
             : `<div class="menu-card-no-image"></div>`;
 
-        const isBoisson = (item.type || 'plat') === 'boisson';
-        const badgeHtml = (!isBoisson && item.badge) ? this.getBadgeHtml(item.badge) : '';
+        const isPetitDejeuner = (item.type || 'chambre') === 'petit_dejeuner';
+        const badgeHtml = (!isPetitDejeuner && item.badge) ? this.getBadgeHtml(item.badge) : '';
         const qty = this.getItemQty(item.id);
-        const descIcon = (!isBoisson && item.description) ? `<svg class="menu-card-desc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>` : '';
+        const descIcon = (!isPetitDejeuner && item.description) ? `<svg class="menu-card-desc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>` : '';
 
         return `
             <div class="menu-card" data-item-id="${item.id}">
@@ -590,9 +602,9 @@ class MenuApp {
                     item.description.toLowerCase().includes(query);
                 
                 if (this.currentFilter === 'drinks') {
-                    return matchesQuery && (item.type || 'plat') === 'boisson';
+                    return matchesQuery && (item.type || 'chambre') === 'petit_dejeuner';
                 }
-                return matchesQuery && (item.type || 'plat') !== 'boisson';
+                return matchesQuery && (item.type || 'chambre') !== 'petit_dejeuner';
             });
 
             this.renderSearchResults(filtered);
@@ -606,7 +618,7 @@ class MenuApp {
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">0</div>
-                    <h3 class="empty-state-title">Aucun resultat</h3>
+                    <h3 class="empty-state-title">Aucun résultat</h3>
                     <p class="empty-state-desc">Essayez autre chose</p>
                 </div>
             `;
@@ -617,22 +629,22 @@ class MenuApp {
         const boissons = items.filter(i => (i.type || 'plat') === 'boisson');
 
         let html = '';
-        if (plats.length > 0) {
+        if (chambres.length > 0) {
             html += `
                 <div class="menu-category">
-                    <h2 class="category-title">Plats</h2>
+                    <h2 class="category-title">Chambres</h2>
                     <div class="menu-grid">
-                        ${plats.map(item => this.renderMenuCard(item)).join('')}
+                        ${chambres.map(item => this.renderMenuCard(item)).join('')}
                     </div>
                 </div>
             `;
         }
-        if (boissons.length > 0) {
+        if (petitsDejeuners.length > 0) {
             html += `
                 <div class="menu-category">
-                    <h2 class="category-title">Boissons</h2>
+                    <h2 class="category-title">Petits-déjeuners</h2>
                     <div class="drinks-grid">
-                        ${boissons.map(item => this.renderMenuCard(item)).join('')}
+                        ${petitsDejeuners.map(item => this.renderMenuCard(item)).join('')}
                     </div>
                 </div>
             `;

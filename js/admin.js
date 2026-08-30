@@ -39,11 +39,11 @@ class AdminApp {
                 }
             },
             categories: [
-                { id: 1, name: 'Entrees', order: 1, unit: 'plat' },
-                { id: 2, name: 'Plats', order: 2, unit: 'plat' },
-                { id: 3, name: 'Grillades', order: 3, unit: 'plat' },
-                { id: 4, name: 'Boissons', order: 4, unit: 'bouteille' },
-                { id: 5, name: 'Desserts', order: 5, unit: 'portion' }
+                { id: 1, name: 'Chambres Standard', order: 1, unit: 'chambre' },
+                { id: 2, name: 'Chambres VIP', order: 2, unit: 'chambre' },
+                { id: 3, name: 'Petit-déjeuner', order: 3, unit: 'petit_dejeuner' },
+                { id: 4, name: 'Boissons', order: 4, unit: 'boisson' },
+                { id: 5, name: 'Snacks', order: 5, unit: 'snack' }
             ],
             items: [],
             lastUpdate: new Date().toISOString()
@@ -150,8 +150,8 @@ class AdminApp {
         if (section) section.style.display = 'block';
         
         switch (this.currentSection) {
-            case 'items': this.renderItems('plat', 'itemsList'); break;
-            case 'drinks': this.renderItems('boisson', 'drinksList'); break;
+            case 'items': this.renderItems('chambre', 'itemsList'); break;
+            case 'drinks': this.renderItems('petit_dejeuner', 'drinksList'); break;
             case 'categories': this.renderCategories(); break;
             case 'restaurant': this.renderRestaurant(); break;
             case 'logo': break;
@@ -166,9 +166,9 @@ class AdminApp {
         setTimeout(() => toast.classList.remove('visible'), 2500);
     }
 
-    // ==================== PLATS ====================
+    // ==================== CHAMBRES / PETITS-DÉJEUNERS ====================
     
-    renderItems(itemType = 'plat', containerId = 'itemsList') {
+    renderItems(itemType = 'chambre', containerId = 'itemsList') {
         const itemsList = document.getElementById(containerId);
         const categories = this.menuData.categories || [];
         const displayMode = localStorage.getItem('admin_display_mode') || 'list';
@@ -183,14 +183,14 @@ class AdminApp {
             itemsList.classList.remove('admin-list-view');
         }
         
-        const itemsToRender = (this.menuData.items || []).filter(i => (i.type || 'plat') === itemType);
+        const itemsToRender = (this.menuData.items || []).filter(i => (i.type || 'chambre') === itemType);
         
         if (itemsToRender.length === 0) {
             itemsList.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">+</div>
-                    <h3 class="empty-state-title">Aucun ${itemType === 'plat' ? 'plat' : 'boisson'}</h3>
-                    <p class="empty-state-desc">Ajoutez votre premi${itemType === 'plat' ? 'er plat' : 'ère boisson'}</p>
+                    <h3 class="empty-state-title">Aucun ${itemType === 'chambre' ? 'chambre' : 'petit-déjeuner'}</h3>
+                    <p class="empty-state-desc">Ajoutez votre premi${itemType === 'chambre' ? 'ère chambre' : 'er petit-déjeuner'}</p>
                 </div>
             `;
             return;
@@ -203,7 +203,7 @@ class AdminApp {
                 ? `<img src="${item.image}" alt="${item.name}" class="item-image">`
                 : `<div class="item-image-placeholder"></div>`;
 
-            const categoryTag = (itemType === 'plat' && category)
+            const categoryTag = (itemType === 'chambre' && category)
                 ? `<span class="item-category">${category.name}</span>`
                 : '';
 
@@ -236,7 +236,7 @@ class AdminApp {
         }).join('');
     }
 
-    showItemForm(itemId = null, defaultType = 'plat') {
+    showItemForm(itemId = null, defaultType = 'chambre') {
         const modal = document.getElementById('itemModal');
         const title = document.getElementById('itemModalTitle');
         const form = document.getElementById('itemForm');
@@ -254,22 +254,25 @@ class AdminApp {
         photoPreview.innerHTML = '<span class="photo-preview-placeholder">Ajouter</span>';
         document.getElementById('photoFile').value = '';
         
-        const actualType = itemId ? (this.menuData.items.find(i => i.id === itemId)?.type || 'plat') : defaultType;
-        const isBoisson = actualType === 'boisson';
+        const actualType = itemId ? (this.menuData.items.find(i => i.id === itemId)?.type || 'chambre') : defaultType;
+        const isPetitDejeuner = actualType === 'petit_dejeuner';
         
         // Adapter les libellés
-        document.getElementById('photoUploadLabel').textContent = isBoisson ? 'Photo de la boisson' : 'Photo du plat';
+        document.getElementById('photoUploadLabel').textContent = isPetitDejeuner ? 'Photo du petit-déjeuner' : 'Photo de la chambre';
         
-        // Masquer/afficher les champs non pertinents pour les boissons
-        document.getElementById('itemCategoryGroup').style.display = isBoisson ? 'none' : '';
-        document.getElementById('itemDescriptionGroup').style.display = isBoisson ? 'none' : '';
-        document.getElementById('itemBadgeGroup').style.display = isBoisson ? 'none' : '';
+        // Masquer/afficher les champs non pertinents pour les petits-déjeuners
+        document.getElementById('itemCategoryGroup').style.display = isPetitDejeuner ? 'none' : '';
+        document.getElementById('itemDescriptionGroup').style.display = isPetitDejeuner ? 'none' : '';
+        document.getElementById('itemBadgeGroup').style.display = isPetitDejeuner ? 'none' : '';
+        
+        const hotelRows = document.querySelectorAll('#hotelFieldsRow, #hotelFieldsRow2');
+        hotelRows.forEach(row => row.style.display = isPetitDejeuner ? 'none' : '');
 
         if (itemId) {
             const item = this.menuData.items.find(i => i.id === itemId);
             if (!item) return;
             
-            title.textContent = actualType === 'boisson' ? 'Modifier la boisson' : 'Modifier le plat';
+            title.textContent = actualType === 'petit_dejeuner' ? 'Modifier le petit-déjeuner' : 'Modifier la chambre';
             document.getElementById('itemId').value = item.id;
             document.getElementById('itemType').value = actualType;
             document.getElementById('itemName').value = item.name;
@@ -282,11 +285,20 @@ class AdminApp {
                 this.photoData = item.image;
                 photoPreview.innerHTML = `<img src="${item.image}" alt="${item.name}">`;
             }
+            
+            document.getElementById('itemCapacity').value = item.capacity || '';
+            document.getElementById('itemArea').value = item.area || '';
+            document.getElementById('itemBedType').value = item.bedType || '';
+            document.getElementById('itemEquipment').value = item.equipment || '';
         } else {
-            title.textContent = actualType === 'boisson' ? 'Ajouter une boisson' : 'Ajouter un plat';
+            title.textContent = actualType === 'petit_dejeuner' ? 'Ajouter un petit-déjeuner' : 'Ajouter une chambre';
             form.reset();
             document.getElementById('itemId').value = '';
             document.getElementById('itemType').value = actualType;
+            document.getElementById('itemCapacity').value = '';
+            document.getElementById('itemArea').value = '';
+            document.getElementById('itemBedType').value = '';
+            document.getElementById('itemEquipment').value = '';
         }
         
         modal.style.display = 'flex';
@@ -306,7 +318,7 @@ class AdminApp {
             description: document.getElementById('itemDescription').value.trim(),
             price: parseInt(document.getElementById('itemPrice').value),
             categoryId: parseInt(document.getElementById('itemCategory').value),
-            type: document.getElementById('itemType').value || 'plat',
+            type: document.getElementById('itemType').value || 'chambre',
             image: this.photoData || '',
             badge: document.getElementById('itemBadge').value || null,
             isActive: true
@@ -381,7 +393,7 @@ class AdminApp {
 
         categoriesList.innerHTML = categories.map(category => {
             const itemCount = this.menuData.items.filter(i => i.categoryId === category.id).length;
-            const unit = category.unit || 'plat';
+            const unit = category.unit || 'chambre';
             
             return `
                 <div class="category-card">
@@ -410,12 +422,12 @@ class AdminApp {
             document.getElementById('categoryId').value = category.id;
             document.getElementById('categoryName').value = category.name;
             document.getElementById('categoryOrder').value = category.order;
-            document.getElementById('categoryUnit').value = category.unit || 'plat';
+            document.getElementById('categoryUnit').value = category.unit || 'chambre';
         } else {
             title.textContent = 'Ajouter';
             form.reset();
             document.getElementById('categoryId').value = '';
-            document.getElementById('categoryUnit').value = 'plat';
+            document.getElementById('categoryUnit').value = 'chambre';
             
             const maxOrder = this.menuData.categories.length > 0
                 ? Math.max(...this.menuData.categories.map(c => c.order))
@@ -486,7 +498,7 @@ class AdminApp {
         }
     }
 
-    // ==================== RESTAURANT ====================
+    // ==================== HÔTEL ====================
     
     renderRestaurant() {
         if (!this.menuData.restaurant) {
@@ -685,7 +697,7 @@ function blobToBase64(blob) {
 
 // ==================== FONCTIONS GLOBALES ====================
 
-function showItemForm(itemId = null, type = 'plat') {
+function showItemForm(itemId = null, type = 'chambre') {
     adminApp.showItemForm(itemId, type);
 }
 
@@ -711,7 +723,7 @@ function logout() {
 }
 
 function resetDatabase() {
-    if (confirm('Réinitialiser la base de données ? Tous les plats et catégories seront perdus.')) {
+    if (confirm('Réinitialiser la base de données ? Toutes les chambres et catégories seront perdues.')) {
         if (!adminApp || !adminApp.binId) {
             alert('Impossible de réinitialiser : base de données non disponible.');
             return;
@@ -726,11 +738,11 @@ function resetDatabase() {
                 social: {}
             },
             categories: [
-                { id: 1, name: 'Entrees', order: 1, unit: 'plat' },
-                { id: 2, name: 'Plats', order: 2, unit: 'plat' },
-                { id: 3, name: 'Grillades', order: 3, unit: 'plat' },
-                { id: 4, name: 'Boissons', order: 4, unit: 'bouteille' },
-                { id: 5, name: 'Desserts', order: 5, unit: 'portion' }
+                { id: 1, name: 'Chambres Standard', order: 1, unit: 'chambre' },
+                { id: 2, name: 'Chambres VIP', order: 2, unit: 'chambre' },
+                { id: 3, name: 'Petit-déjeuner', order: 3, unit: 'petit_dejeuner' },
+                { id: 4, name: 'Boissons', order: 4, unit: 'boisson' },
+                { id: 5, name: 'Snacks', order: 5, unit: 'snack' }
             ],
             items: [],
             settings: {

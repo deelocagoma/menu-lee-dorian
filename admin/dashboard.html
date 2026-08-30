@@ -35,7 +35,7 @@
         <!-- Plats -->
         <section class="admin-section" id="itemsSection">
             <div class="section-header">
-                <h2>Plats</h2>
+                <h2>Chambres</h2>
                 <button class="add-btn" onclick="showItemForm(null, 'plat')">+ Ajouter</button>
             </div>
 
@@ -67,7 +67,7 @@
         <!-- Boissons -->
         <section class="admin-section" id="drinksSection" style="display: none;">
             <div class="section-header">
-                <h2>Boissons</h2>
+                <h2>Petits-déjeuners</h2>
                 <button class="add-btn" onclick="showItemForm(null, 'boisson')">+ Ajouter</button>
             </div>
 
@@ -108,7 +108,7 @@
         <!-- Restaurant -->
         <section class="admin-section" id="restaurantSection" style="display: none;">
             <div class="section-header">
-                <h2>Informations</h2>
+                <h2>Infos Hôtel</h2>
             </div>
 
             <form id="restaurantForm" class="admin-form">
@@ -159,7 +159,7 @@
                 <path d="M7 2v20"></path>
                 <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>
             </svg>
-            <span>Plats</span>
+            <span>Chambres</span>
         </button>
         <button class="admin-nav-item" data-section="drinks">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -167,7 +167,7 @@
                 <path d="M12 11v11"></path>
                 <path d="m19 3-7 8-7-8Z"></path>
             </svg>
-            <span>Boissons</span>
+            <span>Petits-déjeuners</span>
         </button>
         <button class="admin-nav-item" data-section="categories">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -183,7 +183,7 @@
                 <circle cx="12" cy="12" r="3"></circle>
                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0-2.83l.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
             </svg>
-            <span>Infos</span>
+            <span>Infos Hôtel</span>
         </button>
 
     </nav>
@@ -192,7 +192,7 @@
     <div class="modal" id="itemModal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="itemModalTitle">Ajouter un plat</h3>
+                <h3 id="itemModalTitle">Ajouter une chambre</h3>
                 <button class="close-btn" onclick="closeItemModal()">&times;</button>
             </div>
             <form id="itemForm">
@@ -200,7 +200,7 @@
                 <input type="hidden" id="itemType">
                 
                 <div class="photo-upload">
-                    <label class="photo-upload-label" id="photoUploadLabel">Photo du plat</label>
+                    <label class="photo-upload-label" id="photoUploadLabel">Photo de la chambre</label>
                     <div class="photo-upload-area">
                         <div class="photo-preview" id="photoPreview" onclick="document.getElementById('photoFile').click()">
                             <span class="photo-preview-placeholder">Ajouter</span>
@@ -238,6 +238,26 @@
                             <option value="popular">Populaire</option>
                             <option value="new">Nouveau</option>
                         </select>
+                    </div>
+                </div>
+                <div class="form-row" id="hotelFieldsRow">
+                    <div class="form-group">
+                        <label for="itemCapacity">Capacité</label>
+                        <input type="number" id="itemCapacity" min="1" placeholder="Ex: 2">
+                    </div>
+                    <div class="form-group">
+                        <label for="itemArea">Superficie</label>
+                        <input type="text" id="itemArea" placeholder="Ex: 25 m²">
+                    </div>
+                </div>
+                <div class="form-row" id="hotelFieldsRow2">
+                    <div class="form-group">
+                        <label for="itemBedType">Type de lit</label>
+                        <input type="text" id="itemBedType" placeholder="Ex: Lit double">
+                    </div>
+                    <div class="form-group">
+                        <label for="itemEquipment">Équipements</label>
+                        <input type="text" id="itemEquipment" placeholder="Ex: WiFi, TV, Climatisation">
                     </div>
                 </div>
                 <div class="form-actions">
