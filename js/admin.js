@@ -164,6 +164,7 @@ class AdminApp {
             case 'items': this.renderItems('chambre', 'itemsList'); break;
             case 'food': this.renderItems('nourriture', 'foodList'); break;
             case 'drinks': this.renderItems('boisson', 'drinksList'); break;
+            case 'categories': this.renderCategories(); break;
             case 'restaurant': this.renderRestaurant(); break;
             case 'logo': break;
         }
@@ -509,6 +510,129 @@ class AdminApp {
         }
     }
 
+    // ==================== CATÉGORIES ====================
+    
+    renderCategories() {
+        const categoriesList = document.getElementById('categoriesList');
+        const categories = [...(this.menuData.categories || [])].sort((a, b) => a.order - b.order);
+        
+        if (categories.length === 0) {
+            categoriesList.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">+</div>
+                    <h3 class="empty-state-title">Aucune catégorie</h3>
+                </div>
+            `;
+            return;
+        }
+
+        categoriesList.innerHTML = categories.map(category => {
+            const itemCount = this.menuData.items.filter(i => i.categoryId === category.id).length;
+            const unit = category.unit || 'chambre';
+            
+            return `
+                <div class="category-card">
+                    <div class="category-order">${category.order}</div>
+                    <div class="category-name">${category.name}</div>
+                    <span class="item-count">${itemCount} ${unit}${itemCount > 1 ? 's' : ''}</span>
+                    <div class="category-actions">
+                        <button class="action-btn edit-btn" onclick="adminApp.editCategory(${category.id})">✎</button>
+                        <button class="action-btn delete-btn-small" onclick="adminApp.confirmDeleteCategory(${category.id})">×</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    showCategoryForm(categoryId = null) {
+        const modal = document.getElementById('categoryModal');
+        const title = document.getElementById('categoryModalTitle');
+        const form = document.getElementById('categoryForm');
+        
+        if (categoryId) {
+            const category = this.menuData.categories.find(c => c.id === categoryId);
+            if (!category) return;
+            
+            title.textContent = 'Modifier';
+            document.getElementById('categoryId').value = category.id;
+            document.getElementById('categoryName').value = category.name;
+            document.getElementById('categoryOrder').value = category.order;
+            document.getElementById('categoryUnit').value = category.unit || 'chambre';
+        } else {
+            title.textContent = 'Ajouter';
+            form.reset();
+            document.getElementById('categoryId').value = '';
+            document.getElementById('categoryUnit').value = 'chambre';
+            
+            const maxOrder = this.menuData.categories.length > 0
+                ? Math.max(...this.menuData.categories.map(c => c.order))
+                : 0;
+            document.getElementById('categoryOrder').value = maxOrder + 1;
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    closeCategoryModal() {
+        document.getElementById('categoryModal').style.display = 'none';
+    }
+
+    async saveCategory(e) {
+        e.preventDefault();
+        
+        const categoryId = document.getElementById('categoryId').value;
+        const categoryData = {
+            name: document.getElementById('categoryName').value.trim(),
+            order: parseInt(document.getElementById('categoryOrder').value),
+            unit: document.getElementById('categoryUnit').value
+        };
+        
+        if (categoryId) {
+            const index = this.menuData.categories.findIndex(c => c.id === parseInt(categoryId));
+            if (index !== -1) {
+                this.menuData.categories[index] = { ...this.menuData.categories[index], ...categoryData };
+            }
+        } else {
+            const newId = this.menuData.categories.length > 0 
+                ? Math.max(...this.menuData.categories.map(c => c.id)) + 1 
+                : 1;
+            this.menuData.categories.push({ id: newId, ...categoryData });
+        }
+        
+        if (await this.saveMenu()) {
+            this.closeCategoryModal();
+            this.renderCategories();
+        }
+    }
+
+    editCategory(categoryId) {
+        this.showCategoryForm(categoryId);
+    }
+
+    confirmDeleteCategory(categoryId) {
+        const category = this.menuData.categories.find(c => c.id === categoryId);
+        if (!category) return;
+        
+        const itemCount = this.menuData.items.filter(i => i.categoryId === categoryId).length;
+        
+        document.getElementById('confirmTitle').textContent = 'Supprimer';
+        document.getElementById('confirmMessage').textContent = itemCount > 0
+            ? `La catégorie "${category.name}" contient ${itemCount} élément(s). Tout sera supprimé.`
+            : `Supprimer "${category.name}" ?`;
+        document.getElementById('confirmBtn').onclick = () => this.deleteCategory(categoryId);
+        document.getElementById('confirmModal').style.display = 'flex';
+    }
+
+    async deleteCategory(categoryId) {
+        this.menuData.items = this.menuData.items.filter(i => i.categoryId !== categoryId);
+        this.menuData.categories = this.menuData.categories.filter(c => c.id !== categoryId);
+        
+        if (await this.saveMenu()) {
+            this.closeConfirmModal();
+            this.renderCategories();
+        }
+    }
+
     // ==================== HÔTEL ====================
     
     renderRestaurant() {
@@ -617,6 +741,7 @@ class AdminApp {
     
     setupForms() {
         document.getElementById('itemForm').addEventListener('submit', (e) => this.saveItem(e));
+        document.getElementById('categoryForm').addEventListener('submit', (e) => this.saveCategory(e));
         document.getElementById('restaurantForm').addEventListener('submit', (e) => this.saveRestaurant(e));
     }
 
@@ -742,6 +867,14 @@ function blobToBase64(blob) {
 
 function showItemForm(itemId = null, type = 'chambre') {
     adminApp.showItemForm(itemId, type);
+}
+
+function showCategoryForm(categoryId = null) {
+    adminApp.showCategoryForm(categoryId);
+}
+
+function closeCategoryModal() {
+    adminApp.closeCategoryModal();
 }
 
 function closeItemModal() {
