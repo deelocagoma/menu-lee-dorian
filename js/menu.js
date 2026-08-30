@@ -191,6 +191,11 @@ class MenuApp {
         }
     }
 
+    renderAll() {
+        if (!this.menuData) return;
+        this.renderMenu();
+    }
+
     renderMenu(filter = 'hotel') {
         const container = document.getElementById('menuSection');
         
