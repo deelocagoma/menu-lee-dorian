@@ -217,7 +217,9 @@ class MenuApp {
 
     setupSelection() {
         const fab = document.getElementById('selectionFab');
+        console.log('[CART] FAB element found:', !!fab);
         fab.addEventListener('click', () => {
+            console.log('[CART] FAB clicked');
             this.renderSelectionModal();
             const modal = document.getElementById('selectionModal');
             modal.style.display = 'flex';
@@ -364,18 +366,12 @@ class MenuApp {
     toggleSelectItem(itemId, event) {
         event.stopPropagation();
         const qty = this.getItemQty(itemId);
-        const card = event.currentTarget.closest('.menu-card');
-        const fab = document.getElementById('selectionFab');
+        console.log('[CART] toggleSelectItem', itemId, 'current qty:', qty);
         
         if (qty > 0) {
             this.removeFromSelection(itemId);
         } else {
             this.addToSelection(itemId);
-            if (card) {
-                card.classList.add('just-added');
-                setTimeout(() => card.classList.remove('just-added'), 350);
-            }
-
         }
         
         const btn = event.currentTarget;
