@@ -39,10 +39,10 @@ class AdminApp {
                 }
             },
             categories: [
-                { id: 1, name: 'Chambres Standard', order: 1, unit: 'chambre' },
-                { id: 2, name: 'Chambres VIP', order: 2, unit: 'chambre' },
+                { id: 1, name: 'Standard', order: 1, unit: 'chambre' },
+                { id: 2, name: 'VIP', order: 2, unit: 'chambre' },
                 { id: 3, name: 'Petit-déjeuner', order: 3, unit: 'petit_dejeuner' },
-                { id: 4, name: 'Plats', order: 4, unit: 'plat' },
+                { id: 4, name: 'Plats & Desserts', order: 4, unit: 'plat' },
                 { id: 5, name: 'Boissons', order: 5, unit: 'boisson' }
             ],
             items: [
@@ -164,7 +164,6 @@ class AdminApp {
             case 'items': this.renderItems('chambre', 'itemsList'); break;
             case 'food': this.renderItems('nourriture', 'foodList'); break;
             case 'drinks': this.renderItems('boisson', 'drinksList'); break;
-            case 'categories': this.renderCategories(); break;
             case 'restaurant': this.renderRestaurant(); break;
             case 'logo': break;
         }
@@ -210,7 +209,7 @@ class AdminApp {
 
         itemsList.innerHTML = itemsToRender.map(item => {
             const category = categories.find(c => c.id === item.categoryId);
-            const badgeHtml = item.badge ? this.getBadgeHtml(item.badge) : '';
+            const badgeHtml = '';
             const imageHtml = item.image 
                 ? `<img src="${item.image}" alt="${item.name}" class="item-image">`
                 : `<div class="item-image-placeholder"></div>`;
@@ -228,7 +227,7 @@ class AdminApp {
                         <div class="item-meta">
                             <span class="item-price">${this.formatPrice(item.price)}</span>
                             ${categoryTag}
-                            ${badgeHtml}
+                            
                         </div>
                     </div>
                     <div class="item-actions">
@@ -333,7 +332,7 @@ class AdminApp {
             categoryId: parseInt(document.getElementById('itemCategory').value),
             type: document.getElementById('itemType').value || 'chambre',
             image: this.photoData || '',
-            badge: document.getElementById('itemBadge').value || null,
+            
             isActive: true
         };
         
@@ -619,7 +618,6 @@ class AdminApp {
     
     setupForms() {
         document.getElementById('itemForm').addEventListener('submit', (e) => this.saveItem(e));
-        document.getElementById('categoryForm').addEventListener('submit', (e) => this.saveCategory(e));
         document.getElementById('restaurantForm').addEventListener('submit', (e) => this.saveRestaurant(e));
     }
 
@@ -749,14 +747,6 @@ function showItemForm(itemId = null, type = 'chambre') {
 
 function closeItemModal() {
     adminApp.closeItemModal();
-}
-
-function showCategoryForm(categoryId = null) {
-    adminApp.showCategoryForm(categoryId);
-}
-
-function closeCategoryModal() {
-    adminApp.closeCategoryModal();
 }
 
 function closeConfirmModal() {

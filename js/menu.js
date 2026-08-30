@@ -397,10 +397,6 @@ class MenuApp {
         } else if (filter === 'drinks') {
             items = items.filter(item => isBoisson(item));
             isDrinksFilter = true;
-        } else if (filter === 'popular') {
-            items = items.filter(item => item.badge === 'popular' && !isBoisson(item));
-        } else if (filter === 'new') {
-            items = items.filter(item => item.badge === 'new' && !isBoisson(item));
         } else if (filter.startsWith('category-')) {
             const catId = parseInt(filter.replace('category-', ''));
             items = items.filter(item => item.categoryId === catId);
