@@ -443,14 +443,14 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 6px;
+    gap: 6px;
+    margin-bottom: 4px;
 }
 
 .menu-card-name {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 700;
-    line-height: 1.35;
+    line-height: 1.3;
     flex: 1;
     min-width: 0;
     word-wrap: break-word;
@@ -458,16 +458,17 @@ body {
 }
 
 .menu-card-price {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: var(--sage);
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .menu-card-header-right {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
     flex-shrink: 0;
 }
 

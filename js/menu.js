@@ -380,8 +380,8 @@ class MenuApp {
         const container = document.getElementById('menuSection');
         const categories = [...this.menuData.categories].sort((a, b) => a.order - b.order);
         
-        const isChambre = item => (item.type || 'chambre') === 'chambre';
-        const isBoisson = item => (item.type || 'plat') === 'boisson';
+        const isChambre = item => (item.type || '') === 'chambre';
+        const isBoisson = item => (item.type || '') === 'boisson';
         const isRestaurant = item => !isChambre(item) && !isBoisson(item);
         
         let items = this.allItems;
