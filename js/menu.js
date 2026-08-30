@@ -59,6 +59,61 @@ class MenuApp {
         this.renderRestaurantCard();
     }
 
+    renderRestaurantCard() {
+        const section = document.getElementById('restaurantCard');
+        if (!section || !this.menuData?.restaurant) return;
+
+        const restaurant = this.menuData.restaurant;
+        const hasInfo = restaurant.name || restaurant.address || restaurant.phone || restaurant.hours || restaurant.social?.whatsapp;
+        if (!hasInfo) {
+            section.style.display = 'none';
+            return;
+        }
+
+        section.style.display = 'block';
+
+        const nameEl = section.querySelector('.restaurant-card-name');
+        if (nameEl) nameEl.textContent = restaurant.name || '';
+
+        const addressRow = document.getElementById('restaurantAddressRow');
+        const addressText = document.getElementById('restaurantAddressText');
+        if (restaurant.address && addressRow && addressText) {
+            addressText.textContent = restaurant.address;
+            addressRow.style.display = 'inline-flex';
+        } else if (addressRow) {
+            addressRow.style.display = 'none';
+        }
+
+        const phoneRow = document.getElementById('restaurantPhoneRow');
+        const phoneLink = document.getElementById('restaurantPhoneLink');
+        if (restaurant.phone && phoneRow && phoneLink) {
+            phoneLink.textContent = restaurant.phone;
+            phoneLink.href = 'tel:' + restaurant.phone.replace(/[^0-9+]/g, '');
+            phoneRow.style.display = 'inline-flex';
+        } else if (phoneRow) {
+            phoneRow.style.display = 'none';
+        }
+
+        const hoursRow = document.getElementById('restaurantHoursRow');
+        const hoursText = document.getElementById('restaurantHoursText');
+        if (restaurant.hours && hoursRow && hoursText) {
+            hoursText.textContent = restaurant.hours;
+            hoursRow.style.display = 'inline-flex';
+        } else if (hoursRow) {
+            hoursRow.style.display = 'none';
+        }
+
+        const whatsappRow = document.getElementById('restaurantWhatsappRow');
+        const whatsappLink = document.getElementById('restaurantWhatsappLink');
+        if (restaurant.social?.whatsapp && whatsappRow && whatsappLink) {
+            whatsappLink.textContent = restaurant.social.whatsapp;
+            whatsappLink.href = 'https://wa.me/' + restaurant.social.whatsapp.replace(/[^0-9]/g, '');
+            whatsappRow.style.display = 'inline-flex';
+        } else if (whatsappRow) {
+            whatsappRow.style.display = 'none';
+        }
+    }
+
     // ==================== SÉLECTION ====================
     
     loadSelection() {
