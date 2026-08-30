@@ -110,7 +110,9 @@ class MenuApp {
     }
 
     getSelectionCount() {
-        return this.selection.reduce((sum, s) => sum + s.qty, 0);
+        return this.selection
+            .filter(s => s && typeof s.itemId !== 'undefined' && s.qty > 0)
+            .reduce((sum, s) => sum + s.qty, 0);
     }
 
     getSelectionTotal() {
@@ -136,7 +138,9 @@ class MenuApp {
             return;
         }
 
-        body.innerHTML = this.selection.map(s => {
+        const validSelection = this.selection.filter(s => s && typeof s.itemId !== 'undefined' && s.qty > 0);
+        
+        body.innerHTML = validSelection.map(s => {
             const item = this.allItems.find(i => i.id === s.itemId);
             if (!item) return '';
             
