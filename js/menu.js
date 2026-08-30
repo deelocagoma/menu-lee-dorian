@@ -9,6 +9,13 @@ class MenuApp {
         this.init();
     }
 
+    getHeaders() {
+        return {
+            'X-Master-Key': JSONBIN_CONFIG.masterKey,
+            'Content-Type': 'application/json'
+        };
+    }
+
     async init() {
         try {
             console.log('[MENU] binId utilisé:', this.binId);
