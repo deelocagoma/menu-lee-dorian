@@ -512,18 +512,15 @@ class MenuApp {
                 ${imageHtml}
                 <div class="menu-card-body">
                     ${sectorLabel ? `<div class="menu-card-sector">${sectorLabel}</div>` : ''}
-                    <div class="menu-card-header">
-                        <h3 class="menu-card-name">${item.name}</h3>
-                        <div class="menu-card-header-right">
-                            <span class="menu-card-price">${this.formatPrice(item.price)}</span>
-                            ${descIcon}
-                            <button class="select-btn ${qty > 0 ? 'selected' : ''}" onclick="menuApp.toggleSelectItem(${item.id}, event)" aria-label="Ajouter au panier">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12 5v14"></path>
-                                    <path d="M5 12h14"></path>
-                                </svg>
-                            </button>
-                        </div>
+                    <h3 class="menu-card-name">${item.name}</h3>
+                    <div class="menu-card-footer">
+                        <span class="menu-card-price">${this.formatPrice(item.price)}</span>
+                        <button class="select-btn ${qty > 0 ? 'selected' : ''}" onclick="menuApp.toggleSelectItem(${item.id}, event)" aria-label="Ajouter au panier">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 5v14"></path>
+                                <path d="M5 12h14"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
                 <div class="item-qty-badge" style="display: ${qty > 0 ? 'flex' : 'none'}">${qty}</div>
