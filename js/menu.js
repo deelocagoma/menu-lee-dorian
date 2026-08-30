@@ -510,15 +510,31 @@ class MenuApp {
             ? `<img src="${item.image}" alt="${item.name}" class="menu-card-image" loading="lazy">`
             : `<div class="menu-card-no-image"></div>`;
 
-        const isPetitDejeuner = (item.type || 'chambre') === 'petit_dejeuner';
-        const badgeHtml = (!isPetitDejeuner && item.badge) ? this.getBadgeHtml(item.badge) : '';
+        const isChambre = (item.type || 'chambre') === 'chambre';
         const qty = this.getItemQty(item.id);
-        const descIcon = (!isPetitDejeuner && item.description) ? `<svg class="menu-card-desc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>` : '';
+        const descIcon = (!isChambre && item.description) ? `<svg class="menu-card-desc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>` : '';
+
+        const categories = this.menuData.categories || [];
+        const category = categories.find(c => c.id === item.categoryId);
+        const sector = category?.sector || '';
+        const sectorLabel = sector === 'hotel' ? 'Hôtel' : (sector === 'restaurant' ? 'Restaurant' : (sector === 'drinks' ? 'Boissons' : ''));
+
+        let hotelInfo = '';
+        if (isChambre) {
+            const parts = [];
+            if (item.capacity) parts.push(`${item.capacity} pers.`);
+            if (item.area) parts.push(item.area);
+            if (item.bedType) parts.push(item.bedType);
+            if (parts.length > 0) {
+                hotelInfo = `<div class="menu-card-hotel-info">${parts.join(' · ')}</div>`;
+            }
+        }
 
         return `
             <div class="menu-card" data-item-id="${item.id}">
                 ${imageHtml}
                 <div class="menu-card-body">
+                    ${sectorLabel ? `<div class="menu-card-sector">${sectorLabel}</div>` : ''}
                     <div class="menu-card-header">
                         <h3 class="menu-card-name">${item.name}</h3>
                         <div class="menu-card-header-right">
@@ -532,7 +548,7 @@ class MenuApp {
                             </button>
                         </div>
                     </div>
-                    ${badgeHtml ? `<div class="menu-card-badges">${badgeHtml}</div>` : ''}
+                    ${hotelInfo}
                 </div>
                 <div class="item-qty-badge" style="display: ${qty > 0 ? 'flex' : 'none'}">${qty}</div>
             </div>
