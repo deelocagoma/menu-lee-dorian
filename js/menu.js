@@ -215,16 +215,17 @@ class MenuApp {
         let isDrinksFilter = false;
         
         if (filter === 'hotel') {
-            items = items.filter(item => isChambre(item));
+            items = items.filter(item => isChambre(item)).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
             sectionLabel = 'Chambres';
         } else if (filter === 'restaurant') {
-            items = items.filter(item => isRestaurant(item));
+            items = items.filter(item => isRestaurant(item)).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
             sectionLabel = 'Restaurant';
+            isDrinksFilter = true;
         } else if (filter === 'drinks') {
-            items = items.filter(item => isBoisson(item));
+            items = items.filter(item => isBoisson(item)).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
             isDrinksFilter = true;
         } else {
-            items = items.filter(item => isChambre(item));
+            items = items.filter(item => isChambre(item)).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
             sectionLabel = 'Chambres';
         }
 
@@ -232,7 +233,7 @@ class MenuApp {
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">0</div>
-                    <h3 class="empty-state-title">${isDrinksFilter ? 'Aucune boisson' : 'Aucun résultat'}</h3>
+                    <h3 class="empty-state-title">${isDrinksFilter ? (filter === 'restaurant' ? 'Aucun plat' : 'Aucune boisson') : 'Aucun résultat'}</h3>
                     <p class="empty-state-desc">Essayez une autre categorie</p>
                 </div>
             `;
