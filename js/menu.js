@@ -282,6 +282,7 @@ class MenuApp {
         
         // Use event delegation for more reliable clicks
         document.addEventListener('click', (e) => {
+            console.log('[CART] Document click, target:', e.target.tagName, 'classes:', e.target.className);
             if (e.target === fab || fab.contains(e.target)) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -301,6 +302,7 @@ class MenuApp {
         
         // Also keep direct listener as fallback
         fab.addEventListener('click', (e) => {
+            console.log('[CART] FAB clicked directly');
             e.preventDefault();
             e.stopPropagation();
             console.log('[CART] FAB clicked directly, total:', this.getSelectionCount());
