@@ -107,6 +107,7 @@ class MenuApp {
         this.updateMenuCards();
         
         this.renderSelectionModal();
+        document.getElementById('selectionModal').style.display = 'none';
     }
 
     getSelectionCount() {
@@ -218,7 +219,10 @@ class MenuApp {
         const fab = document.getElementById('selectionFab');
         fab.addEventListener('click', () => {
             this.renderSelectionModal();
-            document.getElementById('selectionModal').style.display = 'flex';
+            const modal = document.getElementById('selectionModal');
+            modal.style.display = 'flex';
+            modal.offsetHeight;
+            modal.classList.add('open');
         });
     }
 
