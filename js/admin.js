@@ -254,17 +254,6 @@ class AdminApp {
         const form = document.getElementById('itemForm');
         const photoPreview = document.getElementById('photoPreview');
         
-        // Remplir les catégories
-        const categorySelect = document.getElementById('itemCategory');
-        if (!this.menuData.categories || this.menuData.categories.length === 0) {
-            categorySelect.innerHTML = '<option value="">Aucune catégorie</option>';
-        } else {
-            categorySelect.innerHTML = this.menuData.categories
-                .sort((a, b) => a.order - b.order)
-                .map(cat => `<option value="${cat.id}">${cat.name}</option>`)
-                .join('');
-        }
-        
         // Reset photo
         this.photoData = null;
         photoPreview.innerHTML = '<span class="photo-preview-placeholder">Ajouter</span>';
@@ -278,9 +267,7 @@ class AdminApp {
         document.getElementById('photoUploadLabel').textContent = isChambre ? 'Photo de la chambre' : (isBoisson ? 'Photo de la boisson' : 'Photo du plat');
         
         // Masquer/afficher les champs non pertinents
-        document.getElementById('itemCategoryGroup').style.display = isBoisson ? 'none' : '';
         document.getElementById('itemDescriptionGroup').style.display = isBoisson ? 'none' : '';
-        document.getElementById('itemBadgeGroup').style.display = 'none';
         
 
         if (itemId) {
@@ -293,7 +280,6 @@ class AdminApp {
             document.getElementById('itemName').value = item.name;
             document.getElementById('itemDescription').value = item.description;
             document.getElementById('itemPrice').value = item.price;
-            document.getElementById('itemCategory').value = item.categoryId || '';
             
             if (item.image) {
                 this.photoData = item.image;
@@ -318,14 +304,23 @@ class AdminApp {
         
         const itemId = document.getElementById('itemId').value;
         
+        const itemType = document.getElementById('itemType').value || 'chambre';
+        let defaultCategoryId = 1;
+        if (itemType === 'boisson') {
+            defaultCategoryId = this.menuData.categories.find(c => c.unit === 'boisson')?.id || 5;
+        } else if (itemType === 'nourriture' || itemType === 'petit_dejeuner') {
+            defaultCategoryId = this.menuData.categories.find(c => c.unit === 'plat' || c.unit === 'petit_dejeuner')?.id || 3;
+        } else {
+            defaultCategoryId = this.menuData.categories.find(c => c.unit === 'chambre')?.id || 1;
+        }
+        
         const itemData = {
             name: document.getElementById('itemName').value.trim(),
             description: document.getElementById('itemDescription').value.trim(),
             price: parseInt(document.getElementById('itemPrice').value),
-            categoryId: parseInt(document.getElementById('itemCategory').value),
-            type: document.getElementById('itemType').value || 'chambre',
+            categoryId: defaultCategoryId,
+            type: itemType,
             image: this.photoData || '',
-            
             isActive: true
         };
         
