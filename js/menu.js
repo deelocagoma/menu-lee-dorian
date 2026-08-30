@@ -5,7 +5,8 @@ class MenuApp {
         this.menuData = null;
         this.allItems = [];
         this.currentFilter = 'all';
-        this.selection = this.loadSelection();
+        localStorage.removeItem('pilipili_selection');
+        this.selection = [];
         this.init();
     }
 
@@ -260,6 +261,20 @@ class MenuApp {
         } else {
             this.renderMenu('all');
         }
+    }
+
+    showError() {
+        const loading = document.getElementById('loading');
+        loading.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">!</div>
+                <h3 class="empty-state-title">Erreur de chargement</h3>
+                <p class="empty-state-desc">Verifiez votre connexion</p>
+                <button onclick="localStorage.removeItem('pilipili_binId'); location.reload();">
+                    Reessayer
+                </button>
+            </div>
+        `;
     }
 
     renderAll() {
