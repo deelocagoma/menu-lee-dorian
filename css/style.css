@@ -733,6 +733,17 @@ body {
 
 .public-nav-item.active {
     color: var(--sage);
+    font-weight: 700;
+}
+
+.public-nav-item.active::after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 3px;
+    background: var(--sage);
+    border-radius: 2px;
+    margin-top: 4px;
 }
 
 .app-content {
