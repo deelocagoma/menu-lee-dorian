@@ -422,38 +422,6 @@ class AdminApp {
     }
 
 
-    async addDemoHotelContent() {
-        if (!confirm('Ajouter 10 chambres de démo au contenu existant ?')) return;
-        const demoRooms = [
-            { id: 101, name: "Chambre Standard - Vue Jardin", description: "Chambre confortable avec vue sur le jardin", price: 25000, type: "chambre", image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80", badge: "new", isActive: true, capacity: "2", area: "20 m²", bedType: "Lit double", equipment: "WiFi, TV, Climatisation" },
-            { id: 102, name: "Chambre Standard - Vue Cour", description: "Chambre calme avec vue sur la cour intérieure", price: 22000, type: "chambre", image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "18 m²", bedType: "Lit double", equipment: "WiFi, TV" },
-            { id: 103, name: "Chambre Standard - Familiale", description: "Chambre spacieuse pour famille", price: 30000, type: "chambre", image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&q=80", badge: "popular", isActive: true, capacity: "3", area: "25 m²", bedType: "Lit double + lit simple", equipment: "WiFi, TV, Climatisation, Salle de bain privative" },
-            { id: 104, name: "Chambre Standard - Économique", description: "Chambre fonctionnelle et économique", price: 18000, type: "chambre", image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "15 m²", bedType: "Lit double", equipment: "WiFi" },
-            { id: 105, name: "Chambre Standard - Supérieure", description: "Chambre avec petit-déjeuner inclus", price: 35000, type: "chambre", image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&q=80", badge: "popular", isActive: true, capacity: "2", area: "22 m²", bedType: "Lit double King", equipment: "WiFi, TV, Climatisation, Minibar" },
-            { id: 201, name: "Chambre VIP - Suite Présidentielle", description: "Suite luxueuse avec vue panoramique", price: 120000, type: "chambre", image: "https://images.unsplash.com/photo-1591088398332-8a7791972843?w=800&q=80", badge: "new", isActive: true, capacity: "2", area: "45 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Jacuzzi, Service 24h/24" },
-            { id: 202, name: "Chambre VIP - Suite Exécutive", description: "Suite moderne pour voyageurs d'affaires", price: 85000, type: "chambre", image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "35 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Bureau, Minibar" },
-            { id: 203, name: "Chambre VIP - Suite Deluxe", description: "Suite élégante avec terrasse privée", price: 95000, type: "chambre", image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80", badge: "popular", isActive: true, capacity: "2", area: "40 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Terrasse" },
-            { id: 204, name: "Chambre VIP - Suite Romance", description: "Suite romantique avec décoration spéciale", price: 110000, type: "chambre", image: "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "38 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Décoration romantique" },
-            { id: 205, name: "Chambre VIP - Suite Famille", description: "Suite spacieuse pour familles", price: 130000, type: "chambre", image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&q=80", badge: "new", isActive: true, capacity: "4", area: "50 m²", bedType: "Lit King + lits simples", equipment: "WiFi, TV, Climatisation, Minibar, Salon séparé" }
-        ];
-        const existingNames = new Set((this.menuData.items || []).map(i => i.name));
-        let added = 0;
-        for (const room of demoRooms) {
-            if (!existingNames.has(room.name)) {
-                this.menuData.items.push(room);
-                added++;
-            }
-        }
-        if (added === 0) {
-            alert('Les chambres de démo semblent déjà présentes.');
-            return;
-        }
-        if (await this.saveMenu()) {
-            alert(added + ' chambre(s) de démo ajoutée(s) !');
-            this.renderCurrentSection();
-        }
-    }
-
     // ==================== UTILITAIRES ====================
     
     setupForms() {
