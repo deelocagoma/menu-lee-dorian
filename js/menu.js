@@ -190,8 +190,9 @@ class MenuApp {
         const count = document.getElementById('selectionCount');
         const total = this.getSelectionCount();
         
-        fab.style.display = total > 0 ? 'flex' : 'none';
-        count.textContent = total;
+        if (fab) fab.style.display = total > 0 ? 'flex' : 'none';
+        if (count) count.textContent = total;
+        console.log('[CART] updateSelectionFab, total:', total, 'fab visible:', total > 0);
     }
 
     updateMenuCards() {
@@ -218,14 +219,25 @@ class MenuApp {
 
     setupSelection() {
         const fab = document.getElementById('selectionFab');
-        console.log('[CART] FAB element found:', !!fab);
-        fab.addEventListener('click', () => {
-            console.log('[CART] FAB clicked');
+        if (!fab) {
+            console.warn('[CART] FAB not found');
+            return;
+        }
+        console.log('[CART] FAB element found');
+        fab.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('[CART] FAB clicked, total:', this.getSelectionCount());
             this.renderSelectionModal();
             const modal = document.getElementById('selectionModal');
-            modal.style.display = 'flex';
-            modal.offsetHeight;
-            modal.classList.add('open');
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.offsetHeight;
+                modal.classList.add('open');
+                console.log('[CART] Modal opened');
+            } else {
+                console.warn('[CART] Modal not found');
+            }
         });
     }
 

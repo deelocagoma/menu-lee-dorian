@@ -760,7 +760,7 @@ body {
     background: linear-gradient(135deg, var(--sage), var(--sage-hover));
     border: none;
     color: var(--bg-primary);
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     cursor: pointer;
