@@ -247,7 +247,6 @@ class MenuApp {
         
         if (fab) fab.style.display = total > 0 ? 'flex' : 'none';
         if (count) count.textContent = total;
-        console.log('[CART] updateSelectionFab, total:', total, 'fab visible:', total > 0);
     }
 
     updateMenuCards() {
@@ -274,48 +273,13 @@ class MenuApp {
 
     setupSelection() {
         const fab = document.getElementById('selectionFab');
-        if (!fab) {
-            console.warn('[CART] FAB not found');
-            return;
-        }
-        console.log('[CART] FAB element found');
-        
-        // Use event delegation for more reliable clicks
-        document.addEventListener('click', (e) => {
-            console.log('[CART] Document click, target:', e.target.tagName, 'classes:', e.target.className);
-            if (e.target === fab || fab.contains(e.target)) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('[CART] FAB clicked via delegation, total:', this.getSelectionCount());
-                this.renderSelectionModal();
-                const modal = document.getElementById('selectionModal');
-                if (modal) {
-                    modal.style.display = 'flex';
-                    modal.offsetHeight;
-                    modal.classList.add('open');
-                    console.log('[CART] Modal opened');
-                } else {
-                    console.warn('[CART] Modal not found');
-                }
-            }
-        });
-        
-        // Also keep direct listener as fallback
-        fab.addEventListener('click', (e) => {
-            console.log('[CART] FAB clicked directly');
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('[CART] FAB clicked directly, total:', this.getSelectionCount());
+        if (!fab) return;
+        fab.addEventListener('click', () => {
             this.renderSelectionModal();
             const modal = document.getElementById('selectionModal');
-            if (modal) {
-                modal.style.display = 'flex';
-                modal.offsetHeight;
-                modal.classList.add('open');
-                console.log('[CART] Modal opened');
-            } else {
-                console.warn('[CART] Modal not found');
-            }
+            modal.style.display = 'flex';
+            modal.offsetHeight;
+            modal.classList.add('open');
         });
     }
 
@@ -471,7 +435,6 @@ class MenuApp {
     toggleSelectItem(itemId, event) {
         event.stopPropagation();
         const qty = this.getItemQty(itemId);
-        console.log('[CART] toggleSelectItem', itemId, 'current qty:', qty);
         
         if (qty > 0) {
             this.removeFromSelection(itemId);
