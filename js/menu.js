@@ -279,10 +279,31 @@ class MenuApp {
             return;
         }
         console.log('[CART] FAB element found');
+        
+        // Use event delegation for more reliable clicks
+        document.addEventListener('click', (e) => {
+            if (e.target === fab || fab.contains(e.target)) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[CART] FAB clicked via delegation, total:', this.getSelectionCount());
+                this.renderSelectionModal();
+                const modal = document.getElementById('selectionModal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                    modal.offsetHeight;
+                    modal.classList.add('open');
+                    console.log('[CART] Modal opened');
+                } else {
+                    console.warn('[CART] Modal not found');
+                }
+            }
+        });
+        
+        // Also keep direct listener as fallback
         fab.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log('[CART] FAB clicked, total:', this.getSelectionCount());
+            console.log('[CART] FAB clicked directly, total:', this.getSelectionCount());
             this.renderSelectionModal();
             const modal = document.getElementById('selectionModal');
             if (modal) {
