@@ -38,24 +38,18 @@ class AdminApp {
                     whatsapp: '241074412256'
                 }
             },
-            categories: [
-                { id: 1, name: 'Standard', order: 1, unit: 'chambre', sector: 'hotel' },
-                { id: 2, name: 'VIP', order: 2, unit: 'chambre', sector: 'hotel' },
-                { id: 3, name: 'Petit-déjeuner', order: 3, unit: 'petit_dejeuner', sector: 'restaurant' },
-                { id: 4, name: 'Plats & Desserts', order: 4, unit: 'plat', sector: 'restaurant' },
-                { id: 5, name: 'Boissons', order: 5, unit: 'boisson', sector: 'drinks' }
-            ],
+
             items: [
-                { id: 1, name: "Chambre Standard - Vue Jardin", description: "Chambre confortable avec vue sur le jardin", price: 25000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80", badge: "new", isActive: true, capacity: "2", area: "20 m²", bedType: "Lit double", equipment: "WiFi, TV, Climatisation" },
-                { id: 2, name: "Chambre Standard - Vue Cour", description: "Chambre calme avec vue sur la cour intérieure", price: 22000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "18 m²", bedType: "Lit double", equipment: "WiFi, TV" },
-                { id: 3, name: "Chambre Standard - Familiale", description: "Chambre spacieuse pour famille", price: 30000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&q=80", badge: "popular", isActive: true, capacity: "3", area: "25 m²", bedType: "Lit double + lit simple", equipment: "WiFi, TV, Climatisation, Salle de bain privative" },
-                { id: 4, name: "Chambre Standard - Économique", description: "Chambre fonctionnelle et économique", price: 18000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "15 m²", bedType: "Lit double", equipment: "WiFi" },
-                { id: 5, name: "Chambre Standard - Supérieure", description: "Chambre avec petit-déjeuner inclus", price: 35000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&q=80", badge: "popular", isActive: true, capacity: "2", area: "22 m²", bedType: "Lit double King", equipment: "WiFi, TV, Climatisation, Minibar" },
-                { id: 6, name: "Chambre VIP - Suite Présidentielle", description: "Suite luxueuse avec vue panoramique", price: 120000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1591088398332-8a7791972843?w=800&q=80", badge: "new", isActive: true, capacity: "2", area: "45 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Jacuzzi, Service 24h/24" },
-                { id: 7, name: "Chambre VIP - Suite Exécutive", description: "Suite moderne pour voyageurs d'affaires", price: 85000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "35 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Bureau, Minibar" },
-                { id: 8, name: "Chambre VIP - Suite Deluxe", description: "Suite élégante avec terrasse privée", price: 95000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80", badge: "popular", isActive: true, capacity: "2", area: "40 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Terrasse" },
-                { id: 9, name: "Chambre VIP - Suite Romance", description: "Suite romantique avec décoration spéciale", price: 110000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "38 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Décoration romantique" },
-                { id: 10, name: "Chambre VIP - Suite Famille", description: "Suite spacieuse pour familles", price: 130000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&q=80", badge: "new", isActive: true, capacity: "4", area: "50 m²", bedType: "Lit King + lits simples", equipment: "WiFi, TV, Climatisation, Minibar, Salon séparé" }
+                { id: 1, name: "Chambre Standard - Vue Jardin", description: "Chambre confortable avec vue sur le jardin", price: 25000, type: "chambre", image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80", badge: "new", isActive: true, capacity: "2", area: "20 m²", bedType: "Lit double", equipment: "WiFi, TV, Climatisation" },
+                { id: 2, name: "Chambre Standard - Vue Cour", description: "Chambre calme avec vue sur la cour intérieure", price: 22000, type: "chambre", image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "18 m²", bedType: "Lit double", equipment: "WiFi, TV" },
+                { id: 3, name: "Chambre Standard - Familiale", description: "Chambre spacieuse pour famille", price: 30000, type: "chambre", image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&q=80", badge: "popular", isActive: true, capacity: "3", area: "25 m²", bedType: "Lit double + lit simple", equipment: "WiFi, TV, Climatisation, Salle de bain privative" },
+                { id: 4, name: "Chambre Standard - Économique", description: "Chambre fonctionnelle et économique", price: 18000, type: "chambre", image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "15 m²", bedType: "Lit double", equipment: "WiFi" },
+                { id: 5, name: "Chambre Standard - Supérieure", description: "Chambre avec petit-déjeuner inclus", price: 35000, type: "chambre", image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&q=80", badge: "popular", isActive: true, capacity: "2", area: "22 m²", bedType: "Lit double King", equipment: "WiFi, TV, Climatisation, Minibar" },
+                { id: 6, name: "Chambre VIP - Suite Présidentielle", description: "Suite luxueuse avec vue panoramique", price: 120000, type: "chambre", image: "https://images.unsplash.com/photo-1591088398332-8a7791972843?w=800&q=80", badge: "new", isActive: true, capacity: "2", area: "45 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Jacuzzi, Service 24h/24" },
+                { id: 7, name: "Chambre VIP - Suite Exécutive", description: "Suite moderne pour voyageurs d'affaires", price: 85000, type: "chambre", image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "35 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Bureau, Minibar" },
+                { id: 8, name: "Chambre VIP - Suite Deluxe", description: "Suite élégante avec terrasse privée", price: 95000, type: "chambre", image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80", badge: "popular", isActive: true, capacity: "2", area: "40 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Terrasse" },
+                { id: 9, name: "Chambre VIP - Suite Romance", description: "Suite romantique avec décoration spéciale", price: 110000, type: "chambre", image: "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "38 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Décoration romantique" },
+                { id: 10, name: "Chambre VIP - Suite Famille", description: "Suite spacieuse pour familles", price: 130000, type: "chambre", image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&q=80", badge: "new", isActive: true, capacity: "4", area: "50 m²", bedType: "Lit King + lits simples", equipment: "WiFi, TV, Climatisation, Minibar, Salon séparé" }
             ],
             lastUpdate: new Date().toISOString()
         };
@@ -164,7 +158,6 @@ class AdminApp {
             case 'items': this.renderItems('chambre', 'itemsList'); break;
             case 'food': this.renderItems('nourriture', 'foodList'); break;
             case 'drinks': this.renderItems('boisson', 'drinksList'); break;
-            case 'categories': this.renderCategories(); break;
             case 'restaurant': this.renderRestaurant(); break;
             case 'logo': break;
         }
@@ -182,7 +175,6 @@ class AdminApp {
     
     renderItems(itemType = 'chambre', containerId = 'itemsList') {
         const itemsList = document.getElementById(containerId);
-        const categories = this.menuData.categories || [];
         const displayMode = localStorage.getItem('admin_display_mode') || 'list';
         
         document.querySelectorAll('.display-option').forEach(opt => {
@@ -209,15 +201,9 @@ class AdminApp {
         }
 
         itemsList.innerHTML = itemsToRender.map(item => {
-            const category = categories.find(c => c.id === item.categoryId);
-            const badgeHtml = '';
             const imageHtml = item.image 
                 ? `<img src="${item.image}" alt="${item.name}" class="item-image">`
                 : `<div class="item-image-placeholder"></div>`;
-
-            const categoryTag = (itemType === 'chambre' && category)
-                ? `<span class="item-category">${category.name}</span>`
-                : '';
 
             return `
                 <div class="item-card ${item.isActive ? '' : 'inactive'}">
@@ -227,8 +213,6 @@ class AdminApp {
                         <div class="item-description">${item.description}</div>
                         <div class="item-meta">
                             <span class="item-price">${this.formatPrice(item.price)}</span>
-                            ${categoryTag}
-                            
                         </div>
                     </div>
                     <div class="item-actions">
@@ -305,20 +289,11 @@ class AdminApp {
         const itemId = document.getElementById('itemId').value;
         
         const itemType = document.getElementById('itemType').value || 'chambre';
-        let defaultCategoryId = 1;
-        if (itemType === 'boisson') {
-            defaultCategoryId = this.menuData.categories.find(c => c.unit === 'boisson')?.id || 5;
-        } else if (itemType === 'nourriture' || itemType === 'petit_dejeuner') {
-            defaultCategoryId = this.menuData.categories.find(c => c.unit === 'plat' || c.unit === 'petit_dejeuner')?.id || 3;
-        } else {
-            defaultCategoryId = this.menuData.categories.find(c => c.unit === 'chambre')?.id || 1;
-        }
         
         const itemData = {
             name: document.getElementById('itemName').value.trim(),
             description: document.getElementById('itemDescription').value.trim(),
             price: parseInt(document.getElementById('itemPrice').value),
-            categoryId: defaultCategoryId,
             type: itemType,
             image: this.photoData || '',
             isActive: true
@@ -372,129 +347,6 @@ class AdminApp {
         if (await this.saveMenu()) {
             this.closeConfirmModal();
             this.renderCurrentSection();
-        }
-    }
-
-    // ==================== CATÉGORIES ====================
-    
-    renderCategories() {
-        const categoriesList = document.getElementById('categoriesList');
-        const categories = [...(this.menuData.categories || [])].sort((a, b) => a.order - b.order);
-        
-        if (categories.length === 0) {
-            categoriesList.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">+</div>
-                    <h3 class="empty-state-title">Aucune catégorie</h3>
-                </div>
-            `;
-            return;
-        }
-
-        categoriesList.innerHTML = categories.map(category => {
-            const itemCount = this.menuData.items.filter(i => i.categoryId === category.id).length;
-            const unit = category.unit || 'chambre';
-            
-            return `
-                <div class="category-card">
-                    <div class="category-order">${category.order}</div>
-                    <div class="category-name">${category.name}</div>
-                    <span class="item-count">${itemCount} ${unit}${itemCount > 1 ? 's' : ''}</span>
-                    <div class="category-actions">
-                        <button class="action-btn edit-btn" onclick="adminApp.editCategory(${category.id})">✎</button>
-                        <button class="action-btn delete-btn-small" onclick="adminApp.confirmDeleteCategory(${category.id})">×</button>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
-
-    showCategoryForm(categoryId = null) {
-        const modal = document.getElementById('categoryModal');
-        const title = document.getElementById('categoryModalTitle');
-        const form = document.getElementById('categoryForm');
-        
-        if (categoryId) {
-            const category = this.menuData.categories.find(c => c.id === categoryId);
-            if (!category) return;
-            
-            title.textContent = 'Modifier';
-            document.getElementById('categoryId').value = category.id;
-            document.getElementById('categoryName').value = category.name;
-            document.getElementById('categoryOrder').value = category.order;
-            document.getElementById('categoryUnit').value = category.unit || 'chambre';
-        } else {
-            title.textContent = 'Ajouter';
-            form.reset();
-            document.getElementById('categoryId').value = '';
-            document.getElementById('categoryUnit').value = 'chambre';
-            
-            const maxOrder = this.menuData.categories.length > 0
-                ? Math.max(...this.menuData.categories.map(c => c.order))
-                : 0;
-            document.getElementById('categoryOrder').value = maxOrder + 1;
-        }
-        
-        modal.style.display = 'flex';
-    }
-
-    closeCategoryModal() {
-        document.getElementById('categoryModal').style.display = 'none';
-    }
-
-    async saveCategory(e) {
-        e.preventDefault();
-        
-        const categoryId = document.getElementById('categoryId').value;
-        const categoryData = {
-            name: document.getElementById('categoryName').value.trim(),
-            order: parseInt(document.getElementById('categoryOrder').value),
-            unit: document.getElementById('categoryUnit').value
-        };
-        
-        if (categoryId) {
-            const index = this.menuData.categories.findIndex(c => c.id === parseInt(categoryId));
-            if (index !== -1) {
-                this.menuData.categories[index] = { ...this.menuData.categories[index], ...categoryData };
-            }
-        } else {
-            const newId = this.menuData.categories.length > 0
-                ? Math.max(...this.menuData.categories.map(c => c.id)) + 1
-                : 1;
-            this.menuData.categories.push({ id: newId, ...categoryData });
-        }
-        
-        if (await this.saveMenu()) {
-            this.closeCategoryModal();
-            this.renderCategories();
-        }
-    }
-
-    editCategory(categoryId) {
-        this.showCategoryForm(categoryId);
-    }
-
-    confirmDeleteCategory(categoryId) {
-        const category = this.menuData.categories.find(c => c.id === categoryId);
-        if (!category) return;
-        
-        const itemCount = this.menuData.items.filter(i => i.categoryId === categoryId).length;
-        
-        document.getElementById('confirmTitle').textContent = 'Supprimer';
-        document.getElementById('confirmMessage').textContent = itemCount > 0
-            ? `La catégorie "${category.name}" contient ${itemCount} élément(s). Tout sera supprimé.`
-            : `Supprimer "${category.name}" ?`;
-        document.getElementById('confirmBtn').onclick = () => this.deleteCategory(categoryId);
-        document.getElementById('confirmModal').style.display = 'flex';
-    }
-
-    async deleteCategory(categoryId) {
-        this.menuData.items = this.menuData.items.filter(i => i.categoryId !== categoryId);
-        this.menuData.categories = this.menuData.categories.filter(c => c.id !== categoryId);
-        
-        if (await this.saveMenu()) {
-            this.closeConfirmModal();
-            this.renderCategories();
         }
     }
 
@@ -573,16 +425,16 @@ class AdminApp {
     async addDemoHotelContent() {
         if (!confirm('Ajouter 10 chambres de démo au contenu existant ?')) return;
         const demoRooms = [
-            { id: 101, name: "Chambre Standard - Vue Jardin", description: "Chambre confortable avec vue sur le jardin", price: 25000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80", badge: "new", isActive: true, capacity: "2", area: "20 m²", bedType: "Lit double", equipment: "WiFi, TV, Climatisation" },
-            { id: 102, name: "Chambre Standard - Vue Cour", description: "Chambre calme avec vue sur la cour intérieure", price: 22000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "18 m²", bedType: "Lit double", equipment: "WiFi, TV" },
-            { id: 103, name: "Chambre Standard - Familiale", description: "Chambre spacieuse pour famille", price: 30000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&q=80", badge: "popular", isActive: true, capacity: "3", area: "25 m²", bedType: "Lit double + lit simple", equipment: "WiFi, TV, Climatisation, Salle de bain privative" },
-            { id: 104, name: "Chambre Standard - Économique", description: "Chambre fonctionnelle et économique", price: 18000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "15 m²", bedType: "Lit double", equipment: "WiFi" },
-            { id: 105, name: "Chambre Standard - Supérieure", description: "Chambre avec petit-déjeuner inclus", price: 35000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&q=80", badge: "popular", isActive: true, capacity: "2", area: "22 m²", bedType: "Lit double King", equipment: "WiFi, TV, Climatisation, Minibar" },
-            { id: 201, name: "Chambre VIP - Suite Présidentielle", description: "Suite luxueuse avec vue panoramique", price: 120000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1591088398332-8a7791972843?w=800&q=80", badge: "new", isActive: true, capacity: "2", area: "45 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Jacuzzi, Service 24h/24" },
-            { id: 202, name: "Chambre VIP - Suite Exécutive", description: "Suite moderne pour voyageurs d'affaires", price: 85000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "35 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Bureau, Minibar" },
-            { id: 203, name: "Chambre VIP - Suite Deluxe", description: "Suite élégante avec terrasse privée", price: 95000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80", badge: "popular", isActive: true, capacity: "2", area: "40 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Terrasse" },
-            { id: 204, name: "Chambre VIP - Suite Romance", description: "Suite romantique avec décoration spéciale", price: 110000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "38 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Décoration romantique" },
-            { id: 205, name: "Chambre VIP - Suite Famille", description: "Suite spacieuse pour familles", price: 130000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&q=80", badge: "new", isActive: true, capacity: "4", area: "50 m²", bedType: "Lit King + lits simples", equipment: "WiFi, TV, Climatisation, Minibar, Salon séparé" }
+            { id: 101, name: "Chambre Standard - Vue Jardin", description: "Chambre confortable avec vue sur le jardin", price: 25000, type: "chambre", image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80", badge: "new", isActive: true, capacity: "2", area: "20 m²", bedType: "Lit double", equipment: "WiFi, TV, Climatisation" },
+            { id: 102, name: "Chambre Standard - Vue Cour", description: "Chambre calme avec vue sur la cour intérieure", price: 22000, type: "chambre", image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "18 m²", bedType: "Lit double", equipment: "WiFi, TV" },
+            { id: 103, name: "Chambre Standard - Familiale", description: "Chambre spacieuse pour famille", price: 30000, type: "chambre", image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&q=80", badge: "popular", isActive: true, capacity: "3", area: "25 m²", bedType: "Lit double + lit simple", equipment: "WiFi, TV, Climatisation, Salle de bain privative" },
+            { id: 104, name: "Chambre Standard - Économique", description: "Chambre fonctionnelle et économique", price: 18000, type: "chambre", image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "15 m²", bedType: "Lit double", equipment: "WiFi" },
+            { id: 105, name: "Chambre Standard - Supérieure", description: "Chambre avec petit-déjeuner inclus", price: 35000, type: "chambre", image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&q=80", badge: "popular", isActive: true, capacity: "2", area: "22 m²", bedType: "Lit double King", equipment: "WiFi, TV, Climatisation, Minibar" },
+            { id: 201, name: "Chambre VIP - Suite Présidentielle", description: "Suite luxueuse avec vue panoramique", price: 120000, type: "chambre", image: "https://images.unsplash.com/photo-1591088398332-8a7791972843?w=800&q=80", badge: "new", isActive: true, capacity: "2", area: "45 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Jacuzzi, Service 24h/24" },
+            { id: 202, name: "Chambre VIP - Suite Exécutive", description: "Suite moderne pour voyageurs d'affaires", price: 85000, type: "chambre", image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "35 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Bureau, Minibar" },
+            { id: 203, name: "Chambre VIP - Suite Deluxe", description: "Suite élégante avec terrasse privée", price: 95000, type: "chambre", image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80", badge: "popular", isActive: true, capacity: "2", area: "40 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Terrasse" },
+            { id: 204, name: "Chambre VIP - Suite Romance", description: "Suite romantique avec décoration spéciale", price: 110000, type: "chambre", image: "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80", badge: null, isActive: true, capacity: "2", area: "38 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Décoration romantique" },
+            { id: 205, name: "Chambre VIP - Suite Famille", description: "Suite spacieuse pour familles", price: 130000, type: "chambre", image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&q=80", badge: "new", isActive: true, capacity: "4", area: "50 m²", bedType: "Lit King + lits simples", equipment: "WiFi, TV, Climatisation, Minibar, Salon séparé" }
         ];
         const existingNames = new Set((this.menuData.items || []).map(i => i.name));
         let added = 0;
@@ -606,7 +458,6 @@ class AdminApp {
     
     setupForms() {
         document.getElementById('itemForm').addEventListener('submit', (e) => this.saveItem(e));
-        document.getElementById('categoryForm').addEventListener('submit', (e) => this.saveCategory(e));
         document.getElementById('restaurantForm').addEventListener('submit', (e) => this.saveRestaurant(e));
     }
 
@@ -734,14 +585,6 @@ function showItemForm(itemId = null, type = 'chambre') {
     adminApp.showItemForm(itemId, type);
 }
 
-function showCategoryForm(categoryId = null) {
-    adminApp.showCategoryForm(categoryId);
-}
-
-function closeCategoryModal() {
-    adminApp.closeCategoryModal();
-}
-
 function closeItemModal() {
     adminApp.closeItemModal();
 }
@@ -770,24 +613,18 @@ function resetDatabase() {
                 hours: '',
                 social: {}
             },
-            categories: [
-                { id: 1, name: 'Standard', order: 1, unit: 'chambre', sector: 'hotel' },
-                { id: 2, name: 'VIP', order: 2, unit: 'chambre', sector: 'hotel' },
-                { id: 3, name: 'Petit-déjeuner', order: 3, unit: 'petit_dejeuner', sector: 'restaurant' },
-                { id: 4, name: 'Plats & Desserts', order: 4, unit: 'plat', sector: 'restaurant' },
-                { id: 5, name: 'Boissons', order: 5, unit: 'boisson', sector: 'drinks' }
-            ],
+
             items: [
-                { id: 1, name: "Chambre Standard - Vue Jardin", description: "Chambre confortable avec vue sur le jardin", price: 25000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80", isActive: true, capacity: "2", area: "20 m²", bedType: "Lit double", equipment: "WiFi, TV, Climatisation" },
-                { id: 2, name: "Chambre Standard - Vue Cour", description: "Chambre calme avec vue sur la cour intérieure", price: 22000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80", isActive: true, capacity: "2", area: "18 m²", bedType: "Lit double", equipment: "WiFi, TV" },
-                { id: 3, name: "Chambre Standard - Familiale", description: "Chambre spacieuse pour famille", price: 30000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&q=80", isActive: true, capacity: "3", area: "25 m²", bedType: "Lit double + lit simple", equipment: "WiFi, TV, Climatisation, Salle de bain privative" },
-                { id: 4, name: "Chambre Standard - Économique", description: "Chambre fonctionnelle et économique", price: 18000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80", isActive: true, capacity: "2", area: "15 m²", bedType: "Lit double", equipment: "WiFi" },
-                { id: 5, name: "Chambre Standard - Supérieure", description: "Chambre avec petit-déjeuner inclus", price: 35000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&q=80", isActive: true, capacity: "2", area: "22 m²", bedType: "Lit double King", equipment: "WiFi, TV, Climatisation, Minibar" },
-                { id: 6, name: "Chambre VIP - Suite Présidentielle", description: "Suite luxueuse avec vue panoramique", price: 120000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1591088398332-8a7791972843?w=800&q=80", isActive: true, capacity: "2", area: "45 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Jacuzzi, Service 24h/24" },
-                { id: 7, name: "Chambre VIP - Suite Exécutive", description: "Suite moderne pour voyageurs d'affaires", price: 85000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80", isActive: true, capacity: "2", area: "35 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Bureau, Minibar" },
-                { id: 8, name: "Chambre VIP - Suite Deluxe", description: "Suite élégante avec terrasse privée", price: 95000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80", isActive: true, capacity: "2", area: "40 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Terrasse" },
-                { id: 9, name: "Chambre VIP - Suite Romance", description: "Suite romantique avec décoration spéciale", price: 110000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80", isActive: true, capacity: "2", area: "38 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Décoration romantique" },
-                { id: 10, name: "Chambre VIP - Suite Famille", description: "Suite spacieuse pour familles", price: 130000, categoryId: 2, type: "chambre", image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&q=80", isActive: true, capacity: "4", area: "50 m²", bedType: "Lit King + lits simples", equipment: "WiFi, TV, Climatisation, Minibar, Salon séparé" }
+                { id: 1, name: "Chambre Standard - Vue Jardin", description: "Chambre confortable avec vue sur le jardin", price: 25000, type: "chambre", image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80", isActive: true, capacity: "2", area: "20 m²", bedType: "Lit double", equipment: "WiFi, TV, Climatisation" },
+                { id: 2, name: "Chambre Standard - Vue Cour", description: "Chambre calme avec vue sur la cour intérieure", price: 22000, type: "chambre", image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80", isActive: true, capacity: "2", area: "18 m²", bedType: "Lit double", equipment: "WiFi, TV" },
+                { id: 3, name: "Chambre Standard - Familiale", description: "Chambre spacieuse pour famille", price: 30000, type: "chambre", image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&q=80", isActive: true, capacity: "3", area: "25 m²", bedType: "Lit double + lit simple", equipment: "WiFi, TV, Climatisation, Salle de bain privative" },
+                { id: 4, name: "Chambre Standard - Économique", description: "Chambre fonctionnelle et économique", price: 18000, type: "chambre", image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80", isActive: true, capacity: "2", area: "15 m²", bedType: "Lit double", equipment: "WiFi" },
+                { id: 5, name: "Chambre Standard - Supérieure", description: "Chambre avec petit-déjeuner inclus", price: 35000, type: "chambre", image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&q=80", isActive: true, capacity: "2", area: "22 m²", bedType: "Lit double King", equipment: "WiFi, TV, Climatisation, Minibar" },
+                { id: 6, name: "Chambre VIP - Suite Présidentielle", description: "Suite luxueuse avec vue panoramique", price: 120000, type: "chambre", image: "https://images.unsplash.com/photo-1591088398332-8a7791972843?w=800&q=80", isActive: true, capacity: "2", area: "45 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Jacuzzi, Service 24h/24" },
+                { id: 7, name: "Chambre VIP - Suite Exécutive", description: "Suite moderne pour voyageurs d'affaires", price: 85000, type: "chambre", image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80", isActive: true, capacity: "2", area: "35 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Bureau, Minibar" },
+                { id: 8, name: "Chambre VIP - Suite Deluxe", description: "Suite élégante avec terrasse privée", price: 95000, type: "chambre", image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80", isActive: true, capacity: "2", area: "40 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Terrasse" },
+                { id: 9, name: "Chambre VIP - Suite Romance", description: "Suite romantique avec décoration spéciale", price: 110000, type: "chambre", image: "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80", isActive: true, capacity: "2", area: "38 m²", bedType: "Lit King", equipment: "WiFi, TV, Climatisation, Minibar, Décoration romantique" },
+                { id: 10, name: "Chambre VIP - Suite Famille", description: "Suite spacieuse pour familles", price: 130000, type: "chambre", image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&q=80", isActive: true, capacity: "4", area: "50 m²", bedType: "Lit King + lits simples", equipment: "WiFi, TV, Climatisation, Minibar, Salon séparé" }
             ],            settings: {
                 restaurantInfoVisible: true
             },

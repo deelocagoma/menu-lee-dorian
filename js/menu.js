@@ -191,182 +191,8 @@ class MenuApp {
         }
     }
 
-    renderCategories() {
-        const container = document.getElementById('categoriesScroll');
-        
-        const categories = [...this.menuData.categories]
-            .sort((a, b) => a.order - b.order);
-
-        container.innerHTML = `
-            <button class="category-chip active" data-filter="all">Tout</button>
-            <button class="category-chip" data-filter="drinks">Petits-déjeuners</button>
-            ${categories.map(cat => `
-                <button class="category-chip" data-filter="category-${cat.id}">${cat.name}</button>
-            `).join('')}
-        `;
-
-        container.querySelectorAll('.category-chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-                container.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-                this.filterMenu(chip.dataset.filter);
-            });
-        });
-    }
-
-    showError() {
-        const loading = document.getElementById('loading');
-        loading.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-state-icon">!</div>
-                <h3 class="empty-state-title">Erreur de chargement</h3>
-                <p class="empty-state-desc">Verifiez votre connexion</p>
-                <button onclick="localStorage.removeItem('pilipili_binId'); location.reload();">
-                    Reessayer
-                </button>
-            </div>
-        `;
-    }
-
-    renderAll() {
-        if (!this.menuData) return;
-
-        this.renderCategories();
-        this.renderMenu();
-    }
-
-    renderSelectionModal() {
-        const body = document.getElementById('selectionBody');
-        const totalEl = document.getElementById('selectionTotal');
-        
-        if (this.selection.length === 0) {
-            body.innerHTML = `
-                <div class="empty-state" style="padding: 40px 0;">
-                    <div class="empty-state-icon">+</div>
-                    <h3 class="empty-state-title">Vide</h3>
-                    <p class="empty-state-desc">Ajoutez des elements depuis le menu</p>
-                </div>
-            `;
-            totalEl.textContent = '';
-            return;
-        }
-
-        body.innerHTML = this.selection.map(s => {
-            const item = this.allItems.find(i => i.id === s.itemId);
-            if (!item) return '';
-            
-            const isChambre = (item.type || 'chambre') === 'chambre';
-            let unitLabel;
-            if (isChambre) {
-                const category = this.menuData.categories.find(c => c.id === item.categoryId);
-                const unit = category?.unit || 'chambre';
-                unitLabel = `${unit}${s.qty > 1 ? 's' : ''}`;
-            } else {
-                unitLabel = s.qty > 1 ? 'petits-déjeuners' : 'petit-déjeuner';
-            }
-            
-            const imageHtml = item.image 
-                ? `<img src="${item.image}" alt="${item.name}" class="selection-item-image">`
-                : `<div class="selection-item-no-image"></div>`;
-
-            return `
-                <div class="selection-item">
-                    ${imageHtml}
-                    <div class="selection-item-info">
-                        <div class="selection-item-name">${item.name}</div>
-                        <div class="selection-item-price">${s.qty} ${unitLabel} - ${this.formatPrice(item.price * s.qty)}</div>
-                    </div>
-                    <div class="selection-item-qty">
-                        <button class="qty-btn" onclick="menuApp.removeFromSelection(${item.id})">−</button>
-                        <span class="qty-value">${s.qty}</span>
-                        <button class="qty-btn" onclick="menuApp.addToSelection(${item.id})">+</button>
-                    </div>
-                </div>
-            `;
-        }).join('');
-
-        const total = this.getSelectionTotal();
-        totalEl.textContent = this.formatPrice(total);
-    }
-
-    getHeaders() {
-        return {
-            'X-Master-Key': JSONBIN_CONFIG.masterKey,
-            'Content-Type': 'application/json'
-        };
-    }
-
-    renderRestaurantCard() {
-        const section = document.getElementById('restaurantCard');
-        if (!section || !this.menuData?.restaurant) return;
-
-        const restaurant = this.menuData.restaurant;
-        const hasInfo = restaurant.name || restaurant.address || restaurant.phone || restaurant.hours || restaurant.social?.whatsapp;
-        if (!hasInfo) {
-            section.style.display = 'none';
-            return;
-        }
-
-        section.style.display = 'block';
-
-        const nameEl = section.querySelector('.restaurant-card-name');
-        if (nameEl) nameEl.textContent = restaurant.name || '';
-
-        const addressRow = document.getElementById('restaurantAddressRow');
-        const addressText = document.getElementById('restaurantAddressText');
-        if (restaurant.address && addressRow && addressText) {
-            addressText.textContent = restaurant.address;
-            addressRow.style.display = 'inline-flex';
-        } else if (addressRow) {
-            addressRow.style.display = 'none';
-        }
-
-        const phoneRow = document.getElementById('restaurantPhoneRow');
-        const phoneLink = document.getElementById('restaurantPhoneLink');
-        if (restaurant.phone && phoneRow && phoneLink) {
-            phoneLink.textContent = restaurant.phone;
-            phoneLink.href = 'tel:' + restaurant.phone.replace(/[^0-9+]/g, '');
-            phoneRow.style.display = 'inline-flex';
-        } else if (phoneRow) {
-            phoneRow.style.display = 'none';
-        }
-
-        const hoursRow = document.getElementById('restaurantHoursRow');
-        const hoursText = document.getElementById('restaurantHoursText');
-        if (restaurant.hours && hoursRow && hoursText) {
-            hoursText.textContent = restaurant.hours;
-            hoursRow.style.display = 'inline-flex';
-        } else if (hoursRow) {
-            hoursRow.style.display = 'none';
-        }
-    }
-
-    renderCategories() {
-        const container = document.getElementById('categoriesScroll');
-        
-        const categories = [...this.menuData.categories]
-            .sort((a, b) => a.order - b.order);
-
-        container.innerHTML = `
-            <button class="category-chip active" data-filter="all">Tout</button>
-            <button class="category-chip" data-filter="drinks">Petits-déjeuners</button>
-            ${categories.map(cat => `
-                <button class="category-chip" data-filter="category-${cat.id}">${cat.name}</button>
-            `).join('')}
-        `;
-
-        container.querySelectorAll('.category-chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-                container.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-                this.filterMenu(chip.dataset.filter);
-            });
-        });
-    }
-
     renderMenu(filter = 'hotel') {
         const container = document.getElementById('menuSection');
-        const categories = [...this.menuData.categories].sort((a, b) => a.order - b.order);
         
         const isChambre = item => (item.type || '') === 'chambre';
         const isBoisson = item => (item.type || '') === 'boisson';
@@ -385,9 +211,6 @@ class MenuApp {
         } else if (filter === 'drinks') {
             items = items.filter(item => isBoisson(item));
             isDrinksFilter = true;
-        } else if (filter.startsWith('category-')) {
-            const catId = parseInt(filter.replace('category-', ''));
-            items = items.filter(item => item.categoryId === catId);
         } else {
             items = items.filter(item => isChambre(item));
             sectionLabel = 'Chambres';
@@ -411,88 +234,17 @@ class MenuApp {
                 </div>
             `;
         } else if (filter === 'hotel') {
-            const groupedItems = {};
-            items.forEach(item => {
-                if (!groupedItems[item.categoryId]) {
-                    groupedItems[item.categoryId] = [];
-                }
-                groupedItems[item.categoryId].push(item);
-            });
-
-            container.innerHTML = categories
-                .filter(cat => groupedItems[cat.id])
-                .map(category => {
-                    const categoryItems = groupedItems[category.id];
-                    return `
-                        <div class="menu-category">
-                            <h2 class="category-title">${category.name}</h2>
-                            <div class="menu-grid">
-                                ${categoryItems.map(item => this.renderMenuCard(item)).join('')}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
+            container.innerHTML = `
+                <div class="menu-grid">
+                    ${items.map(item => this.renderMenuCard(item)).join('')}
+                </div>
+            `;
         } else {
-            const chambres = items.filter(item => isChambre(item));
-            const restaurantItems = items.filter(item => isRestaurant(item));
-            const boissons = items.filter(item => isBoisson(item));
-            let html = '';
-
-            if (chambres.length > 0) {
-                const groupedItems = {};
-                chambres.forEach(item => {
-                    if (!groupedItems[item.categoryId]) {
-                        groupedItems[item.categoryId] = [];
-                    }
-                    groupedItems[item.categoryId].push(item);
-                });
-
-                html += categories
-                    .filter(cat => groupedItems[cat.id])
-                    .map(category => {
-                        const categoryItems = groupedItems[category.id];
-                        return `
-                            <div class="menu-category">
-                                <h2 class="category-title">${category.name}</h2>
-                                <div class="menu-grid">
-                                    ${categoryItems.map(item => this.renderMenuCard(item)).join('')}
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-            }
-
-            if (restaurantItems.length > 0) {
-                html += `
-                    <div class="drinks-separator">
-                        <div class="drinks-separator-line"></div>
-                        <span class="drinks-separator-label">Restaurant</span>
-                        <div class="drinks-separator-line"></div>
-                    </div>
-                    <div class="menu-category">
-                        <div class="drinks-grid">
-                            ${restaurantItems.map(item => this.renderMenuCard(item)).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-
-            if (boissons.length > 0) {
-                html += `
-                    <div class="drinks-separator">
-                        <div class="drinks-separator-line"></div>
-                        <span class="drinks-separator-label">Boissons</span>
-                        <div class="drinks-separator-line"></div>
-                    </div>
-                    <div class="menu-category">
-                        <div class="drinks-grid">
-                            ${boissons.map(item => this.renderMenuCard(item)).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-
-            container.innerHTML = html;
+            container.innerHTML = `
+                <div class="menu-grid">
+                    ${items.map(item => this.renderMenuCard(item)).join('')}
+                </div>
+            `;
         }
     }
 
@@ -505,16 +257,10 @@ class MenuApp {
         const qty = this.getItemQty(item.id);
         const descIcon = (!isChambre && item.description) ? `<svg class="menu-card-desc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>` : '';
 
-        const categories = this.menuData.categories || [];
-        const category = categories.find(c => c.id === item.categoryId);
-        const sector = category?.sector || '';
-        const sectorLabel = sector === 'hotel' ? 'Hôtel' : (sector === 'restaurant' ? 'Restaurant' : (sector === 'drinks' ? 'Boissons' : ''));
-
         return `
             <div class="menu-card" data-item-id="${item.id}">
                 ${imageHtml}
                 <div class="menu-card-body">
-                    ${sectorLabel ? `<div class="menu-card-sector">${sectorLabel}</div>` : ''}
                     <h3 class="menu-card-name">${item.name}</h3>
                     <div class="menu-card-footer">
                         <span class="menu-card-price">${this.formatPrice(item.price)}</span>
@@ -591,12 +337,6 @@ class MenuApp {
                 ` : ''}
             </div>
         `;
-    }
-
-    filterMenu(filter) {
-        this.currentFilter = filter;
-        this.renderMenu(filter);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     getBadgeHtml(badge) {

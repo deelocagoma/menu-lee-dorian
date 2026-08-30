@@ -430,15 +430,6 @@ body {
     padding: 14px;
 }
 
-.menu-card-sector {
-    font-size: 0.65rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--text-muted);
-    margin-bottom: 4px;
-}
-
 .menu-card-footer {
     display: flex;
     justify-content: space-between;
