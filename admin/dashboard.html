@@ -36,7 +36,7 @@
         <section class="admin-section" id="itemsSection">
             <div class="section-header">
                 <h2>Chambres</h2>
-                <button class="add-btn" onclick="showItemForm(null, 'plat')">+ Ajouter</button>
+                <button class="add-btn" onclick="showItemForm(null, 'chambre')">+ Ajouter</button>
             </div>
 
             <div class="settings-group">
@@ -64,10 +64,42 @@
             <div class="items-list" id="itemsList"></div>
         </section>
 
+        <!-- Nourriture -->
+        <section class="admin-section" id="foodSection" style="display: none;">
+            <div class="section-header">
+                <h2>Nourriture</h2>
+                <button class="add-btn" onclick="showItemForm(null, 'nourriture')">+ Ajouter</button>
+            </div>
+
+            <div class="settings-group">
+                <label class="settings-label">Affichage des plats</label>
+                <div class="display-options">
+                    <button class="display-option" data-display="grid" onclick="adminApp.setDisplayMode('grid')">
+                        <div class="display-icon">
+                            <div class="grid-preview">
+                                <span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <span>Grille</span>
+                    </button>
+                    <button class="display-option active" data-display="list" onclick="adminApp.setDisplayMode('list')">
+                        <div class="display-icon">
+                            <div class="list-preview">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <span>Liste</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="items-list" id="foodList"></div>
+        </section>
+
         <!-- Boissons -->
         <section class="admin-section" id="drinksSection" style="display: none;">
             <div class="section-header">
-                <h2>Petits-déjeuners</h2>
+                <h2>Boissons</h2>
                 <button class="add-btn" onclick="showItemForm(null, 'boisson')">+ Ajouter</button>
             </div>
 
@@ -166,13 +198,23 @@
             </svg>
             <span>Chambres</span>
         </button>
+        <button class="admin-nav-item" data-section="food">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                <line x1="6" y1="1" x2="6" y2="4"></line>
+                <line x1="10" y1="1" x2="10" y2="4"></line>
+                <line x1="14" y1="1" x2="14" y2="4"></line>
+            </svg>
+            <span>Nourriture</span>
+        </button>
         <button class="admin-nav-item" data-section="drinks">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M8 22h8"></path>
                 <path d="M12 11v11"></path>
                 <path d="m19 3-7 8-7-8Z"></path>
             </svg>
-            <span>Petits-déjeuners</span>
+            <span>Boissons</span>
         </button>
         <button class="admin-nav-item" data-section="categories">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">

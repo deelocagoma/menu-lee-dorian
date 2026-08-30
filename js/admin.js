@@ -42,8 +42,8 @@ class AdminApp {
                 { id: 1, name: 'Chambres Standard', order: 1, unit: 'chambre' },
                 { id: 2, name: 'Chambres VIP', order: 2, unit: 'chambre' },
                 { id: 3, name: 'Petit-déjeuner', order: 3, unit: 'petit_dejeuner' },
-                { id: 4, name: 'Boissons', order: 4, unit: 'boisson' },
-                { id: 5, name: 'Snacks', order: 5, unit: 'snack' }
+                { id: 4, name: 'Plats', order: 4, unit: 'plat' },
+                { id: 5, name: 'Boissons', order: 5, unit: 'boisson' }
             ],
             items: [
                 { id: 1, name: "Chambre Standard - Vue Jardin", description: "Chambre confortable avec vue sur le jardin", price: 25000, categoryId: 1, type: "chambre", image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80", badge: "new", isActive: true, capacity: "2", area: "20 m²", bedType: "Lit double", equipment: "WiFi, TV, Climatisation" },
@@ -162,7 +162,8 @@ class AdminApp {
         
         switch (this.currentSection) {
             case 'items': this.renderItems('chambre', 'itemsList'); break;
-            case 'drinks': this.renderItems('petit_dejeuner', 'drinksList'); break;
+            case 'food': this.renderItems('nourriture', 'foodList'); break;
+            case 'drinks': this.renderItems('boisson', 'drinksList'); break;
             case 'categories': this.renderCategories(); break;
             case 'restaurant': this.renderRestaurant(); break;
             case 'logo': break;
@@ -266,18 +267,19 @@ class AdminApp {
         document.getElementById('photoFile').value = '';
         
         const actualType = itemId ? (this.menuData.items.find(i => i.id === itemId)?.type || 'chambre') : defaultType;
-        const isPetitDejeuner = actualType === 'petit_dejeuner';
+        const isChambre = actualType === 'chambre';
+        const isBoisson = actualType === 'boisson';
         
         // Adapter les libellés
-        document.getElementById('photoUploadLabel').textContent = isPetitDejeuner ? 'Photo du petit-déjeuner' : 'Photo de la chambre';
+        document.getElementById('photoUploadLabel').textContent = isChambre ? 'Photo de la chambre' : (isBoisson ? 'Photo de la boisson' : 'Photo du plat');
         
-        // Masquer/afficher les champs non pertinents pour les petits-déjeuners
-        document.getElementById('itemCategoryGroup').style.display = isPetitDejeuner ? 'none' : '';
-        document.getElementById('itemDescriptionGroup').style.display = isPetitDejeuner ? 'none' : '';
-        document.getElementById('itemBadgeGroup').style.display = isPetitDejeuner ? 'none' : '';
+        // Masquer/afficher les champs non pertinents
+        document.getElementById('itemCategoryGroup').style.display = isBoisson ? 'none' : '';
+        document.getElementById('itemDescriptionGroup').style.display = isBoisson ? 'none' : '';
+        document.getElementById('itemBadgeGroup').style.display = isChambre ? 'none' : '';
         
         const hotelRows = document.querySelectorAll('#hotelFieldsRow, #hotelFieldsRow2');
-        hotelRows.forEach(row => row.style.display = isPetitDejeuner ? 'none' : '');
+        hotelRows.forEach(row => row.style.display = isChambre ? '' : 'none');
 
         if (itemId) {
             const item = this.menuData.items.find(i => i.id === itemId);
@@ -302,7 +304,7 @@ class AdminApp {
             document.getElementById('itemBedType').value = item.bedType || '';
             document.getElementById('itemEquipment').value = item.equipment || '';
         } else {
-            title.textContent = actualType === 'petit_dejeuner' ? 'Ajouter un petit-déjeuner' : 'Ajouter une chambre';
+            title.textContent = actualType === 'chambre' ? 'Ajouter une chambre' : (actualType === 'boisson' ? 'Ajouter une boisson' : 'Ajouter un plat');
             form.reset();
             document.getElementById('itemId').value = '';
             document.getElementById('itemType').value = actualType;
@@ -546,7 +548,7 @@ class AdminApp {
         });
 
         // Apply to the currently visible list
-        const listId = this.currentSection === 'drinks' ? 'drinksList' : 'itemsList';
+        const listId = this.currentSection === 'drinks' ? 'drinksList' : (this.currentSection === 'food' ? 'foodList' : 'itemsList');
         const itemsList = document.getElementById(listId);
         if (itemsList) {
             if (mode === 'list') {

@@ -175,6 +175,22 @@ class MenuApp {
         logoImg.onload = () => URL.revokeObjectURL(url);
     }
 
+    filterPublicNav(filter) {
+        document.querySelectorAll('.public-nav-item').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.filter === filter);
+        });
+
+        if (filter === 'hotel') {
+            this.renderMenu('hotel');
+        } else if (filter === 'restaurant') {
+            this.renderMenu('restaurant');
+        } else if (filter === 'drinks') {
+            this.renderMenu('drinks');
+        } else {
+            this.renderMenu('all');
+        }
+    }
+
     renderCategories() {
         const container = document.getElementById('categoriesScroll');
         
@@ -364,37 +380,37 @@ class MenuApp {
         const container = document.getElementById('menuSection');
         const categories = [...this.menuData.categories].sort((a, b) => a.order - b.order);
         
-        const drinkCategoryIds = new Set(
-            categories
-                .filter(c => c.name.toLowerCase().includes('petit') || c.name.toLowerCase().includes('petit_dejeuner'))
-                .map(c => c.id)
-        );
-        
-        const isPetitDejeuner = item =>
-            (item.type || 'chambre') === 'petit_dejeuner' || drinkCategoryIds.has(item.categoryId);
+        const isChambre = item => (item.type || 'chambre') === 'chambre';
+        const isBoisson = item => (item.type || 'plat') === 'boisson';
+        const isRestaurant = item => !isChambre(item) && !isBoisson(item);
         
         let items = this.allItems;
+        let sectionLabel = '';
         let isDrinksFilter = false;
         
-        if (filter === 'popular') {
-            items = items.filter(item => item.badge === 'popular' && !isPetitDejeuner(item));
+        if (filter === 'hotel') {
+            items = items.filter(item => isChambre(item));
+            sectionLabel = 'Chambres';
+        } else if (filter === 'restaurant') {
+            items = items.filter(item => isRestaurant(item));
+            sectionLabel = 'Restaurant';
         } else if (filter === 'drinks') {
-            items = items.filter(item => isPetitDejeuner(item));
+            items = items.filter(item => isBoisson(item));
             isDrinksFilter = true;
+        } else if (filter === 'popular') {
+            items = items.filter(item => item.badge === 'popular' && !isBoisson(item));
         } else if (filter === 'new') {
-            items = items.filter(item => item.badge === 'new' && !isPetitDejeuner(item));
+            items = items.filter(item => item.badge === 'new' && !isBoisson(item));
         } else if (filter.startsWith('category-')) {
             const catId = parseInt(filter.replace('category-', ''));
             items = items.filter(item => item.categoryId === catId);
-        } else {
-            items = items;
         }
 
         if (items.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">0</div>
-                    <h3 class="empty-state-title">${isDrinksFilter ? 'Aucun petit-déjeuner' : 'Aucun résultat'}</h3>
+                    <h3 class="empty-state-title">${isDrinksFilter ? 'Aucune boisson' : 'Aucun résultat'}</h3>
                     <p class="empty-state-desc">Essayez une autre categorie</p>
                 </div>
             `;
@@ -407,9 +423,32 @@ class MenuApp {
                     ${items.map(item => this.renderMenuCard(item)).join('')}
                 </div>
             `;
+        } else if (filter === 'hotel') {
+            const groupedItems = {};
+            items.forEach(item => {
+                if (!groupedItems[item.categoryId]) {
+                    groupedItems[item.categoryId] = [];
+                }
+                groupedItems[item.categoryId].push(item);
+            });
+
+            container.innerHTML = categories
+                .filter(cat => groupedItems[cat.id])
+                .map(category => {
+                    const categoryItems = groupedItems[category.id];
+                    return `
+                        <div class="menu-category">
+                            <h2 class="category-title">${category.name}</h2>
+                            <div class="menu-grid">
+                                ${categoryItems.map(item => this.renderMenuCard(item)).join('')}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
         } else {
-            const chambres = items.filter(item => !isPetitDejeuner(item));
-            const petitsDejeuners = items.filter(item => isPetitDejeuner(item));
+            const chambres = items.filter(item => isChambre(item));
+            const restaurantItems = items.filter(item => isRestaurant(item));
+            const boissons = items.filter(item => isBoisson(item));
             let html = '';
 
             if (chambres.length > 0) {
@@ -436,16 +475,31 @@ class MenuApp {
                     }).join('');
             }
 
-            if (petitsDejeuners.length > 0) {
+            if (restaurantItems.length > 0) {
                 html += `
                     <div class="drinks-separator">
                         <div class="drinks-separator-line"></div>
-                        <span class="drinks-separator-label">Petits-déjeuners</span>
+                        <span class="drinks-separator-label">Restaurant</span>
                         <div class="drinks-separator-line"></div>
                     </div>
                     <div class="menu-category">
                         <div class="drinks-grid">
-                            ${petitsDejeuners.map(item => this.renderMenuCard(item)).join('')}
+                            ${restaurantItems.map(item => this.renderMenuCard(item)).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (boissons.length > 0) {
+                html += `
+                    <div class="drinks-separator">
+                        <div class="drinks-separator-line"></div>
+                        <span class="drinks-separator-label">Boissons</span>
+                        <div class="drinks-separator-line"></div>
+                    </div>
+                    <div class="menu-category">
+                        <div class="drinks-grid">
+                            ${boissons.map(item => this.renderMenuCard(item)).join('')}
                         </div>
                     </div>
                 `;

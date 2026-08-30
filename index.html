@@ -133,7 +133,7 @@
         </div>
 
         <section class="hero" id="heroSection" style="display: none;">
-            <p class="hero-subtitle">Votre séjour</p>
+            <p class="hero-subtitle">Hôtel · Restaurant · Boissons</p>
         </section>
 
         <div class="categories-scroll" id="categoriesScroll"></div>
@@ -157,6 +157,32 @@
             </div>
         </section>
     </main>
+
+    <nav class="public-bottom-nav">
+        <button class="public-nav-item active" data-filter="hotel" onclick="menuApp.filterPublicNav('hotel')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span>Hôtel</span>
+        </button>
+        <button class="public-nav-item" data-filter="restaurant" onclick="menuApp.filterPublicNav('restaurant')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path>
+                <path d="M7 2v20"></path>
+                <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>
+            </svg>
+            <span>Restaurant</span>
+        </button>
+        <button class="public-nav-item" data-filter="drinks" onclick="menuApp.filterPublicNav('drinks')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 22h8"></path>
+                <path d="M12 11v11"></path>
+                <path d="m19 3-7 8-7-8Z"></path>
+            </svg>
+            <span>Boissons</span>
+        </button>
+    </nav>
 
     <button class="selection-fab" id="selectionFab" aria-label="Ma selection">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
