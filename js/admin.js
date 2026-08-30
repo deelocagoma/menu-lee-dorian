@@ -277,11 +277,7 @@ class AdminApp {
         document.getElementById('itemDescriptionGroup').style.display = isBoisson ? 'none' : '';
         document.getElementById('itemBadgeGroup').style.display = isChambre ? 'none' : '';
         
-        const hotelFields = document.querySelectorAll('#hotelFieldsRow');
-        hotelFields.forEach(row => row.style.display = 'none');
-        
-        const hotelDetails = document.querySelectorAll('#hotelFieldsRow2');
-        hotelDetails.forEach(row => row.style.display = isChambre ? '' : 'none');
+
 
         if (itemId) {
             const item = this.menuData.items.find(i => i.id === itemId);

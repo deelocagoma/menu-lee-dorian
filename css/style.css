@@ -486,19 +486,7 @@ body {
     margin-top: 10px;
 }
 
-.menu-card-hotel-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 8px;
-    font-size: 0.72rem;
-    color: var(--text-secondary);
-}
 
-.menu-card-hotel-info::before {
-    content: "ℹ";
-    margin-right: 2px;
-}
 
 .badge {
     display: inline-flex;
@@ -948,11 +936,7 @@ body {
     font-weight: 600;
 }
 
-.selection-item-hotel {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    margin-bottom: 4px;
-}
+
 
 .selection-item-qty {
     display: flex;

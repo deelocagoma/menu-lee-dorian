@@ -269,23 +269,11 @@ class MenuApp {
                 ? `<img src="${item.image}" alt="${item.name}" class="selection-item-image">`
                 : `<div class="selection-item-no-image"></div>`;
 
-            let hotelDetail = '';
-            if (isChambre) {
-                const parts = [];
-                if (item.capacity) parts.push(`${item.capacity} pers.`);
-                if (item.area) parts.push(item.area);
-                if (item.bedType) parts.push(item.bedType);
-                if (parts.length > 0) {
-                    hotelDetail = `<div class="selection-item-hotel">${parts.join(' · ')}</div>`;
-                }
-            }
-
             return `
                 <div class="selection-item">
                     ${imageHtml}
                     <div class="selection-item-info">
                         <div class="selection-item-name">${item.name}</div>
-                        ${hotelDetail}
                         <div class="selection-item-price">${s.qty} ${unitLabel} - ${this.formatPrice(item.price * s.qty)}</div>
                     </div>
                     <div class="selection-item-qty">
@@ -519,17 +507,6 @@ class MenuApp {
         const sector = category?.sector || '';
         const sectorLabel = sector === 'hotel' ? 'Hôtel' : (sector === 'restaurant' ? 'Restaurant' : (sector === 'drinks' ? 'Boissons' : ''));
 
-        let hotelInfo = '';
-        if (isChambre) {
-            const parts = [];
-            if (item.capacity) parts.push(`${item.capacity} pers.`);
-            if (item.area) parts.push(item.area);
-            if (item.bedType) parts.push(item.bedType);
-            if (parts.length > 0) {
-                hotelInfo = `<div class="menu-card-hotel-info">${parts.join(' · ')}</div>`;
-            }
-        }
-
         return `
             <div class="menu-card" data-item-id="${item.id}">
                 ${imageHtml}
@@ -548,7 +525,6 @@ class MenuApp {
                             </button>
                         </div>
                     </div>
-                    ${hotelInfo}
                 </div>
                 <div class="item-qty-badge" style="display: ${qty > 0 ? 'flex' : 'none'}">${qty}</div>
             </div>
