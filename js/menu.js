@@ -260,6 +260,14 @@ class MenuApp {
     renderMenu(filter = 'hotel') {
         const container = document.getElementById('menuSection');
         
+        if (this.menuData) {
+            container.innerHTML = `
+                <div class="loading" style="display:flex;align-items:center;justify-content:center;padding:40px 0;">
+                    <div class="loading-spinner" style="width:28px;height:28px;border:3px solid #eee;border-top-color:#5E7057;border-radius:50%;animation:spin 0.8s linear infinite"></div>
+                </div>
+            `;
+        }
+        
         const isChambre = item => (item.type || '') === 'chambre';
         const isBoisson = item => (item.type || '') === 'boisson';
         const isRestaurant = item => !isChambre(item) && !isBoisson(item);
