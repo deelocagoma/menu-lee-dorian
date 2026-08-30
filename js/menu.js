@@ -184,7 +184,7 @@ class MenuApp {
         const count = document.getElementById('selectionCount');
         const total = this.getSelectionCount();
         
-        fab.style.display = 'flex';
+        fab.style.display = total > 0 ? 'flex' : 'none';
         count.textContent = total;
     }
 
@@ -257,7 +257,7 @@ class MenuApp {
         this.renderMenu();
     }
 
-    renderMenu(filter = 'hotel') {
+    async renderMenu(filter = 'hotel') {
         const container = document.getElementById('menuSection');
         
         if (this.menuData) {
@@ -266,6 +266,7 @@ class MenuApp {
                     <div class="loading-spinner" style="width:28px;height:28px;border:3px solid #eee;border-top-color:#5E7057;border-radius:50%;animation:spin 0.8s linear infinite"></div>
                 </div>
             `;
+            await new Promise(resolve => setTimeout(resolve, 300));
         }
         
         const isChambre = item => (item.type || '') === 'chambre';
