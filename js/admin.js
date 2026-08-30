@@ -256,10 +256,14 @@ class AdminApp {
         
         // Remplir les catégories
         const categorySelect = document.getElementById('itemCategory');
-        categorySelect.innerHTML = this.menuData.categories
-            .sort((a, b) => a.order - b.order)
-            .map(cat => `<option value="${cat.id}">${cat.name}</option>`)
-            .join('');
+        if (!this.menuData.categories || this.menuData.categories.length === 0) {
+            categorySelect.innerHTML = '<option value="">Aucune catégorie</option>';
+        } else {
+            categorySelect.innerHTML = this.menuData.categories
+                .sort((a, b) => a.order - b.order)
+                .map(cat => `<option value="${cat.id}">${cat.name}</option>`)
+                .join('');
+        }
         
         // Reset photo
         this.photoData = null;
@@ -276,41 +280,30 @@ class AdminApp {
         // Masquer/afficher les champs non pertinents
         document.getElementById('itemCategoryGroup').style.display = isBoisson ? 'none' : '';
         document.getElementById('itemDescriptionGroup').style.display = isBoisson ? 'none' : '';
-        document.getElementById('itemBadgeGroup').style.display = isChambre ? 'none' : '';
+        document.getElementById('itemBadgeGroup').style.display = 'none';
         
-
 
         if (itemId) {
             const item = this.menuData.items.find(i => i.id === itemId);
             if (!item) return;
             
-            title.textContent = actualType === 'petit_dejeuner' ? 'Modifier le petit-déjeuner' : 'Modifier la chambre';
+            title.textContent = isChambre ? 'Modifier la chambre' : (isBoisson ? 'Modifier la boisson' : 'Modifier le plat');
             document.getElementById('itemId').value = item.id;
             document.getElementById('itemType').value = actualType;
             document.getElementById('itemName').value = item.name;
             document.getElementById('itemDescription').value = item.description;
             document.getElementById('itemPrice').value = item.price;
-            document.getElementById('itemCategory').value = item.categoryId;
-            document.getElementById('itemBadge').value = item.badge || '';
+            document.getElementById('itemCategory').value = item.categoryId || '';
             
             if (item.image) {
                 this.photoData = item.image;
                 photoPreview.innerHTML = `<img src="${item.image}" alt="${item.name}">`;
             }
-            
-            document.getElementById('itemCapacity').value = item.capacity || '';
-            document.getElementById('itemArea').value = item.area || '';
-            document.getElementById('itemBedType').value = item.bedType || '';
-            document.getElementById('itemEquipment').value = item.equipment || '';
         } else {
-            title.textContent = actualType === 'chambre' ? 'Ajouter une chambre' : (actualType === 'boisson' ? 'Ajouter une boisson' : 'Ajouter un plat');
+            title.textContent = isChambre ? 'Ajouter une chambre' : (isBoisson ? 'Ajouter une boisson' : 'Ajouter un plat');
             form.reset();
             document.getElementById('itemId').value = '';
             document.getElementById('itemType').value = actualType;
-            document.getElementById('itemCapacity').value = '';
-            document.getElementById('itemArea').value = '';
-            document.getElementById('itemBedType').value = '';
-            document.getElementById('itemEquipment').value = '';
         }
         
         modal.style.display = 'flex';
@@ -472,129 +465,6 @@ class AdminApp {
         } else {
             const newId = this.menuData.categories.length > 0
                 ? Math.max(...this.menuData.categories.map(c => c.id)) + 1
-                : 1;
-            this.menuData.categories.push({ id: newId, ...categoryData });
-        }
-        
-        if (await this.saveMenu()) {
-            this.closeCategoryModal();
-            this.renderCategories();
-        }
-    }
-
-    editCategory(categoryId) {
-        this.showCategoryForm(categoryId);
-    }
-
-    confirmDeleteCategory(categoryId) {
-        const category = this.menuData.categories.find(c => c.id === categoryId);
-        if (!category) return;
-        
-        const itemCount = this.menuData.items.filter(i => i.categoryId === categoryId).length;
-        
-        document.getElementById('confirmTitle').textContent = 'Supprimer';
-        document.getElementById('confirmMessage').textContent = itemCount > 0
-            ? `La catégorie "${category.name}" contient ${itemCount} élément(s). Tout sera supprimé.`
-            : `Supprimer "${category.name}" ?`;
-        document.getElementById('confirmBtn').onclick = () => this.deleteCategory(categoryId);
-        document.getElementById('confirmModal').style.display = 'flex';
-    }
-
-    async deleteCategory(categoryId) {
-        this.menuData.items = this.menuData.items.filter(i => i.categoryId !== categoryId);
-        this.menuData.categories = this.menuData.categories.filter(c => c.id !== categoryId);
-        
-        if (await this.saveMenu()) {
-            this.closeConfirmModal();
-            this.renderCategories();
-        }
-    }
-
-    // ==================== CATÉGORIES ====================
-    
-    renderCategories() {
-        const categoriesList = document.getElementById('categoriesList');
-        const categories = [...(this.menuData.categories || [])].sort((a, b) => a.order - b.order);
-        
-        if (categories.length === 0) {
-            categoriesList.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">+</div>
-                    <h3 class="empty-state-title">Aucune catégorie</h3>
-                </div>
-            `;
-            return;
-        }
-
-        categoriesList.innerHTML = categories.map(category => {
-            const itemCount = this.menuData.items.filter(i => i.categoryId === category.id).length;
-            const unit = category.unit || 'chambre';
-            
-            return `
-                <div class="category-card">
-                    <div class="category-order">${category.order}</div>
-                    <div class="category-name">${category.name}</div>
-                    <span class="item-count">${itemCount} ${unit}${itemCount > 1 ? 's' : ''}</span>
-                    <div class="category-actions">
-                        <button class="action-btn edit-btn" onclick="adminApp.editCategory(${category.id})">✎</button>
-                        <button class="action-btn delete-btn-small" onclick="adminApp.confirmDeleteCategory(${category.id})">×</button>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
-
-    showCategoryForm(categoryId = null) {
-        const modal = document.getElementById('categoryModal');
-        const title = document.getElementById('categoryModalTitle');
-        const form = document.getElementById('categoryForm');
-        
-        if (categoryId) {
-            const category = this.menuData.categories.find(c => c.id === categoryId);
-            if (!category) return;
-            
-            title.textContent = 'Modifier';
-            document.getElementById('categoryId').value = category.id;
-            document.getElementById('categoryName').value = category.name;
-            document.getElementById('categoryOrder').value = category.order;
-            document.getElementById('categoryUnit').value = category.unit || 'chambre';
-        } else {
-            title.textContent = 'Ajouter';
-            form.reset();
-            document.getElementById('categoryId').value = '';
-            document.getElementById('categoryUnit').value = 'chambre';
-            
-            const maxOrder = this.menuData.categories.length > 0
-                ? Math.max(...this.menuData.categories.map(c => c.order))
-                : 0;
-            document.getElementById('categoryOrder').value = maxOrder + 1;
-        }
-        
-        modal.style.display = 'flex';
-    }
-
-    closeCategoryModal() {
-        document.getElementById('categoryModal').style.display = 'none';
-    }
-
-    async saveCategory(e) {
-        e.preventDefault();
-        
-        const categoryId = document.getElementById('categoryId').value;
-        const categoryData = {
-            name: document.getElementById('categoryName').value.trim(),
-            order: parseInt(document.getElementById('categoryOrder').value),
-            unit: document.getElementById('categoryUnit').value
-        };
-        
-        if (categoryId) {
-            const index = this.menuData.categories.findIndex(c => c.id === parseInt(categoryId));
-            if (index !== -1) {
-                this.menuData.categories[index] = { ...this.menuData.categories[index], ...categoryData };
-            }
-        } else {
-            const newId = this.menuData.categories.length > 0 
-                ? Math.max(...this.menuData.categories.map(c => c.id)) + 1 
                 : 1;
             this.menuData.categories.push({ id: newId, ...categoryData });
         }
