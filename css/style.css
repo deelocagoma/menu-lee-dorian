@@ -765,7 +765,7 @@ body {
     justify-content: center;
     cursor: pointer;
     box-shadow: 0 4px 24px rgba(94, 112, 87, 0.35);
-    z-index: 998;
+    z-index: 10001;
     transition: all 0.3s ease;
 }
 
