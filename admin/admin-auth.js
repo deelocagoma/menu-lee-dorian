@@ -1,5 +1,5 @@
 const ADMIN_CONFIG = {
-    passwordHash: '590c2363a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2',
+    passwordHash: '000000000000000000000000590c2363a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2',
     maxAttempts: 5,
     lockoutDuration: 30000,
     storageKey: 'pilipili_admin_auth'
