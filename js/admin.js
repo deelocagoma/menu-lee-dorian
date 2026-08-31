@@ -151,16 +151,32 @@ class AdminApp {
             section.style.display = 'none';
         });
         
-        const section = document.getElementById(`${this.currentSection}Section`);
-        if (section) section.style.display = 'block';
+        // Show active nav state
+        document.querySelectorAll('.admin-nav-item').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.section === this.currentSection);
+        });
         
-        switch (this.currentSection) {
-            case 'items': this.renderItems('chambre', 'itemsList'); break;
-            case 'food': this.renderItems('nourriture', 'foodList'); break;
-            case 'drinks': this.renderItems('boisson', 'drinksList'); break;
-            case 'restaurant': this.renderRestaurant(); break;
-            case 'logo': break;
+        const section = document.getElementById(`${this.currentSection}Section`);
+        if (section) {
+            section.style.display = 'block';
+            // Show loading in section
+            const loading = section.querySelector('.section-loading');
+            if (loading) loading.style.display = 'flex';
         }
+        
+        // Simulate loading delay for better UX
+        setTimeout(() => {
+            switch (this.currentSection) {
+                case 'items': this.renderItems('chambre', 'itemsList'); break;
+                case 'food': this.renderItems('plat', 'foodList'); break;
+                case 'drinks': this.renderItems('boisson', 'drinksList'); break;
+                case 'restaurant': this.renderRestaurant(); break;
+                case 'logo': break;
+            }
+            // Hide loading after render
+            const sectionLoading = section?.querySelector('.section-loading');
+            if (sectionLoading) sectionLoading.style.display = 'none';
+        }, 300);
     }
 
     showToast(message) {
@@ -193,8 +209,8 @@ class AdminApp {
             itemsList.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">+</div>
-                    <h3 class="empty-state-title">Aucun ${itemType === 'chambre' ? 'chambre' : 'petit-déjeuner'}</h3>
-                    <p class="empty-state-desc">Ajoutez votre premi${itemType === 'chambre' ? 'ère chambre' : 'er petit-déjeuner'}</p>
+                    <h3 class="empty-state-title">Aucun ${itemType === 'chambre' ? 'chambre' : 'plat'}</h3>
+                    <p class="empty-state-desc">Ajoutez votre premi${itemType === 'chambre' ? 'ère chambre' : 'er plat'}</p>
                 </div>
             `;
             return;
