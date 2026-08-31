@@ -30,6 +30,9 @@
                 <div class="error-message" id="errorMessage" style="display: none;">
                     Mot de passe incorrect
                 </div>
+                <div class="error-message" id="lockoutMessage" style="display: none;">
+                    Trop de tentatives. Réessayez dans <span id="lockoutTimer">30</span>s
+                </div>
                 
                 <button type="submit" class="login-btn">
                     Se connecter
@@ -38,25 +41,62 @@
         </div>
     </div>
 
+    <script src="admin-auth.js"></script>
     <script>
-        const ADMIN_PASSWORD = 'Leet#2026';
-        
-        if (sessionStorage.getItem('pilipili_admin')) {
-            window.location.href = 'dashboard.html';
+        if (checkAuth()) {
+            return;
+        }
+
+        const errorMessage = document.getElementById('errorMessage');
+        const lockoutMessage = document.getElementById('lockoutMessage');
+        const lockoutTimer = document.getElementById('lockoutTimer');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.querySelector('.login-btn');
+
+        function updateLockoutUI() {
+            if (isLockedOut()) {
+                const remaining = getLockoutRemaining();
+                errorMessage.style.display = 'none';
+                lockoutMessage.style.display = 'block';
+                lockoutTimer.textContent = remaining;
+                passwordInput.disabled = true;
+                loginBtn.disabled = true;
+                loginBtn.style.opacity = '0.6';
+                loginBtn.style.cursor = 'not-allowed';
+                
+                setTimeout(() => {
+                    if (!isLockedOut()) {
+                        lockoutMessage.style.display = 'none';
+                        passwordInput.disabled = false;
+                        loginBtn.disabled = false;
+                        loginBtn.style.opacity = '1';
+                        loginBtn.style.cursor = 'pointer';
+                    }
+                }, ADMIN_CONFIG.lockoutDuration);
+            }
         }
 
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('errorMessage');
-            
-            if (password === ADMIN_PASSWORD) {
-                sessionStorage.setItem('pilipili_admin', 'true');
+            if (isLockedOut()) {
+                updateLockoutUI();
+                return;
+            }
+
+            const password = passwordInput.value;
+            const result = attemptLogin(password);
+
+            if (result.success) {
                 window.location.href = 'dashboard.html';
             } else {
-                errorMessage.style.display = 'block';
-                document.getElementById('password').value = '';
+                if (result.locked) {
+                    updateLockoutUI();
+                } else {
+                    errorMessage.style.display = 'block';
+                    errorMessage.textContent = 'Mot de passe incorrect. Tentatives restantes : ' + result.remaining;
+                    passwordInput.value = '';
+                }
             }
         });
     </script>
