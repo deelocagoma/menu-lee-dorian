@@ -228,7 +228,7 @@ class AdminApp {
                         <div class="item-name">${item.name}</div>
                         <div class="item-description">${item.description}</div>
                         <div class="item-meta">
-                            <span class="item-price">${this.formatPrice(item.price)}</span>
+                            <span class="item-price">${this.formatPrice(item.price, (item.type || 'chambre') === 'chambre' ? 'la nuitée' : '')}</span>
                         </div>
                     </div>
                     <div class="item-actions">
@@ -457,8 +457,9 @@ class AdminApp {
         return `<span class="item-badge ${badgeInfo.class}">${badgeInfo.text}</span>`;
     }
 
-    formatPrice(price) {
-        return new Intl.NumberFormat('fr-FR').format(price) + ' FCFA';
+    formatPrice(price, unit = '') {
+        const formatted = new Intl.NumberFormat('fr-FR').format(price);
+        return unit ? `${formatted} FCFA / ${unit}` : `${formatted} FCFA`;
     }
 
     closeConfirmModal() {

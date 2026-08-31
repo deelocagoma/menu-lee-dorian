@@ -204,7 +204,7 @@ class MenuApp {
             const isChambre = (item.type || 'chambre') === 'chambre';
             let unitLabel;
             if (isChambre) {
-                unitLabel = s.qty > 1 ? 'chambres' : 'chambre';
+                unitLabel = s.qty > 1 ? 'nuitées' : 'nuitée';
             } else if ((item.type || '') === 'boisson') {
                 unitLabel = s.qty > 1 ? 'boissons' : 'boisson';
             } else {
@@ -418,7 +418,7 @@ class MenuApp {
                 <div class="menu-card-body">
                     <h3 class="menu-card-name">${item.name}</h3>
                     <div class="menu-card-footer">
-                        <span class="menu-card-price">${this.formatPrice(item.price)}</span>
+                        <span class="menu-card-price">${this.formatPrice(item.price, (item.type || 'chambre') === 'chambre' ? 'la nuitée' : '')}</span>
                         <button class="select-btn ${qty > 0 ? 'selected' : ''}" onclick="menuApp.toggleSelectItem(${item.id}, event)" aria-label="Ajouter au panier">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 5v14"></path>
@@ -499,8 +499,9 @@ class MenuApp {
         return `<span class="badge ${badgeInfo.class}">${badgeInfo.text}</span>`;
     }
 
-    formatPrice(price) {
-        return new Intl.NumberFormat('fr-FR').format(price) + ' FCFA';
+    formatPrice(price, unit = '') {
+        const formatted = new Intl.NumberFormat('fr-FR').format(price);
+        return unit ? `${formatted} FCFA / ${unit}` : `${formatted} FCFA`;
     }
 
     setupSearch() {
