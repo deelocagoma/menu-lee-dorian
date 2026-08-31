@@ -23,6 +23,7 @@
                         id="password" 
                         name="password" 
                         placeholder="••••••••"
+                        autocomplete="off"
                         required
                     >
                 </div>
@@ -34,6 +35,9 @@
                     Trop de tentatives. Réessayez dans <span id="lockoutTimer">30</span>s
                 </div>
                 
+                <button type="button" class="login-btn" onclick="resetLockout()" style="background:none;color:var(--text-muted);font-size:0.75rem;margin-top:8px;text-decoration:underline;">
+                    Réinitialiser les tentatives
+                </button>
                 <button type="submit" class="login-btn">
                     Se connecter
                 </button>
@@ -75,6 +79,16 @@
                 }, ADMIN_CONFIG.lockoutDuration);
             }
         }
+
+        window.resetLockout = function() {
+            localStorage.removeItem('pilipili_login_attempts');
+            errorMessage.style.display = 'none';
+            lockoutMessage.style.display = 'none';
+            passwordInput.disabled = false;
+            loginBtn.disabled = false;
+            loginBtn.style.opacity = '1';
+            loginBtn.style.cursor = 'pointer';
+        };
 
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();

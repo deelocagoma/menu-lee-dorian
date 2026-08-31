@@ -17,6 +17,9 @@ function simpleHash(str) {
 }
 
 function checkAuth() {
+    // Clear any existing lockout on page load
+    resetAttempts();
+    
     const session = sessionStorage.getItem(ADMIN_CONFIG.storageKey);
     if (session === 'granted') {
         window.location.href = 'dashboard.html';
