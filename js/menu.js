@@ -205,8 +205,8 @@ class MenuApp {
             let unitLabel;
             if (isChambre) {
                 unitLabel = s.qty > 1 ? 'nuitées' : 'nuitée';
-            } else if ((item.type || '') === 'boisson') {
-                unitLabel = s.qty > 1 ? 'boissons' : 'boisson';
+            } else if ((item.type || '') === 'petit_dejeuner') {
+                unitLabel = s.qty > 1 ? 'petits-déjeuners' : 'petit-déjeuner';
             } else {
                 unitLabel = s.qty > 1 ? 'plats' : 'plat';
             }
@@ -308,10 +308,8 @@ class MenuApp {
 
         if (filter === 'hotel') {
             this.renderMenu('hotel');
-        } else if (filter === 'restaurant') {
-            this.renderMenu('restaurant');
-        } else if (filter === 'drinks') {
-            this.renderMenu('drinks');
+        } else if (filter === 'petit_dejeuner') {
+            this.renderMenu('petit_dejeuner');
         } else {
             this.renderMenu('all');
         }
@@ -349,23 +347,19 @@ class MenuApp {
         }
         
         const isChambre = item => (item.type || '') === 'chambre';
-        const isBoisson = item => (item.type || '') === 'boisson';
-        const isRestaurant = item => !isChambre(item) && !isBoisson(item);
+        const isPetitDejeuner = item => (item.type || '') === 'petit_dejeuner';
         
         let items = this.allItems;
         let sectionLabel = '';
-        let isDrinksFilter = false;
+        let isPetitDejeunerFilter = false;
         
         if (filter === 'hotel') {
             items = items.filter(item => isChambre(item)).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
             sectionLabel = 'Chambres';
-        } else if (filter === 'restaurant') {
-            items = items.filter(item => isRestaurant(item)).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-            sectionLabel = 'Restaurant';
-            isDrinksFilter = true;
-        } else if (filter === 'drinks') {
-            items = items.filter(item => isBoisson(item)).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-            isDrinksFilter = true;
+        } else if (filter === 'petit_dejeuner') {
+            items = items.filter(item => isPetitDejeuner(item)).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+            sectionLabel = 'Petits-déjeuners';
+            isPetitDejeunerFilter = true;
         } else {
             items = items.filter(item => isChambre(item)).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
             sectionLabel = 'Chambres';
@@ -375,22 +369,16 @@ class MenuApp {
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">0</div>
-                    <h3 class="empty-state-title">${isDrinksFilter ? (filter === 'restaurant' ? 'Aucun plat' : 'Aucune boisson') : 'Aucun résultat'}</h3>
+                    <h3 class="empty-state-title">${isPetitDejeunerFilter ? 'Aucun petit-déjeuner' : 'Aucun résultat'}</h3>
                     <p class="empty-state-desc">Essayez une autre categorie</p>
                 </div>
             `;
             return;
         }
 
-        if (isDrinksFilter) {
+        if (isPetitDejeunerFilter) {
             container.innerHTML = `
                 <div class="drinks-grid">
-                    ${items.map(item => this.renderMenuCard(item)).join('')}
-                </div>
-            `;
-        } else if (filter === 'hotel') {
-            container.innerHTML = `
-                <div class="menu-grid">
                     ${items.map(item => this.renderMenuCard(item)).join('')}
                 </div>
             `;
@@ -532,7 +520,7 @@ class MenuApp {
                 const matchesQuery = item.name.toLowerCase().includes(query) ||
                     item.description.toLowerCase().includes(query);
                 
-                if (this.currentFilter === 'drinks') {
+                if (this.currentFilter === 'petit_dejeuner') {
                     return matchesQuery && (item.type || 'chambre') === 'petit_dejeuner';
                 }
                 return matchesQuery && (item.type || 'chambre') !== 'petit_dejeuner';
@@ -556,8 +544,8 @@ class MenuApp {
             return;
         }
 
-        const plats = items.filter(i => (i.type || 'plat') !== 'boisson');
-        const boissons = items.filter(i => (i.type || 'plat') === 'boisson');
+        const chambres = items.filter(i => (i.type || 'chambre') === 'chambre');
+        const petitsDejeuners = items.filter(i => (i.type || 'chambre') === 'petit_dejeuner');
 
         let html = '';
         if (chambres.length > 0) {

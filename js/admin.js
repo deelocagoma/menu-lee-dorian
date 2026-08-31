@@ -168,8 +168,7 @@ class AdminApp {
         setTimeout(() => {
             switch (this.currentSection) {
                 case 'items': this.renderItems('chambre', 'itemsList'); break;
-                case 'food': this.renderItems('plat', 'foodList'); break;
-                case 'drinks': this.renderItems('boisson', 'drinksList'); break;
+                case 'food': this.renderItems('petit_dejeuner', 'foodList'); break;
                 case 'restaurant': this.renderRestaurant(); break;
                 case 'logo': break;
             }
@@ -261,20 +260,20 @@ class AdminApp {
         
         const actualType = itemId ? (this.menuData.items.find(i => i.id === itemId)?.type || 'chambre') : defaultType;
         const isChambre = actualType === 'chambre';
-        const isBoisson = actualType === 'boisson';
+        const isPetitDejeuner = actualType === 'petit_dejeuner';
         
         // Adapter les libellés
-        document.getElementById('photoUploadLabel').textContent = isChambre ? 'Photo de la chambre' : (isBoisson ? 'Photo de la boisson' : 'Photo du plat');
+        document.getElementById('photoUploadLabel').textContent = isChambre ? 'Photo de la chambre' : 'Photo du petit-déjeuner';
         
         // Masquer/afficher les champs non pertinents
-        document.getElementById('itemDescriptionGroup').style.display = isBoisson ? 'none' : '';
+        document.getElementById('itemDescriptionGroup').style.display = isPetitDejeuner ? 'none' : '';
         
 
         if (itemId) {
             const item = this.menuData.items.find(i => i.id === itemId);
             if (!item) return;
             
-            title.textContent = isChambre ? 'Modifier la chambre' : (isBoisson ? 'Modifier la boisson' : 'Modifier le plat');
+            title.textContent = isChambre ? 'Modifier la chambre' : 'Modifier le petit-déjeuner';
             document.getElementById('itemId').value = item.id;
             document.getElementById('itemType').value = actualType;
             document.getElementById('itemName').value = item.name;
@@ -286,7 +285,7 @@ class AdminApp {
                 photoPreview.innerHTML = `<img src="${item.image}" alt="${item.name}">`;
             }
         } else {
-            title.textContent = isChambre ? 'Ajouter une chambre' : (isBoisson ? 'Ajouter une boisson' : 'Ajouter un plat');
+            title.textContent = isChambre ? 'Ajouter une chambre' : 'Ajouter un petit-déjeuner';
             form.reset();
             document.getElementById('itemId').value = '';
             document.getElementById('itemType').value = actualType;
@@ -403,7 +402,7 @@ class AdminApp {
         });
 
         // Apply to the currently visible list
-        const listId = this.currentSection === 'drinks' ? 'drinksList' : (this.currentSection === 'food' ? 'foodList' : 'itemsList');
+        const listId = this.currentSection === 'food' ? 'foodList' : 'itemsList';
         const itemsList = document.getElementById(listId);
         if (itemsList) {
             if (mode === 'list') {

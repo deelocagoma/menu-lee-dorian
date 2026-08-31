@@ -67,15 +67,15 @@
             </div>
         </section>
 
-        <!-- Nourriture -->
+        <!-- Petits-déjeuners -->
         <section class="admin-section" id="foodSection" style="display: none;">
             <div class="section-header">
-                <h2>Nourriture</h2>
-                <button class="add-btn" onclick="showItemForm(null, 'nourriture')">+ Ajouter</button>
+                <h2>Petits-déjeuners</h2>
+                <button class="add-btn" onclick="showItemForm(null, 'petit_dejeuner')">+ Ajouter</button>
             </div>
 
             <div class="settings-group">
-                <label class="settings-label">Affichage des plats</label>
+                <label class="settings-label">Affichage des petits-déjeuners</label>
                 <div class="display-options">
                     <button class="display-option" data-display="grid" onclick="adminApp.setDisplayMode('grid')">
                         <div class="display-icon">
@@ -102,40 +102,7 @@
             </div>
         </section>
 
-        <!-- Boissons -->
-        <section class="admin-section" id="drinksSection" style="display: none;">
-            <div class="section-header">
-                <h2>Boissons</h2>
-                <button class="add-btn" onclick="showItemForm(null, 'boisson')">+ Ajouter</button>
-            </div>
 
-            <div class="settings-group">
-                <label class="settings-label">Affichage des boissons</label>
-                <div class="display-options">
-                    <button class="display-option" data-display="grid" onclick="adminApp.setDisplayMode('grid')">
-                        <div class="display-icon">
-                            <div class="grid-preview">
-                                <span></span><span></span><span></span><span></span>
-                            </div>
-                        </div>
-                        <span>Grille</span>
-                    </button>
-                    <button class="display-option active" data-display="list" onclick="adminApp.setDisplayMode('list')">
-                        <div class="display-icon">
-                            <div class="list-preview">
-                                <span></span><span></span><span></span>
-                            </div>
-                        </div>
-                        <span>Liste</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="items-list" id="drinksList"></div>
-            <div class="section-loading" style="display:none;align-items:center;justify-content:center;padding:40px 0;">
-                <div class="loading-spinner" style="width:28px;height:28px;border:3px solid #eee;border-top-color:#5E7057;border-radius:50%;animation:spin 0.8s linear infinite"></div>
-            </div>
-        </section>
 
 
 
@@ -205,16 +172,9 @@
                 <path d="M7 2v20"></path>
                 <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>
             </svg>
-            <span>Nourriture</span>
+            <span>Petits-déjeuners</span>
         </button>
-        <button class="admin-nav-item" data-section="drinks">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M8 22h8"></path>
-                <path d="M12 11v11"></path>
-                <path d="m19 3-7 8-7-8Z"></path>
-            </svg>
-            <span>Boissons</span>
-        </button>
+
         <button class="admin-nav-item" data-section="restaurant">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="3"></circle>
