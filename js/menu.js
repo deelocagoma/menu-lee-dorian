@@ -54,7 +54,7 @@ class MenuApp {
         this.allItems = this.menuData.items.filter(item => item.isActive);
         
         loading.style.display = 'none';
-        document.getElementById('heroSection').style.display = 'block';
+        const hc = document.getElementById('heroSection'); if(hc) hc.style.display = 'block';
         this.renderAll();
         this.renderRestaurantCard();
     }
@@ -656,3 +656,24 @@ if (pwaCloseBtn) {
     });
 }
 
+
+// Gestion de la carte Hôtel Leet Dorian
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('toggleHotelInfoBtn');
+    const hideBtn = document.getElementById('hideHotelInfoBtn');
+    const infoBody = document.getElementById('hotelInfoBody');
+
+    if (toggleBtn && hideBtn && infoBody) {
+        toggleBtn.addEventListener('click', () => {
+            infoBody.style.display = 'block';
+            toggleBtn.style.display = 'none';
+        });
+        
+        hideBtn.addEventListener('click', () => {
+            infoBody.style.display = 'none';
+            toggleBtn.style.display = 'inline-flex';
+            // Scroll back to top of the card smoothly
+            document.getElementById('hotelInfoCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+});

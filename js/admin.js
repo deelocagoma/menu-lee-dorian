@@ -276,6 +276,7 @@ class AdminApp {
             title.textContent = isChambre ? 'Modifier la chambre' : 'Modifier le petit-déjeuner';
             document.getElementById('itemId').value = item.id;
             document.getElementById('itemType').value = actualType;
+            const u = document.getElementById("itemImageUrl"); if (u) u.value = "";
             document.getElementById('itemName').value = item.name;
             document.getElementById('itemDescription').value = item.description;
             document.getElementById('itemPrice').value = item.price;
@@ -283,12 +284,14 @@ class AdminApp {
             if (item.image) {
                 this.photoData = item.image;
                 photoPreview.innerHTML = `<img src="${item.image}" alt="${item.name}">`;
+                const u = document.getElementById("itemImageUrl"); if (u) u.value = item.image;
             }
         } else {
             title.textContent = isChambre ? 'Ajouter une chambre' : 'Ajouter un petit-déjeuner';
             form.reset();
             document.getElementById('itemId').value = '';
             document.getElementById('itemType').value = actualType;
+            const u = document.getElementById("itemImageUrl"); if (u) u.value = "";
         }
         
         modal.style.display = 'flex';

@@ -202,9 +202,16 @@
                         <div class="photo-preview" id="photoPreview" onclick="document.getElementById('photoFile').click()">
                             <span class="photo-preview-placeholder">Ajouter</span>
                         </div>
-                        <div class="photo-url-input">
-                            <input type="file" id="photoFile" accept="image/*" class="photo-upload-input" onchange="handlePhotoUpload(event)">
-                            <small>Sélectionnez une image (max 500 Ko)</small>
+                        <div class="photo-url-input" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 8px;">
+                            <div>
+                                <input type="file" id="photoFile" accept="image/*" class="photo-upload-input" onchange="handlePhotoUpload(event)" style="margin-bottom: 4px;">
+                                <small style="color: var(--text-muted); font-size: 0.7rem;">(Bouton Uploader : ImgBB)</small>
+                            </div>
+                            
+                            <div style="margin-top: 8px; border-top: 1px dashed var(--border); padding-top: 8px;">
+                                <label for="itemImageUrl" style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:4px; display:block;">Ou collez directement une URL (ex: imgur) :</label>
+                                <input type="url" id="itemImageUrl" placeholder="https://..." oninput="if(this.value){ adminApp.photoData = this.value; document.getElementById('photoPreview').innerHTML = '<img src=\'' + this.value + '\' style=\'width:100%;height:100%;object-fit:cover;border-radius:12px;\'>'; }" style="width:100%; padding:8px; border:1px solid var(--border); border-radius:6px; background:var(--bg-primary); font-size:0.8rem; color:var(--text-primary);">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -249,7 +256,7 @@
     </div>
 
     <script src="../js/config.js"></script>
-    <script src="../js/admin.js"></script>
+    <script src="../js/admin.js?v=2"></script>
     <script>
         const CONFIG = {
             masterKey: '$2a$10$q94z0iyNLwf.aYQIH.DWvu0rTWEIbvKOl4Wl/Ufoe/Ugu21V2EcPC',

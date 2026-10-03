@@ -1,6 +1,5 @@
-/* ============================================
    LEET-DORIAN - DESIGN PREMIUM LIGHT
-   ============================================ */
+
 
 /* Variables CSS */
 :root {
@@ -52,9 +51,8 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* ============================================
    HEADER
-   ============================================ */
+
 .app-header {
     position: fixed;
     top: 0;
@@ -189,9 +187,8 @@ body {
     display: flex;
 }
 
-/* ============================================
    CONTENU PRINCIPAL
-   ============================================ */
+
 .app-content {
     padding: 20px 16px;
 }
@@ -275,9 +272,8 @@ body {
     100% { background-position: -200% 0; }
 }
 
-/* ============================================
    BANNIERE ACCUEIL
-   ============================================ */
+
 .hero {
     text-align: center;
     padding: 18px 20px 14px;
@@ -299,9 +295,8 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* ============================================
    CATÉGORIES
-   ============================================ */
+
 .categories-scroll {
     display: flex;
     flex-wrap: nowrap;
@@ -363,9 +358,8 @@ body {
     white-space: nowrap;
 }
 
-/* ============================================
    SECTION MENU
-   ============================================ */
+
 .menu-section {
     margin-bottom: 16px;
 }
@@ -383,9 +377,8 @@ body {
     margin-bottom: 14px;
 }
 
-/* ============================================
    GRILLE PLATS
-   ============================================ */
+
 .menu-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -557,13 +550,11 @@ body {
     z-index: 3;
 }
 
-/* ============================================
    INFOS RESTAURANT
-   ============================================ */
 
-/* ============================================
+
    RESTAURANT CARD
-   ============================================ */
+
 .restaurant-card {
     padding: 16px 20px 24px;
     display: flex;
@@ -606,14 +597,13 @@ body {
    FAB / SELECTION / MODALE
    ============================================
    LIEN ADMIN DISCRET
-   ============================================ */
+
 .admin-link {
     animation: cardPop 0.35s ease;
 }
 
-/* ============================================
    LIEN ADMIN DISCRET
-   ============================================ */
+
 .admin-link {
     opacity: 0.3;
     transition: opacity 0.2s ease;
@@ -623,9 +613,8 @@ body {
     opacity: 0.7;
 }
 
-/* ============================================
    PWA BANNER
-   ============================================ */
+
 .pwa-banner {
     position: fixed;
     bottom: 80px;
@@ -685,9 +674,8 @@ body {
     cursor: pointer;
 }
 
-/* ============================================
-   VERSION BUREAU & TABLETTE (>768px)
-   ============================================ */
+/* VERSION BUREAU & TABLETTE (>768px) */
+
 /* FAB sélection */
 .public-bottom-nav {
     position: fixed;
@@ -1053,9 +1041,8 @@ body {
     }
 }
 
-/* ============================================
    RESTAURANT INFO
-   ============================================ */
+
 .restaurant-info {
     padding: 24px 20px 40px;
 }
@@ -1103,5 +1090,168 @@ body {
     text-decoration: underline;
 }
 
-/* ============================================
 
+   HOTEL INFO CARD
+
+.hotel-info-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin: 16px 20px 24px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.hotel-info-header {
+    padding: 20px;
+    text-align: center;
+    background: linear-gradient(to bottom, var(--bg-elevated), var(--bg-primary));
+}
+
+.hotel-info-header h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.stars {
+    color: var(--sage);
+    font-size: 1rem;
+}
+
+.hotel-slogan {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    font-style: italic;
+    margin-bottom: 16px;
+}
+
+.btn-read-more, .btn-read-less {
+    background: transparent;
+    border: 1px solid var(--sage);
+    color: var(--sage);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-read-more:active, .btn-read-less:active {
+    background: var(--sage-glow);
+}
+
+.hotel-info-body {
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--bg-primary);
+}
+
+.hotel-experience {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    text-align: center;
+    padding: 16px 0;
+    border-bottom: 1px dashed var(--border);
+    margin-bottom: 16px;
+}
+
+.hotel-features {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.feature-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.feature-icon {
+    font-size: 1.2rem;
+    background: var(--bg-elevated);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.feature-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.feature-text strong {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.feature-text span {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.hotel-pricing-contact {
+    background: var(--bg-elevated);
+    padding: 16px;
+    border-radius: var(--radius-md);
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.pricing-note {
+    font-size: 0.85rem;
+    color: var(--sage);
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.contact-numbers {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contact-btn {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 12px;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.contact-btn svg {
+    color: var(--sage);
+}
+
+#hideHotelInfoBtn {
+    width: 100%;
+    justify-content: center;
+}
+@media (min-width: 768px) {
+    .hotel-info-card {
+        max-width: 800px;
+        margin: 20px auto 32px;
+    }
+}
