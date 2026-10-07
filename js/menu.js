@@ -534,6 +534,36 @@ class MenuApp {
             }
         });
     }
+
+    openLightbox(images, startIndex) {
+        this._lbImages = images;
+        this._lbIndex = startIndex || 0;
+        this._showLightboxSlide();
+        document.getElementById('imageLightbox').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    _showLightboxSlide() {
+        const img = this._lbImages[this._lbIndex];
+        document.getElementById('lightboxImg').src = img.url;
+        document.getElementById('lightboxCaption').textContent = img.title || '';
+        document.getElementById('lightboxCounter').textContent = (this._lbIndex + 1) + ' / ' + this._lbImages.length;
+        const prev = document.getElementById('lightboxPrev');
+        const next = document.getElementById('lightboxNext');
+        if (prev) prev.style.display = this._lbImages.length > 1 ? '' : 'none';
+        if (next) next.style.display = this._lbImages.length > 1 ? '' : 'none';
+    }
+
+    lightboxNav(dir) {
+        this._lbIndex = (this._lbIndex + dir + this._lbImages.length) % this._lbImages.length;
+        this._showLightboxSlide();
+    }
+
+    closeLightbox() {
+        document.getElementById('imageLightbox').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
     renderMenuCard(item) {
         let imageHtml = '';
         const hasGallery = item.gallery && item.gallery.length > 0;
@@ -546,14 +576,14 @@ class MenuApp {
         if (allImages.length === 0) {
             imageHtml = `<div class="menu-card-no-image"></div>`;
         } else if (allImages.length === 1) {
-            imageHtml = `<img src="${allImages[0].url}" alt="${item.name}" class="menu-card-image" loading="lazy">`;
+            imageHtml = `<img src="${allImages[0].url}" alt="${item.name}" class="menu-card-image" loading="lazy" onclick="menuApp.openLightbox(${JSON.stringify(allImages)}, 0)" style="cursor:zoom-in;">`;
         } else {
             // Build carousel
             let slides = '';
             let dots = '';
             allImages.forEach((img, idx) => {
                 let captionHtml = img.title ? `<div class="slide-caption" style="position:absolute; bottom:8px; left:8px; color:#fff; font-size:0.78rem; font-weight:600; text-shadow:0 1px 4px rgba(0,0,0,0.8);">${img.title}</div>` : '';
-                slides += `<div class="gallery-slide" style="position:relative;"><img src="${img.url}" alt="${item.name} - photo ${idx+1}" class="menu-card-image" loading="lazy">${captionHtml}</div>`;
+                slides += `<div class="gallery-slide" style="position:relative;"><img src="${img.url}" alt="${item.name} - photo ${idx+1}" class="menu-card-image" loading="lazy" onclick="menuApp.openLightbox(allImages, ${idx})" style="cursor:zoom-in;">${captionHtml}</div>`;
                 dots += `<div class="carousel-dot ${idx === 0 ? 'active' : ''}"></div>`;
             });
             

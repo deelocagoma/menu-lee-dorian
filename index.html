@@ -19,8 +19,8 @@
         .loading-screen { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.25s ease; }
         .loading-screen.hidden { opacity: 0; pointer-events: none; }
     </style>
-    <link rel="preload" href="css/style.css?v=11" as="style" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="css/style.css?v=11"></noscript>
+    <link rel="preload" href="css/style.css?v=12" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/style.css?v=12"></noscript>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -326,7 +326,7 @@
     </div>
 
     <script src="js/config.js"></script>
-    <script src="js/menu.js?v=19"></script>
+    <script src="js/menu.js?v=20"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const ls = document.getElementById('loadingScreen');
@@ -353,6 +353,16 @@
             });
         }
     </script>
+
+    <!-- Lightbox -->
+    <div id="imageLightbox" onclick="menuApp.closeLightbox()">
+        <button id="lightboxClose" onclick="menuApp.closeLightbox()">×</button>
+        <button id="lightboxPrev" onclick="event.stopPropagation(); menuApp.lightboxNav(-1)">‹</button>
+        <img id="lightboxImg" src="" alt="" onclick="event.stopPropagation()">
+        <div id="lightboxCaption"></div>
+        <div id="lightboxCounter"></div>
+        <button id="lightboxNext" onclick="event.stopPropagation(); menuApp.lightboxNav(1)">›</button>
+    </div>
 </body>
 
 </html>
