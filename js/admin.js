@@ -395,8 +395,8 @@ class AdminApp {
         const { restaurant } = this.menuData;
         
         document.getElementById('restaurantName').value = restaurant.name || '';
-        document.getElementById('hotelSlogan').value = restaurant.slogan || '';
-        document.getElementById('hotelWelcomeText').value = restaurant.welcomeText || '';
+        document.getElementById('hotelSlogan').value = restaurant.slogan || "L'incontournable du centre-ville où l'art et la philosophie se confondent.";
+        document.getElementById('hotelWelcomeText').value = restaurant.welcomeText || "26 ans d'expérience répondra à vos exigences (nous sommes à votre écoute).";
         document.getElementById('restaurantAddress').value = restaurant.address || '';
         document.getElementById('restaurantPhone').value = restaurant.phone || '';
         document.getElementById('restaurantHours').value = restaurant.hours || '';
