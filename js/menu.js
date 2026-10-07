@@ -346,7 +346,7 @@ class MenuApp {
 
         let items;
         if (isHotelFilter) {
-            items = this.allItems.filter(item => (item.type || 'chambre') === 'chambre');
+            items = this.allItems; // show everything on the hotel tab
         } else if (isPetitDejeunerFilter) {
             items = this.allItems.filter(item => item.type === 'petit_dejeuner');
         } else {
@@ -364,7 +364,7 @@ class MenuApp {
             return;
         }
 
-        if (filter === 'all') {
+        if (filter === 'all' || filter === 'hotel') {
             const chambres = items.filter(i => (i.type || 'chambre') === 'chambre');
             const petitsDejeuners = items.filter(i => i.type === 'petit_dejeuner');
             let html = '';

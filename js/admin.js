@@ -756,7 +756,7 @@ AdminApp.prototype.removeSlide = async function(index) {
 
 AdminApp.prototype._saveAndNotify = async function() {
     try {
-        await this.saveData();
+        await this.saveMenu();
         this.showToast('Diaporama enregistré !');
     } catch (e) {
         console.error(e);
