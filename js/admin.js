@@ -170,6 +170,7 @@ class AdminApp {
                 case 'items': this.renderItems('chambre', 'itemsList'); break;
                 case 'food': this.renderItems('petit_dejeuner', 'foodList'); break;
                 case 'restaurant': this.renderRestaurant(); break;
+                case 'gallery': this.renderGallery(); break;
                 case 'logo': break;
             }
             // Hide loading after render
