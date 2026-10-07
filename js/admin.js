@@ -292,6 +292,7 @@ class AdminApp {
             document.getElementById('itemId').value = '';
             document.getElementById('itemType').value = actualType;
             const u = document.getElementById("itemImageUrl"); if (u) u.value = "";
+            const eg = document.getElementById("itemExtraImages"); if (eg) eg.value = "";
         }
         
         modal.style.display = 'flex';
@@ -665,6 +666,60 @@ function resetDatabase() {
 
 // Initialisation
 let adminApp;
+
+
+// Global Gallery Logic
+AdminApp.prototype.renderGallery = function() {
+    const list = document.getElementById('galleryPreviewList');
+    if (!list) return;
+    
+    const gallery = this.menuData.hotelGallery || [];
+    if (gallery.length === 0) {
+        list.innerHTML = '<div style="color:var(--text-muted);font-style:italic;padding:20px;">Aucune image dans le diaporama. Cliquez sur "Gérer les photos".</div>';
+        return;
+    }
+    
+    list.innerHTML = gallery.map(url => `
+        <img src="${url}" style="width: 120px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); flex-shrink: 0;">
+    `).join('');
+};
+
+const origRenderCurrentSection = AdminApp.prototype.renderCurrentSection;
+AdminApp.prototype.renderCurrentSection = function() {
+    origRenderCurrentSection.call(this);
+    this.renderGallery();
+};
+
+window.showGalleryForm = function() {
+    const ta = document.getElementById('hotelGalleryUrls');
+    ta.value = (adminApp.menuData.hotelGallery || []).join('\n');
+    document.getElementById('galleryModal').style.display = 'flex';
+};
+
+window.saveGallery = async function() {
+    const ta = document.getElementById('hotelGalleryUrls');
+    const urls = ta.value.split('\n').map(u => u.trim()).filter(u => u);
+    
+    adminApp.menuData.hotelGallery = urls;
+    
+    try {
+        const btn = document.querySelector('.save-btn');
+        const oldText = btn.textContent;
+        btn.textContent = 'Enregistrement...';
+        
+        await adminApp.saveData();
+        adminApp.renderGallery();
+        document.getElementById('galleryModal').style.display = 'none';
+        
+        btn.textContent = oldText;
+        adminApp.showToast('Diaporama enregistré !');
+    } catch (e) {
+        console.error(e);
+        alert('Erreur lors de la sauvegarde.');
+    }
+};
+
+
 document.addEventListener('DOMContentLoaded', () => {
     adminApp = new AdminApp();
 });
