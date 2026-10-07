@@ -331,6 +331,77 @@ class MenuApp {
     }
 
 
+    renderAll() {
+        this.currentFilter = this.currentFilter || 'hotel';
+        this.renderMenu(this.currentFilter);
+    }
+
+    renderMenu(filter) {
+        this.currentFilter = filter;
+        const container = document.getElementById('menuSection');
+        if (!container) return;
+
+        const isPetitDejeunerFilter = filter === 'petit_dejeuner';
+        const isHotelFilter = filter === 'hotel';
+
+        let items;
+        if (isHotelFilter) {
+            items = this.allItems.filter(item => (item.type || 'chambre') === 'chambre');
+        } else if (isPetitDejeunerFilter) {
+            items = this.allItems.filter(item => item.type === 'petit_dejeuner');
+        } else {
+            items = this.allItems;
+        }
+
+        if (items.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🏨</div>
+                    <h3 class="empty-state-title">Aucun élément disponible</h3>
+                    <p class="empty-state-desc">Revenez bientôt !</p>
+                </div>
+            `;
+            return;
+        }
+
+        if (filter === 'all') {
+            const chambres = items.filter(i => (i.type || 'chambre') === 'chambre');
+            const petitsDejeuners = items.filter(i => i.type === 'petit_dejeuner');
+            let html = '';
+            if (chambres.length > 0) {
+                html += `
+                <div class="menu-category">
+                    <h2 class="category-title">Chambres</h2>
+                    <div class="menu-grid">
+                        ${chambres.map(item => this.renderMenuCard(item)).join('')}
+                    </div>
+                </div>`;
+            }
+            if (petitsDejeuners.length > 0) {
+                html += `
+                <div class="menu-category">
+                    <h2 class="category-title">Petits-déjeuners</h2>
+                    <div class="drinks-grid">
+                        ${petitsDejeuners.map(item => this.renderMenuCard(item)).join('')}
+                    </div>
+                </div>`;
+            }
+            container.innerHTML = html;
+        } else if (isPetitDejeunerFilter) {
+            container.innerHTML = `
+                <div class="drinks-grid">
+                    ${items.map(item => this.renderMenuCard(item)).join('')}
+                </div>
+            `;
+        } else {
+            container.innerHTML = `
+                <div class="menu-grid">
+                    ${items.map(item => this.renderMenuCard(item)).join('')}
+                </div>
+            `;
+        }
+    }
+
     renderGlobalCarousel() {
         let container = document.getElementById('globalHotelCarousel');
         const gallery = this.menuData.hotelGallery || [];
