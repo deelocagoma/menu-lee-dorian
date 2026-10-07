@@ -355,69 +355,45 @@ class MenuApp {
         
         let slides = '';
         let dots = '';
-        gallery.forEach((img, idx) => {
-            slides += `<div class="gallery-slide"><img src="${img}" alt="Hotel Photo ${idx+1}" loading="lazy"></div>`;
+        gallery.forEach((slide, idx) => {
+            // Handle both new format {url, title} and old format string
+            const imgUrl = typeof slide === 'string' ? slide : slide.url;
+            const imgTitle = typeof slide === 'string' ? '' : slide.title;
+            
+            const captionHtml = imgTitle ? `<div class="slide-caption">${imgTitle}</div>` : '';
+            
+            slides += `
+                <div class="gallery-slide">
+                    <img src="${imgUrl}" alt="Hotel Photo ${idx+1}" loading="lazy">
+                    ${captionHtml}
+                </div>`;
             dots += `<div class="carousel-dot ${idx === 0 ? 'active' : ''}"></div>`;
         });
         
         container.innerHTML = `
-            <div class="gallery-carousel" onscroll="menuApp.updateCarouselDots(this)">
-                ${slides}
+            <div class="gallery-carousel-wrapper" style="position: relative;">
+                <div class="gallery-carousel" onscroll="menuApp.updateCarouselDots(this)">
+                    ${slides}
+                </div>
+                <div class="carousel-dots" style="bottom: 12px;">${dots}</div>
             </div>
-            <div class="carousel-dots" style="bottom: 16px;">${dots}</div>
         `;
+        
+        // Auto-advance
+        if (window.hotelCarouselInterval) clearInterval(window.hotelCarouselInterval);
+        window.hotelCarouselInterval = setInterval(() => {
+            const carousel = container.querySelector('.gallery-carousel');
+            if (!carousel) return;
+            const width = carousel.offsetWidth;
+            if (carousel.scrollLeft + width >= carousel.scrollWidth - 10) {
+                carousel.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                carousel.scrollBy({ left: width, behavior: 'smooth' });
+            }
+        }, 3500); // 3.5 seconds
     }
-    renderAll() {
-        if (!this.menuData) return;
-        this.renderMenu();
-    }
 
-    async renderMenu(filter = 'hotel') {
-        const container = document.getElementById('menuSection');
-        
-        if (this.menuData) {
-            container.innerHTML = `
-                <div class="loading" style="display:flex;align-items:center;justify-content:center;padding:40px 0;">
-                    <div class="loading-spinner" style="width:28px;height:28px;border:3px solid #eee;border-top-color:#5E7057;border-radius:50%;animation:spin 0.8s linear infinite"></div>
-                </div>
-            `;
-            await new Promise(resolve => setTimeout(resolve, 300));
-        }
-        
-        const isChambre = item => (item.type || '') === 'chambre';
-        const isPetitDejeuner = item => (item.type || '') === 'petit_dejeuner';
-        
-        let items = this.allItems;
-        let sectionLabel = '';
-        let isPetitDejeunerFilter = false;
-        
-        if (filter === 'hotel') {
-            items = items.filter(item => isChambre(item)).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-            sectionLabel = 'Chambres';
-        } else if (filter === 'petit_dejeuner') {
-            items = items.filter(item => isPetitDejeuner(item)).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-            sectionLabel = 'Petits-déjeuners';
-            isPetitDejeunerFilter = true;
-        } else {
-            items = items.filter(item => isChambre(item)).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-            sectionLabel = 'Chambres';
-        }
-
-        if (items.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">0</div>
-                    <h3 class="empty-state-title">${isPetitDejeunerFilter ? 'Aucun petit-déjeuner' : 'Aucun résultat'}</h3>
-                    <p class="empty-state-desc">Essayez une autre categorie</p>
-                </div>
-            `;
-            return;
-        }
-
-        if (isPetitDejeunerFilter) {
-            container.innerHTML = `
-                <div class="drinks-grid">
-                    ${items.map(item => this.renderMenuCard(item)).join('')}
+    renderMenuCard(item)).join('')}
                 </div>
             `;
         } else {

@@ -38,12 +38,13 @@
         <section class="admin-section" id="gallerySection" style="margin-bottom: 30px;">
             <div class="section-header">
                 <h2>Diaporama de l'Hôtel</h2>
-                <button class="add-btn" onclick="showGalleryForm()" style="background: var(--sage); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600;">Gérer les photos</button>
+                <button class="add-btn" onclick="adminApp.addGallerySlide()" style="background: var(--sage); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600;">+ Ajouter une image</button>
             </div>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">Ces photos s'afficheront en haut de l'application (Accueil, Devanture, etc.).</p>
-            <div id="galleryPreviewList" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
-                <!-- Aperçu des images du diaporama -->
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">Ces images défileront automatiquement en haut de l'application client avec leur titre.</p>
+            <div id="galleryEditorList" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+                <!-- Editeur d'images du diaporama -->
             </div>
+            <button class="save-btn" style="width: 100%; padding: 12px;" onclick="adminApp.saveGallerySlides()">Enregistrer le diaporama</button>
         </section>
 
         <!-- Chambres -->
@@ -275,7 +276,7 @@
     </div>
 
     <script src="../js/config.js"></script>
-    <script src="../js/admin.js?v=3"></script>
+    <script src="../js/admin.js?v=4"></script>
     <script>
         const CONFIG = {
             masterKey: '$2a$10$q94z0iyNLwf.aYQIH.DWvu0rTWEIbvKOl4Wl/Ufoe/Ugu21V2EcPC',
@@ -285,22 +286,7 @@
 
     </script>
 
-    <!-- Modal Diaporama Hôtel -->
-    <div class="modal" id="galleryModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Diaporama de l'Hôtel</h2>
-                <button class="close-btn" onclick="document.getElementById('galleryModal').style.display='none'">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">Collez les liens de vos photos (une URL par ligne) :</p>
-                <textarea id="hotelGalleryUrls" rows="6" placeholder="https://lien-image-1.jpg&#10;https://lien-image-2.jpg" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: monospace; font-size: 0.8rem; line-height: 1.5;"></textarea>
-            </div>
-            <div class="modal-footer">
-                <button class="cancel-btn" onclick="document.getElementById('galleryModal').style.display='none'">Annuler</button>
-                <button class="save-btn" onclick="saveGallery()">Enregistrer</button>
-            </div>
-        </div>
+    
     </div>
 
 </body>
