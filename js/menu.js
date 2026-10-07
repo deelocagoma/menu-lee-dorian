@@ -576,14 +576,19 @@ class MenuApp {
         if (allImages.length === 0) {
             imageHtml = `<div class="menu-card-no-image"></div>`;
         } else if (allImages.length === 1) {
-            imageHtml = `<img src="${allImages[0].url}" alt="${item.name}" class="menu-card-image" loading="lazy" onclick="menuApp.openLightbox(${JSON.stringify(allImages)}, 0)" style="cursor:zoom-in;">`;
+            imageHtml = `<img src="${allImages[0].url}" alt="${item.name}" class="menu-card-image" loading="lazy" onclick="menuApp.openLightbox(menuApp._galleries['${item.id}'] || [{url:'${allImages[0].url}',title:''}], 0)" style="cursor:zoom-in;">`;
+            if (!this._galleries) this._galleries = {};
+            this._galleries[String(item.id)] = allImages;
+            imageHtml = imageHtml;
         } else {
-            // Build carousel
+            // Build carousel - store images for lightbox access
+            if (!this._galleries) this._galleries = {};
+            this._galleries[String(item.id)] = allImages;
             let slides = '';
             let dots = '';
             allImages.forEach((img, idx) => {
-                let captionHtml = img.title ? `<div class="slide-caption" style="position:absolute; bottom:8px; left:8px; color:#fff; font-size:0.78rem; font-weight:600; text-shadow:0 1px 4px rgba(0,0,0,0.8);">${img.title}</div>` : '';
-                slides += `<div class="gallery-slide" style="position:relative;"><img src="${img.url}" alt="${item.name} - photo ${idx+1}" class="menu-card-image" loading="lazy" onclick="menuApp.openLightbox(allImages, ${idx})" style="cursor:zoom-in;">${captionHtml}</div>`;
+                let captionHtml = img.title ? `<div class="room-caption">${img.title}</div>` : '';
+                slides += `<div class="gallery-slide" style="position:relative;"><img src="${img.url}" alt="${item.name} - photo ${idx+1}" class="menu-card-image" loading="lazy" onclick="menuApp.openLightbox(menuApp._galleries['${item.id}'], ${idx})" style="cursor:zoom-in;">${captionHtml}</div>`;
                 dots += `<div class="carousel-dot ${idx === 0 ? 'active' : ''}"></div>`;
             });
             
