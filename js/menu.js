@@ -4,7 +4,7 @@ class MenuApp {
         this.binId = JSONBIN_CONFIG.binId || localStorage.getItem('pilipili_binId');
         this.menuData = null;
         this.allItems = [];
-        this.currentFilter = 'all';
+        this.currentFilter = 'hotel';
         localStorage.removeItem('pilipili_selection');
         this.selection = [];
         this.init();
