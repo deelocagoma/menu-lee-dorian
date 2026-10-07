@@ -38,13 +38,12 @@
         <section class="admin-section" id="gallerySection" style="display: none;">
             <div class="section-header">
                 <h2>Diaporama de l'Hôtel</h2>
-                <button class="add-btn" onclick="adminApp.addGallerySlide()" style="background: var(--sage); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600;">+ Ajouter une image</button>
+                <button class="add-btn" onclick="adminApp.openSlideModal()" style="background: var(--sage); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600;">+ Ajouter</button>
             </div>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">Ces images défileront automatiquement en haut de l'application client avec leur titre.</p>
-            <div id="galleryEditorList" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">Ces images défilent en haut de l'application.</p>
+            <div id="galleryEditorList" class="items-list">
                 <!-- Editeur d'images du diaporama -->
             </div>
-            <button class="save-btn" style="width: 100%; padding: 12px;" onclick="adminApp.saveGallerySlides()">Enregistrer le diaporama</button>
         </section>
 
         <!-- Chambres -->
@@ -285,7 +284,7 @@
     </div>
 
     <script src="../js/config.js"></script>
-    <script src="../js/admin.js?v=7"></script>
+    <script src="../js/admin.js?v=8"></script>
     <script>
         const CONFIG = {
             masterKey: '$2a$10$q94z0iyNLwf.aYQIH.DWvu0rTWEIbvKOl4Wl/Ufoe/Ugu21V2EcPC',
@@ -296,6 +295,32 @@
     </script>
 
     
+    </div>
+
+
+    <!-- Modal Diaporama -->
+    <div class="modal" id="slideModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="slideModalTitle">Ajouter une image</h3>
+                <button class="close-btn" onclick="adminApp.closeSlideModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <input type="hidden" id="slideIndex" value="-1">
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 6px;">Titre de l'image</label>
+                    <input type="text" id="slideTitle" placeholder="Ex: Façade arrière" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 6px;">URL de l'image</label>
+                    <input type="url" id="slideUrl" placeholder="https://..." style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-family: monospace;">
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 16px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px;">
+                <button class="cancel-btn" onclick="adminApp.closeSlideModal()" style="padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px; background: transparent; cursor: pointer;">Annuler</button>
+                <button class="save-btn" onclick="adminApp.saveSlide()" style="padding: 8px 16px; border: none; border-radius: 6px; background: var(--sage); color: white; font-weight: 600; cursor: pointer;">Enregistrer</button>
+            </div>
+        </div>
     </div>
 
 </body>

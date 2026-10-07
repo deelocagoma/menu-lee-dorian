@@ -675,72 +675,88 @@ AdminApp.prototype.renderGallery = function() {
     const list = document.getElementById('galleryEditorList');
     if (!list) return;
     
-    // Convert to objects if they are just strings (for backward compatibility)
+    // Ensure we are using the live array
     let gallery = this.menuData.hotelGallery || [];
     gallery = gallery.map(item => typeof item === 'string' ? { url: item, title: '' } : item);
+    this.menuData.hotelGallery = gallery; // Keep it normalized
     
-    // Store in a local temp variable to avoid modifying the source of truth before saving
-    this._tempGallery = JSON.parse(JSON.stringify(gallery));
-    
-    this._renderGalleryEditorList();
-};
-
-AdminApp.prototype._renderGalleryEditorList = function() {
-    const list = document.getElementById('galleryEditorList');
-    if (!list) return;
-    
-    if (this._tempGallery.length === 0) {
-        list.innerHTML = '<div style="color:var(--text-muted);font-style:italic;padding:10px;">Le diaporama est vide. Ajoutez une image !</div>';
+    if (gallery.length === 0) {
+        list.innerHTML = '<div style="color:var(--text-muted);font-style:italic;padding:10px;">Le diaporama est vide. Cliquez sur "+ Ajouter".</div>';
         return;
     }
-    
-    list.innerHTML = this._tempGallery.map((slide, idx) => `
-        <div style="display: flex; gap: 12px; background: var(--bg-card); border: 1px solid var(--border); padding: 12px; border-radius: 8px; align-items: center;">
-            <div style="width: 80px; height: 60px; background: #eee; border-radius: 4px; overflow: hidden; flex-shrink: 0;">
+
+    list.innerHTML = gallery.map((slide, idx) => `
+        <div class="item-card">
+            <div style="width: 80px; height: 80px; background: #eee; border-radius: 4px; overflow: hidden; flex-shrink: 0; margin-right: 12px;">
                 <img src="${slide.url || ''}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src=''; this.alt='Pas d\'image';">
             </div>
-            <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
-                <input type="text" placeholder="Titre (ex: Façade)" value="${slide.title || ''}" onchange="adminApp._updateGallerySlide(${idx}, 'title', this.value)" style="width: 100%; padding: 6px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.85rem;">
-                <input type="url" placeholder="URL de l'image (https://...)" value="${slide.url || ''}" onchange="adminApp._updateGallerySlide(${idx}, 'url', this.value)" style="width: 100%; padding: 6px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.8rem; font-family: monospace;">
+            <div class="item-info">
+                <div class="item-name">${slide.title || 'Sans titre'}</div>
+                <div class="item-description" style="font-size: 0.75rem; word-break: break-all;">${slide.url}</div>
             </div>
-            <button onclick="adminApp._removeGallerySlide(${idx})" style="background: none; border: none; color: #d9534f; cursor: pointer; padding: 8px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-            </button>
+            <div class="item-actions">
+                <button class="action-btn edit-btn" onclick="adminApp.openSlideModal(${idx})">✎</button>
+                <button class="action-btn delete-btn-small" onclick="adminApp.removeSlide(${idx})">×</button>
+            </div>
         </div>
     `).join('');
 };
 
-AdminApp.prototype._updateGallerySlide = function(index, field, value) {
-    if (this._tempGallery[index]) {
-        this._tempGallery[index][field] = value;
-        if (field === 'url') {
-            this._renderGalleryEditorList(); // re-render to update the image preview
-        }
+AdminApp.prototype.openSlideModal = function(index = -1) {
+    document.getElementById('slideIndex').value = index;
+    if (index >= 0) {
+        const slide = this.menuData.hotelGallery[index];
+        document.getElementById('slideTitle').value = slide.title || '';
+        document.getElementById('slideUrl').value = slide.url || '';
+        document.getElementById('slideModalTitle').textContent = 'Modifier l\'image';
+    } else {
+        document.getElementById('slideTitle').value = '';
+        document.getElementById('slideUrl').value = '';
+        document.getElementById('slideModalTitle').textContent = 'Ajouter une image';
     }
+    document.getElementById('slideModal').style.display = 'flex';
 };
 
-AdminApp.prototype._removeGallerySlide = function(index) {
-    this._tempGallery.splice(index, 1);
-    this._renderGalleryEditorList();
+AdminApp.prototype.closeSlideModal = function() {
+    document.getElementById('slideModal').style.display = 'none';
 };
 
-AdminApp.prototype.addGallerySlide = function() {
-    this._tempGallery.push({ url: '', title: '' });
-    this._renderGalleryEditorList();
+AdminApp.prototype.saveSlide = async function() {
+    const index = parseInt(document.getElementById('slideIndex').value, 10);
+    const title = document.getElementById('slideTitle').value.trim();
+    const url = document.getElementById('slideUrl').value.trim();
+    
+    if (!url) {
+        alert("L'URL de l'image est obligatoire.");
+        return;
+    }
+    
+    if (!this.menuData.hotelGallery) this.menuData.hotelGallery = [];
+    
+    if (index >= 0) {
+        this.menuData.hotelGallery[index] = { title, url };
+    } else {
+        this.menuData.hotelGallery.push({ title, url });
+    }
+    
+    this.closeSlideModal();
+    this.renderGallery();
+    
+    // Auto-save the changes
+    await this._saveAndNotify();
 };
 
-AdminApp.prototype.saveGallerySlides = async function() {
+AdminApp.prototype.removeSlide = async function(index) {
+    if (!confirm("Voulez-vous vraiment supprimer cette image du diaporama ?")) return;
+    
+    this.menuData.hotelGallery.splice(index, 1);
+    this.renderGallery();
+    await this._saveAndNotify();
+};
+
+AdminApp.prototype._saveAndNotify = async function() {
     try {
-        const btn = document.querySelector('#gallerySection .save-btn');
-        const oldText = btn.textContent;
-        btn.textContent = 'Enregistrement...';
-        
-        // Filter out empty urls
-        this.menuData.hotelGallery = this._tempGallery.filter(slide => slide.url.trim() !== '');
-        
         await this.saveData();
-        
-        btn.textContent = oldText;
         this.showToast('Diaporama enregistré !');
     } catch (e) {
         console.error(e);
