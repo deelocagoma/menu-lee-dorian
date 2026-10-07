@@ -53,6 +53,45 @@ class MenuApp {
         this.menuData = result.record;
         this.allItems = this.menuData.items.filter(item => item.isActive);
         
+        // Précharger les images importantes avant de masquer l'écran de chargement
+        const preloadPromises = [];
+        
+        // Images du diaporama global
+        if (this.menuData.hotelGallery && this.menuData.hotelGallery.length > 0) {
+            this.menuData.hotelGallery.forEach(g => {
+                const url = typeof g === 'string' ? g : g.url;
+                if (url) {
+                    preloadPromises.push(new Promise(resolve => {
+                        const img = new Image();
+                        img.onload = resolve;
+                        img.onerror = resolve;
+                        img.src = url;
+                    }));
+                }
+            });
+        }
+        
+        // Images principales des chambres (affichées par défaut)
+        const chambres = this.allItems.filter(i => (i.type || 'chambre') === 'chambre');
+        chambres.forEach(c => {
+            if (c.image) {
+                preloadPromises.push(new Promise(resolve => {
+                    const img = new Image();
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                    img.src = c.image;
+                }));
+            }
+        });
+        
+        // Wait for all preloads to finish (or max 4 seconds to avoid infinite loading if slow connection)
+        if (preloadPromises.length > 0) {
+            await Promise.race([
+                Promise.all(preloadPromises),
+                new Promise(resolve => setTimeout(resolve, 4000))
+            ]);
+        }
+        
         loading.style.display = 'none';
         const hc = document.getElementById('heroSection'); if(hc) hc.style.display = 'block';
         this.renderGlobalCarousel();
