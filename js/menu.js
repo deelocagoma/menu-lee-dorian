@@ -393,18 +393,6 @@ class MenuApp {
         }, 3500); // 3.5 seconds
     }
 
-    renderMenuCard(item)).join('')}
-                </div>
-            `;
-        } else {
-            container.innerHTML = `
-                <div class="menu-grid">
-                    ${items.map(item => this.renderMenuCard(item)).join('')}
-                </div>
-            `;
-        }
-    }
-
 
     updateCarouselDots(scrollContainer) {
         const width = scrollContainer.offsetWidth;
