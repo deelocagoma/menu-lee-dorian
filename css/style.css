@@ -1345,9 +1345,9 @@ body {
 .room-caption {
     position: absolute;
     bottom: 8px;
-    left: 10px;
-    right: 10px;
-    text-align: left;
+    left: 0;
+    right: 0;
+    text-align: center;
     color: white;
     background: none;
     font-weight: 600;
