@@ -552,7 +552,7 @@ class MenuApp {
             let slides = '';
             let dots = '';
             allImages.forEach((img, idx) => {
-                let captionHtml = img.title ? `<div class="slide-caption" style="position:absolute; bottom:8px; left:8px; background:rgba(0,0,0,0.6); color:#fff; padding:4px 8px; border-radius:4px; font-size:0.75rem;">${img.title}</div>` : '';
+                let captionHtml = img.title ? `<div class="slide-caption" style="position:absolute; bottom:8px; left:8px; color:#fff; font-size:0.78rem; font-weight:600; text-shadow:0 1px 4px rgba(0,0,0,0.8);">${img.title}</div>` : '';
                 slides += `<div class="gallery-slide" style="position:relative;"><img src="${img.url}" alt="${item.name} - photo ${idx+1}" class="menu-card-image" loading="lazy">${captionHtml}</div>`;
                 dots += `<div class="carousel-dot ${idx === 0 ? 'active' : ''}"></div>`;
             });
