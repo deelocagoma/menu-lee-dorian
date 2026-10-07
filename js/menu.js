@@ -488,18 +488,23 @@ class MenuApp {
     renderMenuCard(item) {
         let imageHtml = '';
         const hasGallery = item.gallery && item.gallery.length > 0;
-        const allImages = item.image ? [item.image, ...hasGallery ? item.gallery : []] : (hasGallery ? item.gallery : []);
+        
+        // Normalize to array of objects {url, title}
+        const mainImageObj = item.image ? [{url: item.image, title: 'Chambre'}] : [];
+        const galleryObjs = hasGallery ? item.gallery.map(g => typeof g === 'string' ? {url: g, title: ''} : g) : [];
+        const allImages = [...mainImageObj, ...galleryObjs];
         
         if (allImages.length === 0) {
             imageHtml = `<div class="menu-card-no-image"></div>`;
         } else if (allImages.length === 1) {
-            imageHtml = `<img src="${allImages[0]}" alt="${item.name}" class="menu-card-image" loading="lazy">`;
+            imageHtml = `<img src="${allImages[0].url}" alt="${item.name}" class="menu-card-image" loading="lazy">`;
         } else {
             // Build carousel
             let slides = '';
             let dots = '';
             allImages.forEach((img, idx) => {
-                slides += `<div class="gallery-slide"><img src="${img}" alt="${item.name} - photo ${idx+1}" class="menu-card-image" loading="lazy"></div>`;
+                let captionHtml = img.title ? `<div class="slide-caption" style="position:absolute; bottom:8px; left:8px; background:rgba(0,0,0,0.6); color:#fff; padding:4px 8px; border-radius:4px; font-size:0.75rem;">${img.title}</div>` : '';
+                slides += `<div class="gallery-slide" style="position:relative;"><img src="${img.url}" alt="${item.name} - photo ${idx+1}" class="menu-card-image" loading="lazy">${captionHtml}</div>`;
                 dots += `<div class="carousel-dot ${idx === 0 ? 'active' : ''}"></div>`;
             });
             

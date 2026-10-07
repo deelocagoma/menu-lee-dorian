@@ -287,13 +287,17 @@ class AdminApp {
                 photoPreview.innerHTML = `<img src="${item.image}" alt="${item.name}">`;
                 const u = document.getElementById("itemImageUrl"); if (u) u.value = item.image;
             }
+            this._tempItemGallery = JSON.parse(JSON.stringify(item.gallery || []));
+            this._tempItemGallery = this._tempItemGallery.map(g => typeof g === 'string' ? {url: g, title: ''} : g);
+            this.renderItemGalleryPieces();
         } else {
             title.textContent = isChambre ? 'Ajouter une chambre' : 'Ajouter un petit-déjeuner';
             form.reset();
             document.getElementById('itemId').value = '';
             document.getElementById('itemType').value = actualType;
             const u = document.getElementById("itemImageUrl"); if (u) u.value = "";
-            const eg = document.getElementById("itemExtraImages"); if (eg) eg.value = "";
+            this._tempItemGallery = [];
+            this.renderItemGalleryPieces();
         }
         
         modal.style.display = 'flex';
@@ -316,7 +320,8 @@ class AdminApp {
             price: parseInt(document.getElementById('itemPrice').value),
             type: itemType,
             image: this.photoData || '',
-            isActive: true
+            isActive: true,
+            gallery: (this._tempItemGallery || []).filter(g => g.url && g.url.trim() !== '')
         };
         
         if (itemId) {
@@ -669,6 +674,50 @@ function resetDatabase() {
 let adminApp;
 
 
+
+
+AdminApp.prototype.renderItemGalleryPieces = function() {
+    const list = document.getElementById('itemGalleryPiecesList');
+    if (!list) return;
+    
+    if (!this._tempItemGallery || this._tempItemGallery.length === 0) {
+        list.innerHTML = '<div style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">Aucune pièce supplémentaire.</div>';
+        return;
+    }
+    
+    list.innerHTML = this._tempItemGallery.map((piece, idx) => `
+        <div style="display: flex; gap: 8px; align-items: center; background: var(--bg-card); padding: 8px; border-radius: 6px; border: 1px solid var(--border);">
+            <div style="width: 40px; height: 40px; background: #eee; border-radius: 4px; overflow: hidden; flex-shrink: 0;">
+                <img src="${piece.url || ''}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src=''; this.alt='Pas d\'image';">
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                <input type="text" placeholder="Titre (ex: Douche)" value="${piece.title || ''}" onchange="adminApp._updateItemGalleryPiece(${idx}, 'title', this.value)" style="width: 100%; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.8rem;">
+                <input type="url" placeholder="URL image" value="${piece.url || ''}" onchange="adminApp._updateItemGalleryPiece(${idx}, 'url', this.value)" style="width: 100%; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.75rem; font-family: monospace;">
+            </div>
+            <button type="button" onclick="adminApp._removeItemGalleryPiece(${idx})" style="background: none; border: none; color: #d9534f; cursor: pointer; padding: 4px; font-size: 1.2rem;">×</button>
+        </div>
+    `).join('');
+};
+
+AdminApp.prototype.addItemGalleryPiece = function() {
+    this._tempItemGallery = this._tempItemGallery || [];
+    this._tempItemGallery.push({ title: '', url: '' });
+    this.renderItemGalleryPieces();
+};
+
+AdminApp.prototype._updateItemGalleryPiece = function(index, field, value) {
+    if (this._tempItemGallery && this._tempItemGallery[index]) {
+        this._tempItemGallery[index][field] = value;
+        if (field === 'url') this.renderItemGalleryPieces();
+    }
+};
+
+AdminApp.prototype._removeItemGalleryPiece = function(index) {
+    if (this._tempItemGallery) {
+        this._tempItemGallery.splice(index, 1);
+        this.renderItemGalleryPieces();
+    }
+};
 
 // Global Gallery Logic
 AdminApp.prototype.renderGallery = function() {
