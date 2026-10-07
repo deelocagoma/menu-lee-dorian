@@ -163,12 +163,12 @@
             </style>
             <div class="hotel-info-header">
                 <h2>L'HÔTEL "LEET DORIAN" <span class="stars">★★★</span></h2>
-                <p class="hotel-slogan">L'incontournable du centre-ville où l'art et la philosophie se confondent.</p>
+                <p class="hotel-slogan" id="publicHotelSlogan">L'incontournable du centre-ville où l'art et la philosophie se confondent.</p>
                 <button id="toggleHotelInfoBtn" class="btn-read-more" type="button">Découvrir l'hôtel <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
             </div>
             
             <div class="hotel-info-body" id="hotelInfoBody" style="display: none;">
-                <p class="hotel-experience"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> <strong>26 ans d'expérience</strong> répondra à vos exigences (nous sommes à votre écoute).</p>
+                <p class="hotel-experience"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> <span id="publicHotelWelcomeText"><strong>26 ans d'expérience</strong> répondra à vos exigences (nous sommes à votre écoute).</span></p>
                 
                 <div class="hotel-features">
                     <div class="feature-item">
@@ -326,7 +326,7 @@
     </div>
 
     <script src="js/config.js"></script>
-    <script src="js/menu.js?v=16"></script>
+    <script src="js/menu.js?v=17"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const ls = document.getElementById('loadingScreen');

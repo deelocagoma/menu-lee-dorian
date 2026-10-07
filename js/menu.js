@@ -75,6 +75,16 @@ class MenuApp {
 
         const nameEl = section.querySelector('.restaurant-card-name');
         if (nameEl) nameEl.textContent = restaurant.name || '';
+        
+        // Update Info Hotel card on index if present
+        const publicHotelSlogan = document.getElementById('publicHotelSlogan');
+        if (publicHotelSlogan && restaurant.slogan) {
+            publicHotelSlogan.textContent = restaurant.slogan;
+        }
+        const publicHotelWelcomeText = document.getElementById('publicHotelWelcomeText');
+        if (publicHotelWelcomeText && restaurant.welcomeText) {
+            publicHotelWelcomeText.innerHTML = restaurant.welcomeText;
+        }
 
         const addressRow = document.getElementById('restaurantAddressRow');
         const addressText = document.getElementById('restaurantAddressText');

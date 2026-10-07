@@ -395,6 +395,8 @@ class AdminApp {
         const { restaurant } = this.menuData;
         
         document.getElementById('restaurantName').value = restaurant.name || '';
+        document.getElementById('hotelSlogan').value = restaurant.slogan || '';
+        document.getElementById('hotelWelcomeText').value = restaurant.welcomeText || '';
         document.getElementById('restaurantAddress').value = restaurant.address || '';
         document.getElementById('restaurantPhone').value = restaurant.phone || '';
         document.getElementById('restaurantHours').value = restaurant.hours || '';
@@ -428,6 +430,8 @@ class AdminApp {
         
         this.menuData.restaurant = {
             name: document.getElementById('restaurantName').value.trim(),
+            slogan: document.getElementById('hotelSlogan').value.trim(),
+            welcomeText: document.getElementById('hotelWelcomeText').value.trim(),
             address: document.getElementById('restaurantAddress').value.trim(),
             phone: document.getElementById('restaurantPhone').value.trim(),
             hours: document.getElementById('restaurantHours').value.trim(),
