@@ -55,6 +55,7 @@ class MenuApp {
         
         loading.style.display = 'none';
         const hc = document.getElementById('heroSection'); if(hc) hc.style.display = 'block';
+        this.renderGlobalCarousel();
         this.renderAll();
         this.renderRestaurantCard();
     }
@@ -329,6 +330,43 @@ class MenuApp {
         `;
     }
 
+
+    renderGlobalCarousel() {
+        let container = document.getElementById('globalHotelCarousel');
+        const gallery = this.menuData.hotelGallery || [];
+        
+        if (gallery.length === 0) {
+            if (container) container.style.display = 'none';
+            return;
+        }
+        
+        if (!container) {
+            container = document.createElement('section');
+            container.id = 'globalHotelCarousel';
+            
+            // Insert it right before the hotelInfoCard
+            const infoCard = document.getElementById('hotelInfoCard');
+            if (infoCard) {
+                infoCard.parentNode.insertBefore(container, infoCard);
+            }
+        }
+        
+        container.style.display = 'block';
+        
+        let slides = '';
+        let dots = '';
+        gallery.forEach((img, idx) => {
+            slides += `<div class="gallery-slide"><img src="${img}" alt="Hotel Photo ${idx+1}" loading="lazy"></div>`;
+            dots += `<div class="carousel-dot ${idx === 0 ? 'active' : ''}"></div>`;
+        });
+        
+        container.innerHTML = `
+            <div class="gallery-carousel" onscroll="menuApp.updateCarouselDots(this)">
+                ${slides}
+            </div>
+            <div class="carousel-dots" style="bottom: 16px;">${dots}</div>
+        `;
+    }
     renderAll() {
         if (!this.menuData) return;
         this.renderMenu();
@@ -391,10 +429,50 @@ class MenuApp {
         }
     }
 
+
+    updateCarouselDots(scrollContainer) {
+        const width = scrollContainer.offsetWidth;
+        const scrollLeft = scrollContainer.scrollLeft;
+        const activeIndex = Math.round(scrollLeft / width);
+        
+        const wrapper = scrollContainer.closest('.gallery-carousel-wrapper') || scrollContainer.parentElement;
+        const dots = wrapper.querySelectorAll('.carousel-dot');
+        
+        dots.forEach((dot, index) => {
+            if (index === activeIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
     renderMenuCard(item) {
-        const imageHtml = item.image 
-            ? `<img src="${item.image}" alt="${item.name}" class="menu-card-image" loading="lazy">`
-            : `<div class="menu-card-no-image"></div>`;
+        let imageHtml = '';
+        const hasGallery = item.gallery && item.gallery.length > 0;
+        const allImages = item.image ? [item.image, ...hasGallery ? item.gallery : []] : (hasGallery ? item.gallery : []);
+        
+        if (allImages.length === 0) {
+            imageHtml = `<div class="menu-card-no-image"></div>`;
+        } else if (allImages.length === 1) {
+            imageHtml = `<img src="${allImages[0]}" alt="${item.name}" class="menu-card-image" loading="lazy">`;
+        } else {
+            // Build carousel
+            let slides = '';
+            let dots = '';
+            allImages.forEach((img, idx) => {
+                slides += `<div class="gallery-slide"><img src="${img}" alt="${item.name} - photo ${idx+1}" class="menu-card-image" loading="lazy"></div>`;
+                dots += `<div class="carousel-dot ${idx === 0 ? 'active' : ''}"></div>`;
+            });
+            
+            imageHtml = `
+                <div class="gallery-carousel-wrapper" style="position: relative;">
+                    <div class="gallery-carousel" onscroll="menuApp.updateCarouselDots(this)">
+                        ${slides}
+                    </div>
+                    <div class="carousel-dots">${dots}</div>
+                </div>
+            `;
+        }
 
         const isChambre = (item.type || 'chambre') === 'chambre';
         const qty = this.getItemQty(item.id);
