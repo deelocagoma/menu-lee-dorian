@@ -333,6 +333,10 @@ class MenuApp {
 
     renderAll() {
         this.currentFilter = this.currentFilter || 'hotel';
+        // Mark the correct nav button as active on load
+        document.querySelectorAll('.public-nav-item').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.filter === this.currentFilter);
+        });
         this.renderMenu(this.currentFilter);
     }
 
@@ -346,7 +350,7 @@ class MenuApp {
 
         let items;
         if (isHotelFilter) {
-            items = this.allItems; // show everything on the hotel tab
+            items = this.allItems.filter(item => (item.type || 'chambre') === 'chambre');
         } else if (isPetitDejeunerFilter) {
             items = this.allItems.filter(item => item.type === 'petit_dejeuner');
         } else {
@@ -364,7 +368,7 @@ class MenuApp {
             return;
         }
 
-        if (filter === 'all' || filter === 'hotel') {
+        if (filter === 'all') {
             const chambres = items.filter(i => (i.type || 'chambre') === 'chambre');
             const petitsDejeuners = items.filter(i => i.type === 'petit_dejeuner');
             let html = '';
